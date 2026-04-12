@@ -20,7 +20,7 @@ GEMINI_MODEL   = "gemini-2.0-flash"
 GEMINI_URL     = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
 TEMPLATE_PATH  = "template.html"   # relative to this script
-OUTPUT_PATH    = "docs/index.html" # GitHub Pages serves from /docs
+OUTPUT_PATH    = "../docs/index.html" # GitHub Pages serves from repo-root /docs
 
 VOLUME  = 1   # increment manually when you want to reset issue count
 # Issue number = days since Vol.1 launch date
@@ -188,7 +188,7 @@ def write_output(html: str, output_path: str):
 def save_archive(edition: dict):
     """Save each edition as JSON in docs/archive/ for historical access."""
     today     = datetime.date.today().strftime("%Y-%m-%d")
-    arch_dir  = "docs/archive"
+    arch_dir  = "../docs/archive"
     os.makedirs(arch_dir, exist_ok=True)
     path      = os.path.join(arch_dir, f"{today}.json")
     with open(path, "w", encoding="utf-8") as f:

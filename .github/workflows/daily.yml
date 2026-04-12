@@ -52,7 +52,7 @@ jobs:
         run: |
           git config user.name  "AI Infra Times Bot"
           git config user.email "bot@ai-infra-times.github.io"
-          git add ai_infra_times/docs/
+          git add docs/
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           DATE=$(date +'%Y-%m-%d')
           git commit -m "Edition: $DATE"
@@ -77,7 +77,7 @@ jobs:
           # Read the archive JSON to pull today's headlines
           import glob, datetime
           today = datetime.date.today().strftime("%Y-%m-%d")
-          archive_path = f"ai_infra_times/docs/archive/{today}.json"
+          archive_path = f"docs/archive/{today}.json"
 
           try:
               with open(archive_path) as f:
@@ -123,4 +123,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Date: $(date +'%d %B %Y')" >> $GITHUB_STEP_SUMMARY
           echo "- URL: https://MRG15.github.io/AI_infra_MRG" >> $GITHUB_STEP_SUMMARY
-          echo "- Archive: \`ai_infra_times/docs/archive/$(date +'%Y-%m-%d').json\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Archive: \`docs/archive/$(date +'%Y-%m-%d').json\`" >> $GITHUB_STEP_SUMMARY
