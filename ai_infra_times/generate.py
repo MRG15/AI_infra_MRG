@@ -1,8 +1,8 @@
 """
 AI Infra Times · Daily Edition Generator
-Calls Gemini 2.0 Flash with Google Search grounding → injects JSON into HTML template → writes index.html
-Run locally:  GEMINI_API_KEY=your_key python generate.py
-Run via CI:   GitHub Actions sets GEMINI_API_KEY from repo secrets
+Calls Groq compound-beta (with web search) → injects JSON into HTML template → writes index.html
+Run locally:  GROQ_API_KEY=your_key python generate.py
+Run via CI:   GitHub Actions sets GROQ_API_KEY from repo secrets
 """
 
 import os
@@ -15,11 +15,11 @@ import re
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL   = "gemini-2.0-flash"
-GEMINI_URL     = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_MODEL   = "compound-beta"   # Groq's model with built-in web search
+GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
 
-TEMPLATE_PATH  = "template.html"   # relative to this script
+TEMPLATE_PATH  = "template.html"      # relative to this script
 OUTPUT_PATH    = "../docs/index.html" # GitHub Pages serves from repo-root /docs
 
 VOLUME  = 1   # increment manually when you want to reset issue count
@@ -107,40 +107,41 @@ def build_prompt():
         issue      = issue,
     )
 
-def call_gemini(api_key: str) -> dict:
-    prompt = build_prompt()
+def call_groq(api_key: str) -> dict:
+    prompt  = build_prompt()
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "tools":    [{"google_search": {}}],
-        "generationConfig": {
-            "temperature":     0.3,
-            "maxOutputTokens": 8192,
-            "responseMimeType": "application/json",
-        },
+        "model":    GROQ_MODEL,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature":    0.3,
+        "max_tokens":     8192,
+        "response_format": {"type": "json_object"},
     }
-    data    = json.dumps(payload).encode("utf-8")
-    url     = f"{GEMINI_URL}?key={api_key}"
-    req     = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    data = json.dumps(payload).encode("utf-8")
+    req  = urllib.request.Request(
+        GROQ_URL,
+        data    = data,
+        headers = {
+            "Content-Type":  "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+    )
 
     try:
         with urllib.request.urlopen(req, timeout=120) as resp:
             body = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         error_body = e.read().decode("utf-8")
-        raise RuntimeError(f"Gemini API error {e.code}: {error_body}")
+        raise RuntimeError(f"Groq API error {e.code}: {error_body}")
 
-    # Extract text from response
-    parts = body.get("candidates", [{}])[0].get("content", {}).get("parts", [])
-    raw   = "".join(p.get("text", "") for p in parts)
+    raw = body.get("choices", [{}])[0].get("message", {}).get("content", "")
 
     if not raw.strip():
-        raise RuntimeError("Empty response from Gemini API")
+        raise RuntimeError("Empty response from Groq API")
 
     return parse_json(raw)
 
 def parse_json(raw: str) -> dict:
     """Extract and parse JSON even if there's surrounding text."""
-    # Try direct parse first (responseMimeType=json should give clean output)
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
@@ -198,21 +199,21 @@ def save_archive(edition: dict):
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 
 def main():
-    api_key = GEMINI_API_KEY
+    api_key = GROQ_API_KEY
     if not api_key:
-        print("ERROR: GEMINI_API_KEY environment variable not set.")
-        print("  Local run:   export GEMINI_API_KEY=your_key && python generate.py")
-        print("  GitHub CI:   add GEMINI_API_KEY to repo Settings → Secrets → Actions")
+        print("ERROR: GROQ_API_KEY environment variable not set.")
+        print("  Local run:   export GROQ_API_KEY=your_key && python generate.py")
+        print("  GitHub CI:   add GROQ_API_KEY to repo Settings → Secrets → Actions")
         sys.exit(1)
 
     print(f"AI Infra Times Generator · {datetime.date.today()}")
-    print(f"  Model:    {GEMINI_MODEL}")
+    print(f"  Model:    {GROQ_MODEL}")
     print(f"  Template: {TEMPLATE_PATH}")
     print(f"  Output:   {OUTPUT_PATH}")
     print()
 
-    print("[ 1/4 ] Calling Gemini API with Google Search grounding...")
-    edition = call_gemini(api_key)
+    print("[ 1/4 ] Calling Groq API (compound-beta with web search)...")
+    edition = call_groq(api_key)
     print(f"        Got {len(edition.get('stories',[]))} stories")
 
     print("[ 2/4 ] Validating and normalising edition data...")
