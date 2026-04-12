@@ -16,7 +16,7 @@ import re
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-GROQ_MODEL   = "compound-beta"   # Groq's model with built-in web search
+GROQ_MODEL   = "llama-3.3-70b-versatile"
 GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
 
 TEMPLATE_PATH  = "template.html"      # relative to this script
@@ -123,6 +123,7 @@ def call_groq(api_key: str) -> dict:
         headers = {
             "Content-Type":  "application/json",
             "Authorization": f"Bearer {api_key}",
+            "User-Agent":    "AI-Infra-Times/1.0",
         },
     )
 
@@ -212,7 +213,7 @@ def main():
     print(f"  Output:   {OUTPUT_PATH}")
     print()
 
-    print("[ 1/4 ] Calling Groq API (compound-beta with web search)...")
+    print("[ 1/4 ] Calling Groq API (llama-3.3-70b-versatile)...")
     edition = call_groq(api_key)
     print(f"        Got {len(edition.get('stories',[]))} stories")
 
