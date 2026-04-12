@@ -385,172 +385,7 @@
     display: none;
   }
 
-  /* ── SETTINGS TRIGGER ── */
-  .settings-trigger {
-    background: none;
-    border: 1px solid var(--rule);
-    cursor: pointer;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--ink-tertiary);
-    padding: 4px 10px;
-    border-radius: 2px;
-    transition: color 0.15s, border-color 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .settings-trigger:hover { color: var(--ink); border-color: var(--rule-heavy); }
-  .settings-trigger.active { color: var(--amber); border-color: var(--amber); }
-  .settings-trigger svg { width: 11px; height: 11px; }
 
-  /* ── SETTINGS PANEL ── */
-  .settings-panel {
-    background: var(--paper-darker);
-    border-bottom: 2px solid var(--rule-heavy);
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-  }
-  .settings-panel.open { max-height: 320px; }
-  .settings-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 1.25rem 1.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 2rem;
-    align-items: end;
-  }
-  .settings-group { display: flex; flex-direction: column; gap: 6px; }
-  .settings-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--ink-tertiary);
-  }
-  .settings-hint {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    color: var(--ink-faint);
-    margin-top: 3px;
-  }
-  .settings-input-wrap { position: relative; }
-  .settings-input {
-    width: 100%;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink);
-    padding: 7px 32px 7px 10px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .settings-input:focus { border-color: var(--amber); }
-  .settings-input::placeholder { color: var(--ink-faint); }
-  .toggle-reveal {
-    position: absolute;
-    right: 8px; top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--ink-faint);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 2px;
-    transition: color 0.15s;
-  }
-  .toggle-reveal:hover { color: var(--ink); }
-  .settings-select {
-    width: 100%;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink);
-    padding: 7px 10px;
-    outline: none;
-    cursor: pointer;
-    transition: border-color 0.15s;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239e9b96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 28px;
-  }
-  .settings-select:focus { border-color: var(--amber); }
-  .settings-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    grid-column: 1 / -1;
-    padding-top: 0.25rem;
-    border-top: 1px solid var(--rule);
-    margin-top: 0.25rem;
-  }
-  .btn-generate {
-    background: var(--ink);
-    color: var(--paper);
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 8px 18px;
-    transition: background 0.15s, opacity 0.15s;
-  }
-  .btn-generate:hover { background: var(--ink-secondary); }
-  .btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn-save-key {
-    background: none;
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--ink-tertiary);
-    padding: 8px 14px;
-    transition: all 0.15s;
-  }
-  .btn-save-key:hover { color: var(--ink); border-color: var(--rule-heavy); }
-  .gen-status {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: var(--ink-faint);
-    letter-spacing: 0.5px;
-    flex: 1;
-    text-align: right;
-  }
-  .gen-status.running { color: var(--amber); }
-  .gen-status.success { color: var(--cat-infra); }
-  .gen-status.error   { color: #7a3520; }
-
-  /* ── LIVE MODE BANNER ── */
-  .live-banner {
-    background: var(--amber-bg);
-    border-bottom: 1px solid #e8b97a;
-    text-align: center;
-    padding: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1px;
-    color: var(--amber);
-    display: none;
-  }
-  .live-banner.show { display: block; }
 
   /* ── SECTION PREVIEW GRID (front page) ── */
   .section-divider {
@@ -647,7 +482,6 @@
     .masthead-top { flex-direction: column; gap: 4px; text-align: center; }
     .page-wrap { padding: 1.25rem 1rem 3rem; }
     .edition-header { flex-direction: column; gap: 4px; }
-    .settings-inner { grid-template-columns: 1fr; }
     .section-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -659,13 +493,7 @@
   <div class="masthead-top">
     <span class="masthead-meta" id="meta-left">Vol. 1 · Issue 1</span>
     <span class="masthead-meta" id="meta-date">Loading...</span>
-    <button class="settings-trigger" id="settings-trigger" onclick="toggleSettings()" title="Settings & Live Generation">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-        <circle cx="8" cy="8" r="2.5"/>
-        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/>
-      </svg>
-      Settings
-    </button>
+      <a href="archive.html" style="font-family:var(--font-serif);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-light);text-decoration:none;border:1px solid var(--rule);padding:4px 10px;">Archive</a>
   </div>
   <div class="masthead-center">
     <p class="masthead-tagline">Intelligence on silicon, infrastructure & the compute race</p>
@@ -675,44 +503,7 @@
   <div class="masthead-rule"></div>
 </header>
 
-<!-- ── SETTINGS PANEL ── -->
-<div class="settings-panel" id="settings-panel">
-  <div class="settings-inner">
 
-    <div class="settings-group">
-      <label class="settings-label" for="api-key-input">API Key</label>
-      <div class="settings-input-wrap">
-        <input class="settings-input" id="api-key-input" type="password"
-               placeholder="Paste your API key here" autocomplete="off" spellcheck="false">
-        <button class="toggle-reveal" onclick="toggleKeyVisibility()" id="reveal-btn">show</button>
-      </div>
-      <p class="settings-hint">Stored in browser only · Never sent anywhere except the selected LLM API</p>
-    </div>
-
-    <div class="settings-group">
-      <label class="settings-label" for="llm-select">LLM Provider</label>
-      <select class="settings-select" id="llm-select">
-        <option value="gemini">Gemini 2.0 Flash (Google AI Studio — free)</option>
-        <option value="openai">GPT-4o (OpenAI)</option>
-        <option value="anthropic">Claude Sonnet (Anthropic)</option>
-        <option value="groq">Llama 3.3 70B (Groq — free)</option>
-      </select>
-      <p class="settings-hint">Get a free Gemini key at aistudio.google.com</p>
-    </div>
-
-    <div class="settings-actions">
-      <button class="btn-generate" id="gen-btn" onclick="generateLive()">Generate fresh edition</button>
-      <button class="btn-save-key" onclick="saveKey()">Save key</button>
-      <span class="gen-status" id="gen-status">Ready</span>
-    </div>
-
-  </div>
-</div>
-
-<!-- ── LIVE BANNER ── -->
-<div class="live-banner" id="live-banner">
-  Live edition · Generated on demand via your API key · Not the scheduled edition
-</div>
 
 <!-- ── FILTER BAR ── -->
 <nav class="filter-bar" id="filter-bar">
@@ -762,149 +553,8 @@ const CAT_ACCENT = {
   Breakthrough:   '#b5610a',
 };
 const chartRefs = {};
-let settingsOpen = false;
 let allStories   = [];
 let activeFilter = 'all';
-
-/* ── SETTINGS ── */
-function toggleSettings() {
-  settingsOpen = !settingsOpen;
-  document.getElementById('settings-panel').classList.toggle('open', settingsOpen);
-  document.getElementById('settings-trigger').classList.toggle('active', settingsOpen);
-  if (settingsOpen) loadSavedKey();
-}
-function loadSavedKey() {
-  const k = localStorage.getItem('ait_api_key');
-  if (k) document.getElementById('api-key-input').value = k;
-  document.getElementById('llm-select').value = localStorage.getItem('ait_provider') || 'gemini';
-}
-function saveKey() {
-  const k = document.getElementById('api-key-input').value.trim();
-  const p = document.getElementById('llm-select').value;
-  if (k) { localStorage.setItem('ait_api_key', k); localStorage.setItem('ait_provider', p); }
-  setStatus('Key saved to browser', 'success');
-  setTimeout(() => setStatus('Ready'), 2000);
-}
-function toggleKeyVisibility() {
-  const inp = document.getElementById('api-key-input');
-  const btn = document.getElementById('reveal-btn');
-  const hide = inp.type === 'password';
-  inp.type = hide ? 'text' : 'password';
-  btn.textContent = hide ? 'hide' : 'show';
-}
-function setStatus(msg, type='') {
-  const el = document.getElementById('gen-status');
-  el.textContent = msg;
-  el.className = 'gen-status' + (type ? ` ${type}` : '');
-}
-
-/* ── LIVE GENERATION ── */
-const GEMINI_PROMPT = `You are a senior AI infrastructure analyst. Search the web for the 10 most important AI GPU infrastructure developments from the past 3 weeks. Weight for: new architectural breakthroughs, benchmark leaps, regulatory moves with real teeth, supply chain power shifts. Downweight: rebrands, conference-only announcements, funding under $50M unless strategically significant.
-
-Return ONLY valid JSON, no markdown, no backticks, no text outside the object:
-{
-  "edition_date": "12 April 2026",
-  "edition_title": "Today's Edition",
-  "volume": 1,
-  "issue": 1,
-  "stories": [
-    {
-      "id": 1,
-      "headline": "Headline in sentence case",
-      "category": "Silicon",
-      "source": "Publication name",
-      "synopsis": [
-        "What happened — the core fact.",
-        "Who is involved and where.",
-        "Key numbers, scale, or timeline.",
-        "Why this matters in the AI race.",
-        "What to watch next."
-      ],
-      "explanation": "2-3 sentences using a simple everyday analogy to explain what really happened and why it matters. No jargon.",
-      "visual": {
-        "type": "bar_chart",
-        "title": "Chart title",
-        "data": { "items": [{"label":"A","value":100,"unit":"TB/s"}] }
-      }
-    }
-  ]
-}
-
-category must be exactly one of: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough
-visual type must be exactly one of: bar_chart, timeline, flow, market_share
-For timeline: data.events=[{date,title,type:"past"|"now"|"future"}]
-For flow: data.steps=[{title,desc}]
-For market_share: data.segments=[{name,pct}] where pct values sum to 100`;
-
-async function generateLive() {
-  const key = document.getElementById('api-key-input').value.trim() || localStorage.getItem('ait_api_key') || '';
-  const provider = document.getElementById('llm-select').value;
-  if (!key) { setStatus('Paste an API key first', 'error'); return; }
-  const btn = document.getElementById('gen-btn');
-  btn.disabled = true;
-  setStatus('Searching the web...', 'running');
-  try {
-    let edition;
-    if (provider === 'gemini')    edition = await callGemini(key);
-    else if (provider === 'groq') edition = await callGroq(key);
-    else if (provider === 'openai') edition = await callOpenAI(key);
-    else if (provider === 'anthropic') edition = await callAnthropic(key);
-    else throw new Error('Unknown provider');
-    renderEdition(edition, true);
-    setStatus('Edition generated · ' + edition.edition_date, 'success');
-    document.getElementById('live-banner').classList.add('show');
-  } catch(err) {
-    setStatus('Error: ' + err.message, 'error');
-    console.error(err);
-  }
-  btn.disabled = false;
-}
-
-async function callGemini(key) {
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: GEMINI_PROMPT }] }], tools: [{ google_search: {} }], generationConfig: { temperature: 0.3, maxOutputTokens: 8192 } })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
-  const d = await res.json();
-  return parseJSON(d.candidates?.[0]?.content?.parts?.map(p => p.text||'').join('') || '');
-}
-async function callGroq(key) {
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: GEMINI_PROMPT }], temperature: 0.3, max_tokens: 8192, response_format: { type: 'json_object' } })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
-  const d = await res.json();
-  return parseJSON(d.choices?.[0]?.message?.content || '');
-}
-async function callOpenAI(key) {
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-    body: JSON.stringify({ model: 'gpt-4o', messages: [{ role: 'user', content: GEMINI_PROMPT }], temperature: 0.3, max_tokens: 8192, response_format: { type: 'json_object' } })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
-  const d = await res.json();
-  return parseJSON(d.choices?.[0]?.message?.content || '');
-}
-async function callAnthropic(key) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 8192, messages: [{ role: 'user', content: GEMINI_PROMPT }] })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
-  const d = await res.json();
-  return parseJSON(d.content?.map(b => b.text||'').join('') || '');
-}
-function parseJSON(raw) {
-  const s = raw.indexOf('{'), e = raw.lastIndexOf('}');
-  if (s === -1 || e === -1) throw new Error('Could not find JSON in response');
-  return JSON.parse(raw.slice(s, e + 1));
-}
 
 /* ── INIT ── */
 function cat(name) { return (name||'').replace(/\s+/g,''); }

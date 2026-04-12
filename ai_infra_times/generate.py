@@ -187,15 +187,124 @@ def write_output(html: str, output_path: str):
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
 
-def save_archive(edition: dict):
-    """Save each edition as JSON in docs/archive/ for historical access."""
-    today     = datetime.date.today().strftime("%Y-%m-%d")
-    arch_dir  = "../docs/archive"
+def save_archive(edition: dict, html: str):
+    """Save JSON + HTML for each edition, then rebuild archive.html index."""
+    today    = datetime.date.today().strftime("%Y-%m-%d")
+    arch_dir = "../docs/archive"
     os.makedirs(arch_dir, exist_ok=True)
-    path      = os.path.join(arch_dir, f"{today}.json")
-    with open(path, "w", encoding="utf-8") as f:
+
+    # Save JSON
+    json_path = os.path.join(arch_dir, f"{today}.json")
+    with open(json_path, "w", encoding="utf-8") as f:
         json.dump(edition, f, ensure_ascii=False, indent=2)
-    print(f"  Archive saved → {path}")
+    print(f"  JSON saved  → {json_path}")
+
+    # Save dated HTML (so each edition is permanently linkable)
+    html_path = os.path.join(arch_dir, f"{today}.html")
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"  HTML saved  → {html_path}")
+
+    # Rebuild archive index page
+    build_archive_index(arch_dir)
+
+def build_archive_index(arch_dir: str):
+    """Generate docs/archive.html listing every past edition."""
+    entries = []
+    for jf in sorted(os.listdir(arch_dir), reverse=True):
+        if not jf.endswith(".json"):
+            continue
+        date_str = jf[:-5]          # "2026-04-12"
+        json_path = os.path.join(arch_dir, jf)
+        try:
+            with open(json_path, encoding="utf-8") as f:
+                ed = json.load(f)
+            vol    = ed.get("volume", 1)
+            issue  = ed.get("issue", "?")
+            stories = ed.get("stories", [])
+            top3   = stories[:3]
+        except Exception:
+            vol, issue, top3 = 1, "?", []
+
+        # Format date nicely
+        try:
+            d = datetime.date.fromisoformat(date_str)
+            nice_date = d.strftime("%-d %B %Y")
+        except Exception:
+            nice_date = date_str
+
+        cat_colors = {
+            "Silicon": "#1a4f72", "Infrastructure": "#2d6a3f", "Cloud": "#5a3475",
+            "Investment": "#7a3520", "Policy": "#4a4215", "Breakthrough": "#b5610a",
+        }
+        headlines_html = ""
+        for s in top3:
+            cat   = s.get("category", "Silicon")
+            color = cat_colors.get(cat, "#555")
+            hl    = s.get("headline", "")[:100]
+            headlines_html += (
+                f'<div style="display:flex;gap:8px;align-items:baseline;margin-bottom:4px;">'
+                f'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;'
+                f'letter-spacing:.08em;color:{color};text-transform:uppercase;white-space:nowrap;">{cat}</span>'
+                f'<span style="font-size:13px;color:#3a3530;">{hl}</span>'
+                f'</div>'
+            )
+
+        html_file = f"{date_str}.html"
+        entries.append(
+            f'<a href="archive/{html_file}" style="display:block;text-decoration:none;color:inherit;'
+            f'border-bottom:1px solid #d8d0c8;padding:20px 0;">'
+            f'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">'
+            f'<span style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;color:#1a1714;">{nice_date}</span>'
+            f'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.1em;'
+            f'color:#8a8278;text-transform:uppercase;">Vol. {vol} · Issue {issue}</span>'
+            f'</div>'
+            f'{headlines_html}'
+            f'</a>'
+        )
+
+    entries_html = "\n".join(entries) if entries else "<p style='color:#8a8278;font-style:italic;'>No editions yet.</p>"
+
+    page = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Archive · AI Infra Times</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body {{ margin:0; background:#f5f0e8; font-family: Georgia, serif; min-height:100vh; }}
+  .masthead {{ border-bottom: 3px double #3a3530; padding: 16px 0 12px; text-align:center; background:#f5f0e8; }}
+  .masthead-top {{ display:flex; justify-content:space-between; align-items:center; max-width:760px; margin:0 auto; padding:0 24px 10px; }}
+  .masthead-meta {{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#8a8278; }}
+  .masthead-title {{ font-family:'Playfair Display',serif; font-size:52px; font-weight:700; margin:4px 0; color:#1a1714; letter-spacing:-.01em; }}
+  .masthead-tagline {{ font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:#8a8278; margin:0 0 6px; }}
+  .page-wrap {{ max-width:760px; margin:0 auto; padding:32px 24px 64px; }}
+  h2 {{ font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:#1a1714; margin:0 0 24px; border-bottom:1px solid #c8c0b8; padding-bottom:12px; }}
+  a:hover span {{ text-decoration:underline; }}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-meta">Archive</span>
+    <a href="../index.html" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#8a8278;text-decoration:none;border:1px solid #c8c0b8;padding:4px 10px;">← Today's Edition</a>
+  </div>
+  <p class="masthead-tagline">Intelligence on silicon, infrastructure & the compute race</p>
+  <h1 class="masthead-title">AI Infra Times</h1>
+</header>
+<main class="page-wrap">
+  <h2>All Editions</h2>
+  {entries_html}
+</main>
+</body>
+</html>"""
+
+    out = os.path.join(os.path.dirname(arch_dir), "archive.html")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(page)
+    print(f"  Archive index → {out}")
 
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 
@@ -226,7 +335,7 @@ def main():
     print("[ 4/4 ] Writing output files...")
     write_output(html, OUTPUT_PATH)
     print(f"        HTML written → {OUTPUT_PATH}")
-    save_archive(edition)
+    save_archive(edition, html)
 
     print()
     print("Done. Edition ready.")
