@@ -59,23 +59,25 @@ jobs:
           git push
 
       # ── 5. Telegram notification (optional) ───────────────────────────────
-      # Remove this step if you haven't set up Telegram secrets
+      # Skipped until TELEGRAM_BOT_TOKEN and TELEGRAM_CHANNEL_ID secrets are added
       - name: Send Telegram notification
-        if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}
+        if: env.TELEGRAM_BOT_TOKEN != ''
         env:
-          BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         run: |
           DATE=$(date +'%-d %B %Y')
           python3 - << 'PYEOF'
-          import os, urllib.request, urllib.parse, json
+          import os, urllib.request, urllib.parse, json, datetime
 
-          bot_token  = os.environ["BOT_TOKEN"]
-          channel_id = os.environ["CHANNEL_ID"]
-          date_str   = os.environ["DATE"]
+          bot_token  = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+          channel_id = os.environ.get("TELEGRAM_CHANNEL_ID", "")
+          date_str   = os.environ.get("DATE", "")
 
-          # Read the archive JSON to pull today's headlines
-          import glob, datetime
+          if not bot_token or not channel_id:
+              print("Telegram secrets not set — skipping.")
+              exit(0)
+
           today = datetime.date.today().strftime("%Y-%m-%d")
           archive_path = f"docs/archive/{today}.json"
 
@@ -113,8 +115,6 @@ jobs:
               result = json.loads(resp.read())
               print("Telegram sent:", result.get("ok"))
           PYEOF
-        env:
-          DATE: ${{ env.DATE }}
 
       # ── 6. Print summary ──────────────────────────────────────────────────
       - name: Summary
