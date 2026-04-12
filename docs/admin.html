@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin · AI Infra Times</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5f0e8; --ink: #1a1714; --ink-secondary: #3a3530;
+    --ink-light: #6a6560; --ink-faint: #8a8278; --rule: #c8c0b8;
+    --amber: #b5610a; --amber-bg: #fdf6ee;
+    --green: #2d6a3f; --red: #7a2020;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); font-family:'JetBrains Mono',monospace; color:var(--ink); }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    display:flex; align-items:center; justify-content:center; min-height:100vh;
+    flex-direction:column; gap:16px;
+  }
+  #login-screen h1 { font-family:'Playfair Display',serif; font-size:32px; margin:0; }
+  #login-screen p { font-size:11px; color:var(--ink-faint); letter-spacing:.1em; text-transform:uppercase; margin:0; }
+  #pw-input {
+    border:1px solid var(--rule); background:white; padding:10px 14px;
+    font-family:'JetBrains Mono',monospace; font-size:13px; width:280px; outline:none;
+  }
+  #pw-input:focus { border-color:var(--amber); }
+  #login-btn {
+    background:var(--ink); color:white; border:none; padding:10px 24px;
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.5px;
+    text-transform:uppercase; cursor:pointer; width:280px;
+  }
+  #login-btn:hover { background:var(--ink-secondary); }
+  #login-error { color:var(--red); font-size:11px; display:none; }
+
+  /* ── ADMIN APP ── */
+  #admin-app { display:none; }
+
+  .top-bar {
+    background:var(--ink); color:white; padding:12px 24px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .top-bar-title { font-family:'Playfair Display',serif; font-size:20px; }
+  .top-bar-meta { font-size:10px; letter-spacing:.1em; opacity:.6; }
+  .top-bar-actions { display:flex; gap:10px; align-items:center; }
+
+  .btn {
+    padding:8px 16px; font-family:'JetBrains Mono',monospace; font-size:9px;
+    letter-spacing:1.2px; text-transform:uppercase; cursor:pointer; border:none;
+    transition:all .15s;
+  }
+  .btn-primary { background:var(--amber); color:white; }
+  .btn-primary:hover { background:#9a5009; }
+  .btn-primary:disabled { opacity:.4; cursor:not-allowed; }
+  .btn-danger { background:var(--red); color:white; }
+  .btn-danger:hover { background:#5a1010; }
+  .btn-outline { background:transparent; color:white; border:1px solid rgba(255,255,255,.3); }
+  .btn-outline:hover { border-color:white; }
+
+  .toolbar {
+    background:#eae5dd; border-bottom:1px solid var(--rule); padding:10px 24px;
+    display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+  }
+  .toolbar-label { font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); }
+  .status-msg { font-size:10px; color:var(--ink-light); margin-left:auto; }
+  .status-msg.ok { color:var(--green); }
+  .status-msg.err { color:var(--red); }
+  .status-msg.running { color:var(--amber); }
+
+  /* ── TOKEN SETUP ── */
+  .token-bar {
+    background:var(--amber-bg); border-bottom:1px solid #e8c090; padding:10px 24px;
+    display:flex; align-items:center; gap:10px; font-size:11px;
+  }
+  .token-bar input {
+    flex:1; border:1px solid #e8c090; background:white; padding:6px 10px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; outline:none; max-width:420px;
+  }
+  .token-bar input:focus { border-color:var(--amber); }
+  .token-bar .btn { padding:6px 12px; background:var(--amber); color:white; }
+
+  /* ── STORIES ── */
+  .stories-wrap { max-width:900px; margin:0 auto; padding:24px; }
+  .story-card {
+    background:white; border:1px solid var(--rule); margin-bottom:12px;
+    border-radius:2px; transition:all .2s;
+  }
+  .story-card.deleted { opacity:.35; border-style:dashed; }
+  .story-header {
+    display:flex; align-items:center; gap:12px; padding:14px 16px;
+    cursor:grab; user-select:none;
+  }
+  .story-header:active { cursor:grabbing; }
+  .drag-handle { color:var(--ink-faint); font-size:14px; flex-shrink:0; }
+  .story-num {
+    font-size:9px; letter-spacing:.1em; color:var(--ink-faint);
+    text-transform:uppercase; flex-shrink:0; width:20px; text-align:center;
+  }
+  .cat-badge {
+    font-size:8px; letter-spacing:.1em; text-transform:uppercase; padding:3px 8px;
+    border-radius:2px; color:white; flex-shrink:0;
+  }
+  .story-headline { flex:1; font-size:14px; font-family:'Playfair Display',serif; color:var(--ink); }
+  .story-source { font-size:9px; color:var(--ink-faint); flex-shrink:0; }
+  .story-actions { display:flex; gap:6px; flex-shrink:0; }
+  .btn-sm {
+    padding:5px 10px; font-family:'JetBrains Mono',monospace; font-size:8px;
+    letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none;
+  }
+  .btn-delete { background:#fde8e8; color:var(--red); }
+  .btn-delete:hover { background:#f8c8c8; }
+  .btn-restore { background:#e8f5ee; color:var(--green); }
+  .btn-restore:hover { background:#c8e8d8; }
+  .story-body { padding:0 16px 16px 62px; border-top:1px solid #f0ebe3; }
+  .story-body summary { padding:10px 0; cursor:pointer; font-size:11px; color:var(--ink-light); outline:none; }
+  .synopsis-list { margin:8px 0; padding-left:16px; }
+  .synopsis-list li { font-size:12px; color:var(--ink-secondary); margin-bottom:4px; line-height:1.5; }
+  .explanation { font-size:12px; color:var(--ink-secondary); font-style:italic; margin-top:8px; line-height:1.6; }
+
+  /* drag over */
+  .story-card.drag-over { border-color:var(--amber); box-shadow:0 0 0 2px var(--amber-bg); }
+
+  /* ── CONFIRM MODAL ── */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.5);
+    align-items:center; justify-content:center; z-index:100;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:white; padding:28px 32px; max-width:400px; width:90%;
+    border-radius:2px; text-align:center;
+  }
+  .modal h3 { font-family:'Playfair Display',serif; margin:0 0 10px; font-size:22px; }
+  .modal p { font-size:12px; color:var(--ink-light); margin:0 0 20px; line-height:1.6; }
+  .modal-actions { display:flex; gap:10px; justify-content:center; }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <p>AI Infra Times</p>
+  <h1>Admin Panel</h1>
+  <input type="password" id="pw-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+  <button class="btn" id="login-btn" onclick="login()">Enter</button>
+  <span id="login-error">Incorrect password</span>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="admin-app">
+
+  <div class="top-bar">
+    <div>
+      <div class="top-bar-title">AI Infra Times · Admin</div>
+      <div class="top-bar-meta" id="top-edition-meta">Loading edition...</div>
+    </div>
+    <div class="top-bar-actions">
+      <button class="btn btn-outline" onclick="window.open('index.html','_blank')">View Live →</button>
+      <button class="btn btn-primary" id="publish-btn" onclick="publishChanges()">Publish Changes</button>
+    </div>
+  </div>
+
+  <!-- GitHub Token bar -->
+  <div class="token-bar" id="token-bar">
+    <span>GitHub Token needed to publish:</span>
+    <input type="password" id="gh-token-input" placeholder="ghp_xxxx  (repo scope required)" autocomplete="off">
+    <button class="btn" onclick="saveToken()">Save Token</button>
+    <span style="font-size:10px;color:var(--ink-faint);">Stored in browser only</span>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Stories</span>
+    <button class="btn" style="background:var(--ink);color:white;" onclick="triggerRegenerate()">⟳ Regenerate Edition</button>
+    <button class="btn" style="background:#eae5dd;color:var(--ink);border:1px solid var(--rule);" onclick="restoreAll()">Restore All</button>
+    <span class="status-msg" id="status-msg"></span>
+  </div>
+
+  <div class="stories-wrap" id="stories-wrap"></div>
+
+</div>
+
+<!-- ── CONFIRM MODAL ── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Confirm</h3>
+    <p id="modal-body"></p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" style="color:var(--ink);border-color:var(--rule);" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger" id="modal-confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const REPO  = 'MRG15/AI_infra_MRG';
+const ADMIN_PASSWORD = 'aitadmin2026';   // Change this to your preferred password
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let edition  = null;
+let stories  = [];   // working copy (includes deleted flag)
+let dragSrc  = null;
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function login() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display    = 'block';
+    loadEdition();
+    const saved = localStorage.getItem('ait_gh_token');
+    if (saved) {
+      document.getElementById('gh-token-input').value = saved;
+      document.getElementById('token-bar').style.display = 'none';
+    }
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function saveToken() {
+  const t = document.getElementById('gh-token-input').value.trim();
+  if (t) { localStorage.setItem('ait_gh_token', t); setStatus('Token saved.', 'ok'); }
+  document.getElementById('token-bar').style.display = 'none';
+}
+
+// ── LOAD EDITION ──────────────────────────────────────────────────────────────
+async function loadEdition() {
+  setStatus('Loading today\'s edition...', 'running');
+  try {
+    // Load from embedded EDITION in index.html via fetch
+    const resp = await fetch('index.html?t=' + Date.now());
+    const text = await resp.text();
+    const match = text.match(/const EDITION = (\{[\s\S]*?\});\s*\n/);
+    if (!match) throw new Error('Could not parse EDITION from index.html');
+    edition = JSON.parse(match[1]);
+    stories = edition.stories.map((s, i) => ({ ...s, _deleted: false, _origIdx: i }));
+    renderStories();
+    document.getElementById('top-edition-meta').textContent =
+      `Vol. ${edition.volume} · Issue ${edition.issue} · ${edition.edition_date}`;
+    setStatus('Edition loaded — ' + stories.length + ' stories', 'ok');
+  } catch(e) {
+    setStatus('Error loading edition: ' + e.message, 'err');
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+const CAT_COLORS = {
+  Silicon:'#1a4f72', Infrastructure:'#2d6a3f', Cloud:'#5a3475',
+  Investment:'#7a3520', Policy:'#4a4215', Breakthrough:'#b5610a',
+};
+
+function renderStories() {
+  const wrap = document.getElementById('stories-wrap');
+  wrap.innerHTML = '';
+  stories.forEach((s, idx) => {
+    const color   = CAT_COLORS[s.category] || '#555';
+    const deleted = s._deleted;
+    const card = document.createElement('div');
+    card.className = 'story-card' + (deleted ? ' deleted' : '');
+    card.dataset.idx = idx;
+    card.draggable = true;
+    card.innerHTML = `
+      <div class="story-header">
+        <span class="drag-handle">⠿</span>
+        <span class="story-num">${idx + 1}</span>
+        <span class="cat-badge" style="background:${color}">${s.category}</span>
+        <span class="story-headline">${s.headline}</span>
+        <span class="story-source">${s.source || ''}</span>
+        <div class="story-actions">
+          ${deleted
+            ? `<button class="btn-sm btn-restore" onclick="toggleDelete(${idx})">Restore</button>`
+            : `<button class="btn-sm btn-delete" onclick="toggleDelete(${idx})">Delete</button>`
+          }
+        </div>
+      </div>
+      <div class="story-body">
+        <details>
+          <summary>Synopsis &amp; explanation</summary>
+          <ul class="synopsis-list">${(s.synopsis||[]).map(l=>`<li>${l}</li>`).join('')}</ul>
+          <p class="explanation">${s.explanation||''}</p>
+        </details>
+      </div>`;
+
+    // Drag events
+    card.addEventListener('dragstart', e => { dragSrc = idx; e.dataTransfer.effectAllowed = 'move'; });
+    card.addEventListener('dragover',  e => { e.preventDefault(); card.classList.add('drag-over'); });
+    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+    card.addEventListener('drop', e => {
+      e.preventDefault(); card.classList.remove('drag-over');
+      if (dragSrc === idx) return;
+      const moved = stories.splice(dragSrc, 1)[0];
+      stories.splice(idx, 0, moved);
+      renderStories();
+    });
+
+    wrap.appendChild(card);
+  });
+}
+
+function toggleDelete(idx) {
+  stories[idx]._deleted = !stories[idx]._deleted;
+  renderStories();
+  const count = stories.filter(s => s._deleted).length;
+  setStatus(count > 0 ? `${count} story${count>1?'s':''} marked for deletion` : '', count > 0 ? 'err' : '');
+}
+
+function restoreAll() {
+  stories.forEach(s => s._deleted = false);
+  renderStories();
+  setStatus('All stories restored.', 'ok');
+}
+
+// ── PUBLISH ───────────────────────────────────────────────────────────────────
+async function publishChanges() {
+  const token = localStorage.getItem('ait_gh_token') || document.getElementById('gh-token-input').value.trim();
+  if (!token) {
+    document.getElementById('token-bar').style.display = 'flex';
+    setStatus('Enter your GitHub token first.', 'err');
+    return;
+  }
+
+  const kept = stories.filter(s => !s._deleted).map((s, i) => {
+    const { _deleted, _origIdx, ...clean } = s;
+    return { ...clean, id: i + 1 };
+  });
+
+  if (kept.length === 0) { setStatus('Cannot publish — no stories remaining.', 'err'); return; }
+
+  openModal(
+    'Publish Changes',
+    `This will update the live page with ${kept.length} story${kept.length > 1 ? 'ies' : 'y'} (${stories.length - kept.length} deleted). Continue?`,
+    async () => {
+      closeModal();
+      setStatus('Publishing...', 'running');
+      document.getElementById('publish-btn').disabled = true;
+
+      try {
+        const newEdition = { ...edition, stories: kept };
+
+        // Fetch current index.html from GitHub to get its SHA
+        const metaResp = await fetch(`https://api.github.com/repos/${REPO}/contents/docs/index.html`, {
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        if (!metaResp.ok) throw new Error(`GitHub API: ${metaResp.status} ${metaResp.statusText}`);
+        const meta = await metaResp.json();
+
+        // Fetch current template shape from live page
+        const liveResp = await fetch('index.html?t=' + Date.now());
+        const liveText = await liveResp.text();
+
+        // Replace EDITION data
+        const newJson = JSON.stringify(newEdition, null, 2);
+        const newHtml = liveText.replace(
+          /const EDITION = \{[\s\S]*?\};\s*\n/,
+          `const EDITION = ${newJson};\n`
+        );
+
+        const encoded = btoa(unescape(encodeURIComponent(newHtml)));
+        const today   = new Date().toISOString().slice(0, 10);
+
+        const putResp = await fetch(`https://api.github.com/repos/${REPO}/contents/docs/index.html`, {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: `Admin edit: ${today}`, content: encoded, sha: meta.sha })
+        });
+        if (!putResp.ok) {
+          const err = await putResp.json();
+          throw new Error(err.message || putResp.statusText);
+        }
+
+        setStatus(`Published! ${kept.length} stories live. GitHub Pages will update in ~30s.`, 'ok');
+        // Reload to reflect
+        setTimeout(loadEdition, 3000);
+      } catch(e) {
+        setStatus('Publish failed: ' + e.message, 'err');
+      }
+      document.getElementById('publish-btn').disabled = false;
+    }
+  );
+}
+
+// ── REGENERATE ────────────────────────────────────────────────────────────────
+async function triggerRegenerate() {
+  const token = localStorage.getItem('ait_gh_token') || document.getElementById('gh-token-input').value.trim();
+  if (!token) {
+    document.getElementById('token-bar').style.display = 'flex';
+    setStatus('Enter your GitHub token first.', 'err');
+    return;
+  }
+  openModal(
+    'Regenerate Edition',
+    'This triggers the GitHub Actions workflow to fetch fresh news from the web and overwrite today\'s edition. It takes ~30 seconds. Continue?',
+    async () => {
+      closeModal();
+      setStatus('Triggering workflow...', 'running');
+      try {
+        const resp = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/daily.yml/dispatches`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: 'main' })
+        });
+        if (resp.ok || resp.status === 204) {
+          setStatus('Workflow triggered! Fresh edition generating — reload this page in ~45 seconds.', 'ok');
+        } else {
+          const err = await resp.json();
+          throw new Error(err.message || resp.statusText);
+        }
+      } catch(e) {
+        setStatus('Error: ' + e.message, 'err');
+      }
+    }
+  );
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+let _modalAction = null;
+function openModal(title, body, action) {
+  document.getElementById('modal-title').textContent   = title;
+  document.getElementById('modal-body').textContent    = body;
+  document.getElementById('modal-confirm').onclick     = action;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function setStatus(msg, type='') {
+  const el = document.getElementById('status-msg');
+  el.textContent  = msg;
+  el.className    = 'status-msg' + (type ? ' ' + type : '');
+}
+</script>
+</body>
+</html>

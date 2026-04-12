@@ -1,8 +1,8 @@
 """
 AI Infra Times · Daily Edition Generator
-Calls Groq compound-beta (with web search) → injects JSON into HTML template → writes index.html
-Run locally:  GROQ_API_KEY=your_key python generate.py
-Run via CI:   GitHub Actions sets GROQ_API_KEY from repo secrets
+Calls Gemini 2.0 Flash with Google Search grounding → injects JSON into HTML template → writes index.html
+Run locally:  GEMINI_API_KEY=your_key python generate.py
+Run via CI:   GitHub Actions sets GEMINI_API_KEY from repo secrets
 """
 
 import os
@@ -15,22 +15,21 @@ import re
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
-GROQ_MODEL   = "llama-3.3-70b-versatile"
-GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL   = "gemini-2.0-flash"
+GEMINI_URL     = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
 TEMPLATE_PATH  = "template.html"      # relative to this script
 OUTPUT_PATH    = "../docs/index.html" # GitHub Pages serves from repo-root /docs
 
-VOLUME  = 1   # increment manually when you want to reset issue count
-# Issue number = days since Vol.1 launch date
+VOLUME  = 1
 LAUNCH_DATE = datetime.date(2026, 4, 12)
 
 # ── PROMPT ────────────────────────────────────────────────────────────────────
 
 SYSTEM_PROMPT = """You are a senior AI infrastructure analyst and editor of AI Infra Times, a daily intelligence briefing.
 
-Search the web thoroughly for the 10 most significant AI GPU and infrastructure developments from the past 3 weeks.
+Use Google Search to find the 10 most significant AI GPU and infrastructure developments from the past 72 hours. Prioritise breaking news and events from today and yesterday first.
 
 Selection criteria (strictly apply this weighting):
   HIGH WEIGHT:
@@ -97,9 +96,9 @@ Rules:
 # ── HELPERS ───────────────────────────────────────────────────────────────────
 
 def build_prompt():
-    today      = datetime.date.today()
-    issue      = (today - LAUNCH_DATE).days + 1
-    today_str  = today.strftime("%-d %B %Y")   # e.g. "12 April 2026"
+    today     = datetime.date.today()
+    issue     = (today - LAUNCH_DATE).days + 1
+    today_str = today.strftime("%-d %B %Y")
     return SYSTEM_PROMPT.format(
         today      = today_str,
         today_long = today_str,
@@ -107,47 +106,41 @@ def build_prompt():
         issue      = issue,
     )
 
-def call_groq(api_key: str) -> dict:
+def call_gemini(api_key: str) -> dict:
     prompt  = build_prompt()
     payload = {
-        "model":    GROQ_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature":    0.3,
-        "max_tokens":     8192,
-        "response_format": {"type": "json_object"},
+        "contents": [{"parts": [{"text": prompt}]}],
+        "tools":    [{"google_search": {}}],
+        "generationConfig": {
+            "temperature":      0.3,
+            "maxOutputTokens":  8192,
+            "responseMimeType": "application/json",
+        },
     }
     data = json.dumps(payload).encode("utf-8")
-    req  = urllib.request.Request(
-        GROQ_URL,
-        data    = data,
-        headers = {
-            "Content-Type":  "application/json",
-            "Authorization": f"Bearer {api_key}",
-            "User-Agent":    "AI-Infra-Times/1.0",
-        },
-    )
+    url  = f"{GEMINI_URL}?key={api_key}"
+    req  = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
 
     try:
         with urllib.request.urlopen(req, timeout=120) as resp:
             body = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         error_body = e.read().decode("utf-8")
-        raise RuntimeError(f"Groq API error {e.code}: {error_body}")
+        raise RuntimeError(f"Gemini API error {e.code}: {error_body}")
 
-    raw = body.get("choices", [{}])[0].get("message", {}).get("content", "")
+    parts = body.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+    raw   = "".join(p.get("text", "") for p in parts)
 
     if not raw.strip():
-        raise RuntimeError("Empty response from Groq API")
+        raise RuntimeError("Empty response from Gemini API")
 
     return parse_json(raw)
 
 def parse_json(raw: str) -> dict:
-    """Extract and parse JSON even if there's surrounding text."""
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
         pass
-    # Fallback: extract between first { and last }
     s = raw.find("{")
     e = raw.rfind("}")
     if s == -1 or e == -1:
@@ -155,23 +148,21 @@ def parse_json(raw: str) -> dict:
     return json.loads(raw[s:e+1])
 
 def validate_edition(edition: dict) -> dict:
-    """Light validation and normalisation — never crash, just fix."""
-    stories = edition.get("stories", [])
-    valid_cats  = {"Silicon","Infrastructure","Cloud","Investment","Policy","Breakthrough"}
-    valid_vis   = {"bar_chart","timeline","flow","market_share"}
+    stories    = edition.get("stories", [])
+    valid_cats = {"Silicon","Infrastructure","Cloud","Investment","Policy","Breakthrough"}
+    valid_vis  = {"bar_chart","timeline","flow","market_share"}
 
     for s in stories:
         if s.get("category") not in valid_cats:
             s["category"] = "Silicon"
         if "visual" in s and s["visual"].get("type") not in valid_vis:
             s["visual"]["type"] = "bar_chart"
-        # Ensure synopsis is always a list of 5
         if not isinstance(s.get("synopsis"), list):
             s["synopsis"] = [s.get("synopsis",""), "", "", "", ""]
         while len(s["synopsis"]) < 5:
             s["synopsis"].append("")
 
-    edition["stories"] = stories[:10]  # cap at 10
+    edition["stories"] = stories[:10]
     return edition
 
 def inject_into_template(edition: dict, template_path: str) -> str:
@@ -193,42 +184,36 @@ def save_archive(edition: dict, html: str):
     arch_dir = "../docs/archive"
     os.makedirs(arch_dir, exist_ok=True)
 
-    # Save JSON
     json_path = os.path.join(arch_dir, f"{today}.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(edition, f, ensure_ascii=False, indent=2)
     print(f"  JSON saved  → {json_path}")
 
-    # Save dated HTML (so each edition is permanently linkable)
     html_path = os.path.join(arch_dir, f"{today}.html")
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"  HTML saved  → {html_path}")
 
-    # Rebuild archive index page
     build_archive_index(arch_dir)
 
 def build_archive_index(arch_dir: str):
-    """Generate docs/archive.html listing every past edition."""
     entries = []
     for jf in sorted(os.listdir(arch_dir), reverse=True):
         if not jf.endswith(".json"):
             continue
-        date_str = jf[:-5]          # "2026-04-12"
+        date_str  = jf[:-5]
         json_path = os.path.join(arch_dir, jf)
         try:
             with open(json_path, encoding="utf-8") as f:
                 ed = json.load(f)
             vol    = ed.get("volume", 1)
             issue  = ed.get("issue", "?")
-            stories = ed.get("stories", [])
-            top3   = stories[:3]
+            top3   = ed.get("stories", [])[:3]
         except Exception:
             vol, issue, top3 = 1, "?", []
 
-        # Format date nicely
         try:
-            d = datetime.date.fromisoformat(date_str)
+            d         = datetime.date.fromisoformat(date_str)
             nice_date = d.strftime("%-d %B %Y")
         except Exception:
             nice_date = date_str
@@ -244,23 +229,20 @@ def build_archive_index(arch_dir: str):
             hl    = s.get("headline", "")[:100]
             headlines_html += (
                 f'<div style="display:flex;gap:8px;align-items:baseline;margin-bottom:4px;">'
-                f'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;'
-                f'letter-spacing:.08em;color:{color};text-transform:uppercase;white-space:nowrap;">{cat}</span>'
+                f'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.08em;'
+                f'color:{color};text-transform:uppercase;white-space:nowrap;">{cat}</span>'
                 f'<span style="font-size:13px;color:#3a3530;">{hl}</span>'
                 f'</div>'
             )
 
-        html_file = f"{date_str}.html"
         entries.append(
-            f'<a href="archive/{html_file}" style="display:block;text-decoration:none;color:inherit;'
+            f'<a href="archive/{date_str}.html" style="display:block;text-decoration:none;color:inherit;'
             f'border-bottom:1px solid #d8d0c8;padding:20px 0;">'
             f'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">'
             f'<span style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;color:#1a1714;">{nice_date}</span>'
             f'<span style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:.1em;'
             f'color:#8a8278;text-transform:uppercase;">Vol. {vol} · Issue {issue}</span>'
-            f'</div>'
-            f'{headlines_html}'
-            f'</a>'
+            f'</div>{headlines_html}</a>'
         )
 
     entries_html = "\n".join(entries) if entries else "<p style='color:#8a8278;font-style:italic;'>No editions yet.</p>"
@@ -274,15 +256,14 @@ def build_archive_index(arch_dir: str):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  body {{ margin:0; background:#f5f0e8; font-family: Georgia, serif; min-height:100vh; }}
-  .masthead {{ border-bottom: 3px double #3a3530; padding: 16px 0 12px; text-align:center; background:#f5f0e8; }}
+  body {{ margin:0; background:#f5f0e8; font-family:Georgia,serif; min-height:100vh; }}
+  .masthead {{ border-bottom:3px double #3a3530; padding:16px 0 12px; text-align:center; background:#f5f0e8; }}
   .masthead-top {{ display:flex; justify-content:space-between; align-items:center; max-width:760px; margin:0 auto; padding:0 24px 10px; }}
   .masthead-meta {{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#8a8278; }}
   .masthead-title {{ font-family:'Playfair Display',serif; font-size:52px; font-weight:700; margin:4px 0; color:#1a1714; letter-spacing:-.01em; }}
   .masthead-tagline {{ font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:#8a8278; margin:0 0 6px; }}
   .page-wrap {{ max-width:760px; margin:0 auto; padding:32px 24px 64px; }}
   h2 {{ font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:#1a1714; margin:0 0 24px; border-bottom:1px solid #c8c0b8; padding-bottom:12px; }}
-  a:hover span {{ text-decoration:underline; }}
 </style>
 </head>
 <body>
@@ -291,7 +272,7 @@ def build_archive_index(arch_dir: str):
     <span class="masthead-meta">Archive</span>
     <a href="../index.html" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#8a8278;text-decoration:none;border:1px solid #c8c0b8;padding:4px 10px;">← Today's Edition</a>
   </div>
-  <p class="masthead-tagline">Intelligence on silicon, infrastructure & the compute race</p>
+  <p class="masthead-tagline">Intelligence on silicon, infrastructure &amp; the compute race</p>
   <h1 class="masthead-title">AI Infra Times</h1>
 </header>
 <main class="page-wrap">
@@ -309,21 +290,19 @@ def build_archive_index(arch_dir: str):
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 
 def main():
-    api_key = GROQ_API_KEY
+    api_key = GEMINI_API_KEY
     if not api_key:
-        print("ERROR: GROQ_API_KEY environment variable not set.")
-        print("  Local run:   export GROQ_API_KEY=your_key && python generate.py")
-        print("  GitHub CI:   add GROQ_API_KEY to repo Settings → Secrets → Actions")
+        print("ERROR: GEMINI_API_KEY environment variable not set.")
         sys.exit(1)
 
     print(f"AI Infra Times Generator · {datetime.date.today()}")
-    print(f"  Model:    {GROQ_MODEL}")
+    print(f"  Model:    {GEMINI_MODEL} (with Google Search grounding)")
     print(f"  Template: {TEMPLATE_PATH}")
     print(f"  Output:   {OUTPUT_PATH}")
     print()
 
-    print("[ 1/4 ] Calling Groq API (llama-3.3-70b-versatile)...")
-    edition = call_groq(api_key)
+    print("[ 1/4 ] Calling Gemini API with live Google Search grounding...")
+    edition = call_gemini(api_key)
     print(f"        Got {len(edition.get('stories',[]))} stories")
 
     print("[ 2/4 ] Validating and normalising edition data...")
