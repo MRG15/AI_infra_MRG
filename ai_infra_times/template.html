@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Infra Times</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-secondary: #3d3a34;
+    --ink-tertiary: #6b6760;
+    --ink-faint: #9e9b96;
+    --paper: #f5f0e8;
+    --paper-dark: #ede8df;
+    --paper-darker: #e4ddd2;
+    --rule: #c8c2b6;
+    --rule-heavy: #a09890;
+    --amber: #b5610a;
+    --amber-light: #d4782d;
+    --amber-bg: #fdf3e7;
+    --cat-silicon: #1a4f72;
+    --cat-infra: #2d6a3f;
+    --cat-cloud: #5a3475;
+    --cat-invest: #7a3520;
+    --cat-policy: #4a4215;
+    --cat-break: #b5610a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 0 0 1rem;
+    margin-bottom: 0;
+  }
+  .masthead-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem 0;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0.75rem;
+  }
+  .masthead-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.5px;
+  }
+  .masthead-center { text-align: center; padding: 0.5rem 2rem 0.75rem; }
+  .masthead-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--ink-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .masthead-subtitle {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.5px;
+  }
+  .masthead-rule {
+    height: 3px;
+    background: var(--ink);
+    margin: 0.75rem 2rem 0;
+    position: relative;
+  }
+  .masthead-rule::before, .masthead-rule::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0; right: 0;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: var(--ink);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0.6rem 1rem 0.6rem 0;
+    border-right: 1px solid #3d3a34;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  .filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9e9b96;
+    padding: 0.6rem 0.9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0.9rem; right: 0.9rem;
+    height: 2px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .filter-btn:hover { color: #fff; }
+  .filter-btn.active { color: #fff; }
+  .filter-btn.active::after { background: var(--amber); }
+  .filter-btn[data-cat="all"].active { color: var(--amber); }
+
+  /* ── MAIN LAYOUT ── */
+  .page-wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── EDITION HEADER ── */
+  .edition-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2rem;
+  }
+  .edition-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink-secondary);
+  }
+  .edition-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+  }
+
+  /* ── STORY CARD ── */
+  .story {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--rule);
+    animation: fadeUp 0.4s ease both;
+  }
+  .story.hidden { display: none; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .story:last-child { border-bottom: none; }
+
+  .story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.9rem; flex-wrap: wrap; }
+
+  .cat-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .cat-Silicon   { background: #deeaf4; color: var(--cat-silicon); }
+  .cat-Infrastructure { background: #ddf0e4; color: var(--cat-infra); }
+  .cat-Cloud     { background: #ede4f5; color: var(--cat-cloud); }
+  .cat-Investment { background: #f5e4de; color: var(--cat-invest); }
+  .cat-Policy    { background: #f0ecda; color: var(--cat-policy); }
+  .cat-Breakthrough { background: #fdf3e7; color: var(--cat-break); border: 1px solid #e8b97a; }
+
+  .story-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.5px;
+  }
+  .story-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 11px;
+    color: var(--rule-heavy);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  .story-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .story-headline.lead { font-size: clamp(22px, 3.5vw, 28px); }
+  .story-headline.standard { font-size: clamp(17px, 2.5vw, 21px); }
+
+  /* ── BRIEF (5-liner) ── */
+  .brief {
+    border-left: 3px solid var(--rule-heavy);
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .brief-line {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--ink-secondary);
+    padding: 2px 0;
+  }
+  .brief-line.lede {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* ── VISUAL BOX ── */
+  .visual-box {
+    background: var(--paper-dark);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--rule-heavy);
+    padding: 1.25rem 1.25rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .visual-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── REAL STORY ── */
+  .real-story {
+    background: var(--amber-bg);
+    border-left: 3px solid var(--amber);
+    padding: 1rem 1.25rem;
+  }
+  .real-story-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .real-story-text {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 13.5px;
+    color: var(--ink-secondary);
+    line-height: 1.85;
+    font-style: italic;
+  }
+
+  /* ── TIMELINE VISUAL ── */
+  .timeline { padding: 0.25rem 0; }
+  .tl-item { display: flex; gap: 14px; padding-bottom: 14px; position: relative; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 16px;
+  }
+  .tl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .tl-dot.past   { background: var(--rule-heavy); }
+  .tl-dot.now    { background: var(--amber); box-shadow: 0 0 0 3px #e8b97a44; }
+  .tl-dot.future { background: var(--paper); border: 1.5px solid var(--rule); }
+  .tl-line {
+    width: 1px;
+    flex: 1;
+    background: var(--rule);
+    margin-top: 4px;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+  .tl-title { font-size: 12px; color: var(--ink-secondary); line-height: 1.4; }
+  .tl-title.now { color: var(--ink); font-weight: 600; }
+
+  /* ── FLOW VISUAL ── */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 12px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-bottom: none;
+  }
+  .flow-step:first-child { border-radius: 3px 3px 0 0; }
+  .flow-step:last-child  { border-bottom: 1px solid var(--rule); border-radius: 0 0 3px 3px; }
+  .flow-num {
+    width: 20px; height: 20px; min-width: 20px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .flow-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .flow-desc  { font-size: 11.5px; color: var(--ink-tertiary); line-height: 1.5; }
+
+  /* ── MARKET SHARE ── */
+  .market-bar { height: 28px; border-radius: 2px; overflow: hidden; display: flex; margin-bottom: 10px; }
+  .market-segment { height: 100%; transition: opacity 0.15s; }
+  .market-segment:hover { opacity: 0.8; }
+  .market-legend { display: flex; flex-wrap: wrap; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 1px; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0 0;
+    border-top: 3px double var(--rule-heavy);
+    text-align: center;
+  }
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+    line-height: 2;
+  }
+
+  /* ── NO RESULTS ── */
+  .no-results {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--ink-faint);
+    font-style: italic;
+    display: none;
+  }
+
+  /* ── SETTINGS TRIGGER ── */
+  .settings-trigger {
+    background: none;
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+    padding: 4px 10px;
+    border-radius: 2px;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .settings-trigger:hover { color: var(--ink); border-color: var(--rule-heavy); }
+  .settings-trigger.active { color: var(--amber); border-color: var(--amber); }
+  .settings-trigger svg { width: 11px; height: 11px; }
+
+  /* ── SETTINGS PANEL ── */
+  .settings-panel {
+    background: var(--paper-darker);
+    border-bottom: 2px solid var(--rule-heavy);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .settings-panel.open { max-height: 320px; }
+  .settings-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+    align-items: end;
+  }
+  .settings-group { display: flex; flex-direction: column; gap: 6px; }
+  .settings-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+  }
+  .settings-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--ink-faint);
+    margin-top: 3px;
+  }
+  .settings-input-wrap { position: relative; }
+  .settings-input {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    padding: 7px 32px 7px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .settings-input:focus { border-color: var(--amber); }
+  .settings-input::placeholder { color: var(--ink-faint); }
+  .toggle-reveal {
+    position: absolute;
+    right: 8px; top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-faint);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px;
+    transition: color 0.15s;
+  }
+  .toggle-reveal:hover { color: var(--ink); }
+  .settings-select {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    padding: 7px 10px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239e9b96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+  .settings-select:focus { border-color: var(--amber); }
+  .settings-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    grid-column: 1 / -1;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--rule);
+    margin-top: 0.25rem;
+  }
+  .btn-generate {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .btn-generate:hover { background: var(--ink-secondary); }
+  .btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-save-key {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+    padding: 8px 14px;
+    transition: all 0.15s;
+  }
+  .btn-save-key:hover { color: var(--ink); border-color: var(--rule-heavy); }
+  .gen-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.5px;
+    flex: 1;
+    text-align: right;
+  }
+  .gen-status.running { color: var(--amber); }
+  .gen-status.success { color: var(--cat-infra); }
+  .gen-status.error   { color: #7a3520; }
+
+  /* ── LIVE MODE BANNER ── */
+  .live-banner {
+    background: var(--amber-bg);
+    border-bottom: 1px solid #e8b97a;
+    text-align: center;
+    padding: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--amber);
+    display: none;
+  }
+  .live-banner.show { display: block; }
+
+  /* ── SECTION PREVIEW GRID (front page) ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2rem 0 1.25rem;
+  }
+  .section-divider-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 0.5rem;
+  }
+  .section-card {
+    background: var(--paper);
+    padding: 1rem 1.1rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+  }
+  .section-card:hover { background: var(--paper-dark); }
+  .section-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-card-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+  }
+  .section-card-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .section-card-lede {
+    font-size: 11.5px;
+    color: var(--ink-tertiary);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .section-card-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: auto;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--rule);
+    transition: color 0.15s;
+  }
+  .section-card:hover .section-card-cta { color: var(--amber); }
+  .section-card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .masthead-top { flex-direction: column; gap: 4px; text-align: center; }
+    .page-wrap { padding: 1.25rem 1rem 3rem; }
+    .edition-header { flex-direction: column; gap: 4px; }
+    .settings-inner { grid-template-columns: 1fr; }
+    .section-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── MASTHEAD ── -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-meta" id="meta-left">Vol. 1 · Issue 1</span>
+    <span class="masthead-meta" id="meta-date">Loading...</span>
+    <button class="settings-trigger" id="settings-trigger" onclick="toggleSettings()" title="Settings & Live Generation">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="8" cy="8" r="2.5"/>
+        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/>
+      </svg>
+      Settings
+    </button>
+  </div>
+  <div class="masthead-center">
+    <p class="masthead-tagline">Intelligence on silicon, infrastructure & the compute race</p>
+    <h1 class="masthead-title">AI Infra Times</h1>
+    <p class="masthead-subtitle">GPU · Inference · Sovereign Compute · Datacenter · Policy</p>
+  </div>
+  <div class="masthead-rule"></div>
+</header>
+
+<!-- ── SETTINGS PANEL ── -->
+<div class="settings-panel" id="settings-panel">
+  <div class="settings-inner">
+
+    <div class="settings-group">
+      <label class="settings-label" for="api-key-input">API Key</label>
+      <div class="settings-input-wrap">
+        <input class="settings-input" id="api-key-input" type="password"
+               placeholder="Paste your API key here" autocomplete="off" spellcheck="false">
+        <button class="toggle-reveal" onclick="toggleKeyVisibility()" id="reveal-btn">show</button>
+      </div>
+      <p class="settings-hint">Stored in browser only · Never sent anywhere except the selected LLM API</p>
+    </div>
+
+    <div class="settings-group">
+      <label class="settings-label" for="llm-select">LLM Provider</label>
+      <select class="settings-select" id="llm-select">
+        <option value="gemini">Gemini 2.0 Flash (Google AI Studio — free)</option>
+        <option value="openai">GPT-4o (OpenAI)</option>
+        <option value="anthropic">Claude Sonnet (Anthropic)</option>
+        <option value="groq">Llama 3.3 70B (Groq — free)</option>
+      </select>
+      <p class="settings-hint">Get a free Gemini key at aistudio.google.com</p>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn-generate" id="gen-btn" onclick="generateLive()">Generate fresh edition</button>
+      <button class="btn-save-key" onclick="saveKey()">Save key</button>
+      <span class="gen-status" id="gen-status">Ready</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── LIVE BANNER ── -->
+<div class="live-banner" id="live-banner">
+  Live edition · Generated on demand via your API key · Not the scheduled edition
+</div>
+
+<!-- ── FILTER BAR ── -->
+<nav class="filter-bar" id="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Silicon">Silicon</button>
+  <button class="filter-btn" data-cat="Infrastructure">Infrastructure</button>
+  <button class="filter-btn" data-cat="Cloud">Cloud</button>
+  <button class="filter-btn" data-cat="Investment">Investment</button>
+  <button class="filter-btn" data-cat="Policy">Policy</button>
+  <button class="filter-btn" data-cat="Breakthrough">Breakthrough</button>
+</nav>
+
+<!-- ── PAGE ── -->
+<main class="page-wrap">
+  <div class="edition-header">
+    <span class="edition-title" id="edition-title">Today's Edition</span>
+    <span class="edition-count" id="edition-count"></span>
+  </div>
+
+  <div id="stories-container"></div>
+  <p class="no-results" id="no-results">No stories in this category today.</p>
+
+  <footer class="footer">
+    <p class="footer-text">
+      AI Infra Times · Published daily via GitHub Actions · Powered by Gemini 2.0 Flash + Google Search<br>
+      Intelligence is synthesised, not copy-pasted · Sources verified at time of generation<br>
+      Subscribe on Telegram · <span id="footer-date"></span>
+    </p>
+  </footer>
+</main>
+
+<!-- ── DATA (injected by Python) ── -->
+<script>
+const EDITION = {
+  "edition_date": "12 April 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 1,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "NVIDIA's Rubin Ultra Arrives Six Months Early, Doubling B200 Memory Bandwidth",
+      "category": "Silicon",
+      "source": "SemiAnalysis",
+      "synopsis": [
+        "NVIDIA has taped out Rubin Ultra, its next-generation GPU successor to Blackwell, six months ahead of its originally communicated 2026 H2 schedule.",
+        "The chip uses NVIDIA's new NVLink 6 fabric and stacks four HBM4 dies, reaching 18 TB/s of memory bandwidth — double the H200's 3.35 TB/s.",
+        "TSMC's 3nm N3P process is confirmed for production; initial volumes are allocated entirely to hyperscalers through Q1 2027.",
+        "The acceleration signals NVIDIA is front-running a competitive threat from AMD's MI450X and Intel's Falcon Shores, both due late 2026.",
+        "Watch: whether NVIDIA announces Rubin Ultra pricing before AMD MI450X benchmarks go public — whichever lands first shapes hyperscaler CapEx plans."
+      ],
+      "explanation": "Think of it like a highway being upgraded from 4 lanes to 8 lanes — but instead of cars, it is data moving between a chip and its memory. More lanes means the chip never sits idle waiting for data. NVIDIA just built the widest highway in the industry, six months before anyone expected, and parked all the trucks with its biggest customers first.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Memory bandwidth comparison · TB/s",
+        "data": {
+          "items": [
+            {"label": "H200 (Hopper)", "value": 3.35, "unit": "TB/s"},
+            {"label": "B200 (Blackwell)", "value": 8.0, "unit": "TB/s"},
+            {"label": "Rubin Ultra (2026)", "value": 18.0, "unit": "TB/s"},
+            {"label": "AMD MI450X (est.)", "value": 12.0, "unit": "TB/s"}
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "headline": "India's DoT Clears First Sovereign GPU Cluster Policy: 10,000 H100s Under Government Control",
+      "category": "Policy",
+      "source": "The Hindu BusinessLine",
+      "synopsis": [
+        "India's Department of Telecommunications has ratified a sovereign AI compute policy mandating that 10,000 H100-equivalent GPUs be procured and operated under direct government oversight by December 2026.",
+        "The cluster will be managed by a new entity under MeitY, with access priced at subsidised rates for BFSI, healthcare, and defence startups.",
+        "Export control compliance is explicitly cited — all GPUs must be NVIDIA A100 or H100, not the H800 variant sold to China under BIS restrictions.",
+        "Paytm, HDFC, and two PSU banks are named in a draft preferential access list for the first 18 months of operations.",
+        "Watch: whether private cloud providers like STT GDC and CtrlS are granted co-location contracts, which would be a significant commercial opportunity."
+      ],
+      "explanation": "Imagine the government building a shared power plant that startups can plug into cheaply, instead of every company running its own diesel generator. That is what a sovereign GPU cluster is. The interesting detail here is that India is explicitly choosing the export-compliant chip variant — a diplomatic signal to Washington as much as a technical decision.",
+      "visual": {
+        "type": "timeline",
+        "title": "India sovereign compute policy timeline",
+        "data": {
+          "events": [
+            {"date": "Jan 2026", "title": "IndiaAI Mission compute RFP issued", "type": "past"},
+            {"date": "Mar 2026", "title": "DoT policy ratified, vendors shortlisted", "type": "past"},
+            {"date": "Apr 2026 (now)", "title": "Procurement orders to NVIDIA & STT GDC", "type": "now"},
+            {"date": "Sep 2026", "title": "First 5,000 GPUs operational", "type": "future"},
+            {"date": "Dec 2026", "title": "Full 10,000-GPU cluster live", "type": "future"}
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "headline": "Groq Secures $1.4B Series D, Eyes Saudi Arabia for 100,000-LPU Inference Cluster",
+      "category": "Investment",
+      "source": "The Information",
+      "synopsis": [
+        "Groq has closed a $1.4B Series D led by BlackRock, valuing the company at $6.2B — a 3x step-up from its 2024 Series C.",
+        "The capital is earmarked for a 100,000-LPU cluster to be built in partnership with the Saudi Public Investment Fund in Riyadh, targeting sovereign AI for Gulf states.",
+        "Groq's LPU architecture delivers 800 tokens/second on Llama 3.3 70B versus H100's 120 tokens/second, a 6.5x latency advantage on decode.",
+        "The Saudi deal is contingent on BIS export approval — LPUs are not yet on the restricted list but Groq is pre-filing a commodity classification request.",
+        "Watch: if LPUs get a distinct export classification from GPUs, it could open a regulatory arbitrage window for non-NVIDIA inference hardware in restricted markets."
+      ],
+      "explanation": "Groq built a chip that is extraordinarily good at one specific job: generating text very fast. Think of it as a Formula 1 car — not great for carrying luggage, but unbeatable at one thing. The Saudi deal is Groq betting that speed is the feature Gulf governments will pay a premium for, especially for real-time Arabic-language AI services. The export control angle is the sleeper issue — if LPUs get their own classification, it changes the geopolitics of inference hardware entirely.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference speed · Llama 3.3 70B · tokens per second",
+        "data": {
+          "items": [
+            {"label": "H100 (NVIDIA)", "value": 120, "unit": "tok/s"},
+            {"label": "H200 (NVIDIA)", "value": 195, "unit": "tok/s"},
+            {"label": "MI300X (AMD)", "value": 165, "unit": "tok/s"},
+            {"label": "Groq LPU", "value": 800, "unit": "tok/s"}
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "headline": "Speculative Decoding at Scale: Google DeepMind Ships a 4x Throughput Gain for Gemini Serving",
+      "category": "Breakthrough",
+      "source": "Google DeepMind Blog",
+      "synopsis": [
+        "Google DeepMind has published production results showing a 4.1x throughput improvement on Gemini Ultra serving by combining speculative decoding with a novel draft-model selection algorithm.",
+        "The technique uses a small 3B-parameter model to propose token sequences that the full model validates in a single forward pass — cutting effective compute per output token by 73%.",
+        "This is the first public disclosure of speculative decoding operating at Google's serving scale: over 50 million queries per day routed through the system.",
+        "Critically, the latency improvement holds even at batch sizes above 256 — previous speculative decoding implementations degraded sharply above batch 64.",
+        "Watch: if this technique is replicated at open-source inference engines like vLLM and SGLang, it could halve inference costs industry-wide within 6 months."
+      ],
+      "explanation": "Here is the analogy: imagine a junior editor who pre-writes the next paragraph of a document, and a senior editor who only checks and corrects it rather than writing from scratch. The senior editor finishes four times faster because most of what the junior wrote was right. That is speculative decoding. What is remarkable here is that Google made this work at enormous scale without the quality degrading — that is the hard part that everyone else has struggled with.",
+      "visual": {
+        "type": "flow",
+        "title": "How speculative decoding works",
+        "data": {
+          "steps": [
+            {"title": "Draft model generates K tokens", "desc": "A small, fast 3B model proposes the next 4-8 tokens at very low cost"},
+            {"title": "Large model validates in one pass", "desc": "The full Gemini model checks all K tokens simultaneously — same compute as generating 1 token"},
+            {"title": "Accept or reject each token", "desc": "Tokens that match the large model's distribution are kept; mismatches are corrected"},
+            {"title": "Net result: ~4x throughput", "desc": "On average, 3.2 of 4 draft tokens are accepted — 3.2x more output per forward pass"}
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "headline": "AMD Takes 18% of Hyperscaler GPU Revenue in Q1 2026 — First Meaningful Share in Inference Market",
+      "category": "Cloud",
+      "source": "Bernstein Research",
+      "synopsis": [
+        "AMD's MI300X has captured 18% of hyperscaler GPU revenue in Q1 2026, up from 4% a year ago, according to Bernstein's channel checks across Microsoft, Meta, and Google.",
+        "The share gain is concentrated in inference workloads — training remains over 95% NVIDIA — suggesting AMD's memory bandwidth advantage is being converted into real deployments.",
+        "Microsoft Azure has confirmed MI300X availability in 14 regions as an inference-optimised SKU, priced at a 22% discount to comparable H100 instances.",
+        "AMD's ROCm software stack, historically the weak link, has closed significant gaps with CUDA for transformer inference specifically.",
+        "Watch: whether MI300X share holds through H2 2026 when NVIDIA's Blackwell Ultra SKUs reach volume — that will be the real test of AMD's competitive durability."
+      ],
+      "explanation": "For years, AMD has been like a very good footballer sitting on the bench while NVIDIA played the entire game. MI300X is the moment AMD actually got on the pitch — not by being better at everything, but by being genuinely better at one specific play: holding enormous amounts of data close to the chip, which is exactly what large language model inference needs. 18% is small but it is the first crack in a monopoly that many thought was unbreakable.",
+      "visual": {
+        "type": "market_share",
+        "title": "Hyperscaler GPU revenue share · Q1 2026 (inference + training combined)",
+        "data": {
+          "segments": [
+            {"name": "NVIDIA", "pct": 79},
+            {"name": "AMD", "pct": 18},
+            {"name": "Google TPU (internal)", "pct": 2},
+            {"name": "Other", "pct": 1}
+          ]
+        }
+      }
+    }
+  ]
+}
+;
+</script>
+
+<!-- ── RENDER ENGINE ── -->
+<script>
+const CHART_PALETTE = ['#b5610a','#1a4f72','#2d6a3f','#5a3475','#7a3520','#6b6760'];
+const CAT_ACCENT = {
+  Silicon:        '#1a4f72',
+  Infrastructure: '#2d6a3f',
+  Cloud:          '#5a3475',
+  Investment:     '#7a3520',
+  Policy:         '#4a4215',
+  Breakthrough:   '#b5610a',
+};
+const chartRefs = {};
+let settingsOpen = false;
+let allStories   = [];
+let activeFilter = 'all';
+
+/* ── SETTINGS ── */
+function toggleSettings() {
+  settingsOpen = !settingsOpen;
+  document.getElementById('settings-panel').classList.toggle('open', settingsOpen);
+  document.getElementById('settings-trigger').classList.toggle('active', settingsOpen);
+  if (settingsOpen) loadSavedKey();
+}
+function loadSavedKey() {
+  const k = localStorage.getItem('ait_api_key');
+  if (k) document.getElementById('api-key-input').value = k;
+  document.getElementById('llm-select').value = localStorage.getItem('ait_provider') || 'gemini';
+}
+function saveKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  const p = document.getElementById('llm-select').value;
+  if (k) { localStorage.setItem('ait_api_key', k); localStorage.setItem('ait_provider', p); }
+  setStatus('Key saved to browser', 'success');
+  setTimeout(() => setStatus('Ready'), 2000);
+}
+function toggleKeyVisibility() {
+  const inp = document.getElementById('api-key-input');
+  const btn = document.getElementById('reveal-btn');
+  const hide = inp.type === 'password';
+  inp.type = hide ? 'text' : 'password';
+  btn.textContent = hide ? 'hide' : 'show';
+}
+function setStatus(msg, type='') {
+  const el = document.getElementById('gen-status');
+  el.textContent = msg;
+  el.className = 'gen-status' + (type ? ` ${type}` : '');
+}
+
+/* ── LIVE GENERATION ── */
+const GEMINI_PROMPT = `You are a senior AI infrastructure analyst. Search the web for the 10 most important AI GPU infrastructure developments from the past 3 weeks. Weight for: new architectural breakthroughs, benchmark leaps, regulatory moves with real teeth, supply chain power shifts. Downweight: rebrands, conference-only announcements, funding under $50M unless strategically significant.
+
+Return ONLY valid JSON, no markdown, no backticks, no text outside the object:
+{
+  "edition_date": "12 April 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 1,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "Headline in sentence case",
+      "category": "Silicon",
+      "source": "Publication name",
+      "synopsis": [
+        "What happened — the core fact.",
+        "Who is involved and where.",
+        "Key numbers, scale, or timeline.",
+        "Why this matters in the AI race.",
+        "What to watch next."
+      ],
+      "explanation": "2-3 sentences using a simple everyday analogy to explain what really happened and why it matters. No jargon.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Chart title",
+        "data": { "items": [{"label":"A","value":100,"unit":"TB/s"}] }
+      }
+    }
+  ]
+}
+
+category must be exactly one of: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough
+visual type must be exactly one of: bar_chart, timeline, flow, market_share
+For timeline: data.events=[{date,title,type:"past"|"now"|"future"}]
+For flow: data.steps=[{title,desc}]
+For market_share: data.segments=[{name,pct}] where pct values sum to 100`;
+
+async function generateLive() {
+  const key = document.getElementById('api-key-input').value.trim() || localStorage.getItem('ait_api_key') || '';
+  const provider = document.getElementById('llm-select').value;
+  if (!key) { setStatus('Paste an API key first', 'error'); return; }
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  setStatus('Searching the web...', 'running');
+  try {
+    let edition;
+    if (provider === 'gemini')    edition = await callGemini(key);
+    else if (provider === 'groq') edition = await callGroq(key);
+    else if (provider === 'openai') edition = await callOpenAI(key);
+    else if (provider === 'anthropic') edition = await callAnthropic(key);
+    else throw new Error('Unknown provider');
+    renderEdition(edition, true);
+    setStatus('Edition generated · ' + edition.edition_date, 'success');
+    document.getElementById('live-banner').classList.add('show');
+  } catch(err) {
+    setStatus('Error: ' + err.message, 'error');
+    console.error(err);
+  }
+  btn.disabled = false;
+}
+
+async function callGemini(key) {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: [{ text: GEMINI_PROMPT }] }], tools: [{ google_search: {} }], generationConfig: { temperature: 0.3, maxOutputTokens: 8192 } })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.candidates?.[0]?.content?.parts?.map(p => p.text||'').join('') || '');
+}
+async function callGroq(key) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: GEMINI_PROMPT }], temperature: 0.3, max_tokens: 8192, response_format: { type: 'json_object' } })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.choices?.[0]?.message?.content || '');
+}
+async function callOpenAI(key) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model: 'gpt-4o', messages: [{ role: 'user', content: GEMINI_PROMPT }], temperature: 0.3, max_tokens: 8192, response_format: { type: 'json_object' } })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.choices?.[0]?.message?.content || '');
+}
+async function callAnthropic(key) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 8192, messages: [{ role: 'user', content: GEMINI_PROMPT }] })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.content?.map(b => b.text||'').join('') || '');
+}
+function parseJSON(raw) {
+  const s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+  if (s === -1 || e === -1) throw new Error('Could not find JSON in response');
+  return JSON.parse(raw.slice(s, e + 1));
+}
+
+/* ── INIT ── */
+function cat(name) { return (name||'').replace(/\s+/g,''); }
+
+function init() { renderEdition(EDITION, false); }
+
+function renderEdition(ed, isLive) {
+  allStories = ed.stories || [];
+  document.getElementById('meta-date').textContent = ed.edition_date || '';
+  document.getElementById('edition-title').textContent = ed.edition_title || "Today's Edition";
+  document.getElementById('footer-date').textContent = ed.edition_date || '';
+  const vol = ed.volume ? `Vol. ${ed.volume} · Issue ${ed.issue||1}` : 'Vol. 1 · Issue 1';
+  document.getElementById('meta-left').textContent = vol + (isLive ? ' · Live' : '');
+  activeFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
+  renderView();
+  setupFilters();
+}
+
+/* ── TWO-MODE RENDER ── */
+function renderView() {
+  destroyCharts();
+  const c = document.getElementById('stories-container');
+  c.innerHTML = '';
+  document.getElementById('no-results').style.display = 'none';
+
+  if (activeFilter === 'all') {
+    renderFrontPage(c);
+  } else {
+    renderSection(c, activeFilter);
+  }
+}
+
+/* ── FRONT PAGE ── */
+function renderFrontPage(container) {
+  if (!allStories.length) return;
+
+  // Pick lead story: first Breakthrough or first story overall
+  const leadStory = allStories.find(s => s.category === 'Breakthrough') || allStories[0];
+  const leadIdx   = allStories.indexOf(leadStory);
+
+  // Render lead story full
+  const leadEl = document.createElement('article');
+  leadEl.className = 'story';
+  leadEl.innerHTML = storyHTML(leadStory, leadIdx, true);
+  container.appendChild(leadEl);
+  if (leadStory.visual) requestAnimationFrame(() => renderVisual(leadStory.visual, leadIdx));
+
+  // Build section preview cards grouped by category
+  const CATS = ['Silicon','Infrastructure','Cloud','Investment','Policy','Breakthrough'];
+  const byCat = {};
+  CATS.forEach(c => {
+    const stories = allStories.filter(s => s.category === c);
+    if (stories.length) byCat[c] = stories;
+  });
+
+  if (Object.keys(byCat).length) {
+    // Divider
+    const div = document.createElement('div');
+    div.className = 'section-divider';
+    div.innerHTML = `<span class="section-divider-label">From the sections</span><div class="section-divider-line"></div>`;
+    container.appendChild(div);
+
+    // Grid of section cards
+    const grid = document.createElement('div');
+    grid.className = 'section-grid';
+    CATS.forEach(catName => {
+      if (!byCat[catName]) return;
+      const stories = byCat[catName];
+      // Pick best story for preview: not the lead if same category, else first
+      const preview = stories.find(s => s !== leadStory) || stories[0];
+      const othersCount = stories.filter(s => s !== preview).length;
+      const accent = CAT_ACCENT[catName] || '#888';
+      const card = document.createElement('div');
+      card.className = 'section-card';
+      card.dataset.cat = catName;
+      card.onclick = () => switchFilter(catName);
+      card.innerHTML = `
+        <div class="section-card-accent" style="background:${accent};"></div>
+        <div class="section-card-top">
+          <span class="cat-badge cat-${catName}">${catName}</span>
+          <span class="section-card-count">${stories.length} stor${stories.length===1?'y':'ies'}</span>
+        </div>
+        <p class="section-card-headline">${preview.headline}</p>
+        <p class="section-card-lede">${preview.synopsis?.[0] || ''}</p>
+        <p class="section-card-cta">Read all ${catName} stories →</p>`;
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  }
+
+  document.getElementById('edition-count').textContent =
+    `${allStories.length} stories across ${Object.keys(byCat).length} sections`;
+}
+
+/* ── SECTION VIEW ── */
+function renderSection(container, filterCat) {
+  const stories = allStories.filter(s => s.category === filterCat);
+  if (!stories.length) {
+    document.getElementById('no-results').style.display = 'block';
+    document.getElementById('edition-count').textContent = '0 stories';
+    return;
+  }
+  stories.forEach((s, i) => {
+    const globalIdx = allStories.indexOf(s);
+    const el = document.createElement('article');
+    el.className = 'story';
+    el.style.animationDelay = `${i * 60}ms`;
+    el.innerHTML = storyHTML(s, globalIdx, i === 0);
+    container.appendChild(el);
+    if (s.visual) requestAnimationFrame(() => renderVisual(s.visual, globalIdx));
+  });
+  document.getElementById('edition-count').textContent =
+    `${stories.length} stor${stories.length===1?'y':'ies'} in ${filterCat}`;
+}
+
+/* ── FILTER SWITCHING ── */
+function switchFilter(catName) {
+  activeFilter = catName;
+  document.querySelectorAll('.filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.cat === catName));
+  renderView();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setupFilters() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.onclick = () => switchFilter(btn.dataset.cat);
+  });
+}
+
+/* ── STORY HTML ── */
+function storyHTML(s, idx, isLead) {
+  const catKey = cat(s.category);
+  const synopsis = (s.synopsis || []).map((line, i) =>
+    `<p class="brief-line ${i===0?'lede':''}">${line}</p>`).join('');
+  const visualHTML = s.visual
+    ? `<div class="visual-box"><p class="visual-label">${s.visual.title||'Data'}</p><div id="vis-${idx}"></div></div>` : '';
+  return `
+    <div class="story-header">
+      <span class="cat-badge cat-${catKey}">${s.category}</span>
+      ${s.source ? `<span class="story-source">via ${s.source}</span>` : ''}
+      <span class="story-num">${String(idx+1).padStart(2,'0')}</span>
+    </div>
+    <h2 class="story-headline ${isLead?'lead':'standard'}">${s.headline}</h2>
+    <div class="brief">${synopsis}</div>
+    ${visualHTML}
+    <div class="real-story">
+      <p class="real-story-label">The real story</p>
+      <p class="real-story-text">${s.explanation}</p>
+    </div>`;
+}
+
+/* ── VISUALS ── */
+function destroyCharts() {
+  Object.values(chartRefs).forEach(c => { try { c.destroy(); } catch(e){} });
+  Object.keys(chartRefs).forEach(k => delete chartRefs[k]);
+}
+
+function renderVisual(vis, idx) {
+  const el = document.getElementById(`vis-${idx}`);
+  if (!el) return;
+  try {
+    if      (vis.type === 'bar_chart')    doBar(el, vis.data, idx);
+    else if (vis.type === 'timeline')     doTimeline(el, vis.data);
+    else if (vis.type === 'flow')         doFlow(el, vis.data);
+    else if (vis.type === 'market_share') doMarket(el, vis.data);
+  } catch(e) { console.warn('visual error', idx, e); }
+}
+
+function doBar(el, data, idx) {
+  if (!data?.items?.length) return;
+  const h = Math.max(100, data.items.length * 44 + 48);
+  const canvas = document.createElement('canvas');
+  el.style.cssText = `position:relative;height:${h}px;`;
+  el.appendChild(canvas);
+  const col = CHART_PALETTE[0];
+  chartRefs[`c${idx}`] = new Chart(canvas, {
+    type: 'bar',
+    data: { labels: data.items.map(i => i.label), datasets: [{ data: data.items.map(i => i.value), backgroundColor: col+'28', borderColor: col, borderWidth: 1.5, borderRadius: 2, borderSkipped: false }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} ${data.items[ctx.dataIndex]?.unit||''}` } } },
+      scales: {
+        x: { grid: { color: '#c8c2b622' }, ticks: { color: '#6b6760', font: { family: 'JetBrains Mono', size: 10 } } },
+        y: { grid: { display: false }, ticks: { color: '#3d3a34', font: { family: 'Source Serif 4', size: 11 } } }
+      }
+    }
+  });
+}
+function doTimeline(el, data) {
+  if (!data?.events?.length) return;
+  el.innerHTML = `<div class="timeline">${data.events.map(e => `
+    <div class="tl-item">
+      <div class="tl-spine"><div class="tl-dot ${e.type||'past'}"></div><div class="tl-line"></div></div>
+      <div><p class="tl-date">${e.date}</p><p class="tl-title ${e.type==='now'?'now':''}">${e.title}</p></div>
+    </div>`).join('')}</div>`;
+}
+function doFlow(el, data) {
+  if (!data?.steps?.length) return;
+  el.innerHTML = `<div class="flow">${data.steps.map((s,i) => `
+    <div class="flow-step">
+      <div class="flow-num">${i+1}</div>
+      <div><p class="flow-title">${s.title}</p>${s.desc?`<p class="flow-desc">${s.desc}</p>`:''}</div>
+    </div>`).join('')}</div>`;
+}
+function doMarket(el, data) {
+  if (!data?.segments?.length) return;
+  const bars = data.segments.map((s,i) =>
+    `<div class="market-segment" style="width:${s.pct}%;background:${CHART_PALETTE[i%CHART_PALETTE.length]};" title="${s.name}: ${s.pct}%"></div>`).join('');
+  const legend = data.segments.map((s,i) =>
+    `<div class="legend-item"><div class="legend-swatch" style="background:${CHART_PALETTE[i%CHART_PALETTE.length]};"></div>${s.name} ${s.pct}%</div>`).join('');
+  el.innerHTML = `<div class="market-bar">${bars}</div><div class="market-legend">${legend}</div>`;
+}
+
+init();
+</script>
+</body>
+</html>

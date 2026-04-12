@@ -1,0 +1,126 @@
+# AI Infra Times · GitHub Actions Workflow
+#
+# Runs daily at 6:30 AM IST (1:00 AM UTC)
+# Also triggerable manually from GitHub UI (Actions tab → Run workflow)
+#
+# Required setup (one-time):
+#   GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+#   Name: GEMINI_API_KEY   Value: your key from aistudio.google.com
+#
+# Required repo settings (one-time):
+#   GitHub repo → Settings → Pages → Source: Deploy from a branch → Branch: main → /docs
+#
+# Optional: set TELEGRAM_BOT_TOKEN and TELEGRAM_CHANNEL_ID secrets to enable
+#   Telegram notifications when a new edition publishes.
+
+name: Generate Daily Edition
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 1:00 AM UTC = 6:30 AM IST every day
+  workflow_dispatch:        # allows manual trigger from GitHub UI
+
+permissions:
+  contents: write           # needed to push the generated HTML back to the repo
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # ── 1. Checkout repo ──────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Python ──────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ── 3. Generate edition ───────────────────────────────────────────────
+      - name: Generate today's edition
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cd ai_infra_times
+          python generate.py
+
+      # ── 4. Commit and push ────────────────────────────────────────────────
+      - name: Commit generated edition
+        run: |
+          git config user.name  "AI Infra Times Bot"
+          git config user.email "bot@ai-infra-times.github.io"
+          git add ai_infra_times/docs/
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+          DATE=$(date +'%Y-%m-%d')
+          git commit -m "Edition: $DATE"
+          git push
+
+      # ── 5. Telegram notification (optional) ───────────────────────────────
+      # Remove this step if you haven't set up Telegram secrets
+      - name: Send Telegram notification
+        if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}
+        env:
+          BOT_TOKEN:  ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: |
+          DATE=$(date +'%-d %B %Y')
+          python3 - << 'PYEOF'
+          import os, urllib.request, urllib.parse, json
+
+          bot_token  = os.environ["BOT_TOKEN"]
+          channel_id = os.environ["CHANNEL_ID"]
+          date_str   = os.environ["DATE"]
+
+          # Read the archive JSON to pull today's headlines
+          import glob, datetime
+          today = datetime.date.today().strftime("%Y-%m-%d")
+          archive_path = f"ai_infra_times/docs/archive/{today}.json"
+
+          try:
+              with open(archive_path) as f:
+                  edition = json.load(f)
+              stories = edition.get("stories", [])[:3]
+              lines = []
+              cat_icons = {
+                  "Silicon": "🔵", "Infrastructure": "🟢", "Cloud": "🟣",
+                  "Investment": "🟠", "Policy": "🟡", "Breakthrough": "⭐"
+              }
+              for s in stories:
+                  icon = cat_icons.get(s.get("category",""), "•")
+                  lines.append(f"{icon} {s.get('headline','')}")
+              headlines = "\n".join(lines)
+          except Exception:
+              headlines = "Today's edition is live."
+
+          message = (
+              f"🗞 *AI Infra Times · {date_str}*\n\n"
+              f"{headlines}\n\n"
+              f"[Read the full edition →](https://MRG15.github.io/AI_infra_MRG)"
+          )
+
+          url  = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+          data = urllib.parse.urlencode({
+              "chat_id":    channel_id,
+              "text":       message,
+              "parse_mode": "Markdown",
+              "disable_web_page_preview": "false",
+          }).encode()
+          req  = urllib.request.Request(url, data=data)
+          with urllib.request.urlopen(req) as resp:
+              result = json.loads(resp.read())
+              print("Telegram sent:", result.get("ok"))
+          PYEOF
+        env:
+          DATE: ${{ env.DATE }}
+
+      # ── 6. Print summary ──────────────────────────────────────────────────
+      - name: Summary
+        run: |
+          echo "## Edition published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Date: $(date +'%d %B %Y')" >> $GITHUB_STEP_SUMMARY
+          echo "- URL: https://MRG15.github.io/AI_infra_MRG" >> $GITHUB_STEP_SUMMARY
+          echo "- Archive: \`ai_infra_times/docs/archive/$(date +'%Y-%m-%d').json\`" >> $GITHUB_STEP_SUMMARY
