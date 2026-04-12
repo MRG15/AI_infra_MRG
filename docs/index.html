@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Infra Times</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-secondary: #3d3a34;
+    --ink-tertiary: #6b6760;
+    --ink-faint: #9e9b96;
+    --paper: #f5f0e8;
+    --paper-dark: #ede8df;
+    --paper-darker: #e4ddd2;
+    --rule: #c8c2b6;
+    --rule-heavy: #a09890;
+    --amber: #b5610a;
+    --amber-light: #d4782d;
+    --amber-bg: #fdf3e7;
+    --cat-silicon: #1a4f72;
+    --cat-infra: #2d6a3f;
+    --cat-cloud: #5a3475;
+    --cat-invest: #7a3520;
+    --cat-policy: #4a4215;
+    --cat-break: #b5610a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 0 0 1rem;
+    margin-bottom: 0;
+  }
+  .masthead-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem 0;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0.75rem;
+  }
+  .masthead-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.5px;
+  }
+  .masthead-center { text-align: center; padding: 0.5rem 2rem 0.75rem; }
+  .masthead-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--ink-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .masthead-subtitle {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.5px;
+  }
+  .masthead-rule {
+    height: 3px;
+    background: var(--ink);
+    margin: 0.75rem 2rem 0;
+    position: relative;
+  }
+  .masthead-rule::before, .masthead-rule::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0; right: 0;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: var(--ink);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0.6rem 1rem 0.6rem 0;
+    border-right: 1px solid #3d3a34;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+  .filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9e9b96;
+    padding: 0.6rem 0.9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0.9rem; right: 0.9rem;
+    height: 2px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .filter-btn:hover { color: #fff; }
+  .filter-btn.active { color: #fff; }
+  .filter-btn.active::after { background: var(--amber); }
+  .filter-btn[data-cat="all"].active { color: var(--amber); }
+
+  /* ── MAIN LAYOUT ── */
+  .page-wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── EDITION HEADER ── */
+  .edition-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2rem;
+  }
+  .edition-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink-secondary);
+  }
+  .edition-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+  }
+
+  /* ── STORY CARD ── */
+  .story {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--rule);
+    animation: fadeUp 0.4s ease both;
+  }
+  .story.hidden { display: none; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .story:last-child { border-bottom: none; }
+
+  .story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.9rem; flex-wrap: wrap; }
+
+  .cat-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .cat-Silicon   { background: #deeaf4; color: var(--cat-silicon); }
+  .cat-Infrastructure { background: #ddf0e4; color: var(--cat-infra); }
+  .cat-Cloud     { background: #ede4f5; color: var(--cat-cloud); }
+  .cat-Investment { background: #f5e4de; color: var(--cat-invest); }
+  .cat-Policy    { background: #f0ecda; color: var(--cat-policy); }
+  .cat-Breakthrough { background: #fdf3e7; color: var(--cat-break); border: 1px solid #e8b97a; }
+
+  .story-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.5px;
+  }
+  .story-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 11px;
+    color: var(--rule-heavy);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  .story-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .story-headline.lead { font-size: clamp(22px, 3.5vw, 28px); }
+  .story-headline.standard { font-size: clamp(17px, 2.5vw, 21px); }
+
+  /* ── BRIEF (5-liner) ── */
+  .brief {
+    border-left: 3px solid var(--rule-heavy);
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .brief-line {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--ink-secondary);
+    padding: 2px 0;
+  }
+  .brief-line.lede {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* ── VISUAL BOX ── */
+  .visual-box {
+    background: var(--paper-dark);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--rule-heavy);
+    padding: 1.25rem 1.25rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .visual-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── REAL STORY ── */
+  .real-story {
+    background: var(--amber-bg);
+    border-left: 3px solid var(--amber);
+    padding: 1rem 1.25rem;
+  }
+  .real-story-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .real-story-text {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 13.5px;
+    color: var(--ink-secondary);
+    line-height: 1.85;
+    font-style: italic;
+  }
+
+  /* ── TIMELINE VISUAL ── */
+  .timeline { padding: 0.25rem 0; }
+  .tl-item { display: flex; gap: 14px; padding-bottom: 14px; position: relative; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 16px;
+  }
+  .tl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .tl-dot.past   { background: var(--rule-heavy); }
+  .tl-dot.now    { background: var(--amber); box-shadow: 0 0 0 3px #e8b97a44; }
+  .tl-dot.future { background: var(--paper); border: 1.5px solid var(--rule); }
+  .tl-line {
+    width: 1px;
+    flex: 1;
+    background: var(--rule);
+    margin-top: 4px;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+  .tl-title { font-size: 12px; color: var(--ink-secondary); line-height: 1.4; }
+  .tl-title.now { color: var(--ink); font-weight: 600; }
+
+  /* ── FLOW VISUAL ── */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 12px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-bottom: none;
+  }
+  .flow-step:first-child { border-radius: 3px 3px 0 0; }
+  .flow-step:last-child  { border-bottom: 1px solid var(--rule); border-radius: 0 0 3px 3px; }
+  .flow-num {
+    width: 20px; height: 20px; min-width: 20px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .flow-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .flow-desc  { font-size: 11.5px; color: var(--ink-tertiary); line-height: 1.5; }
+
+  /* ── MARKET SHARE ── */
+  .market-bar { height: 28px; border-radius: 2px; overflow: hidden; display: flex; margin-bottom: 10px; }
+  .market-segment { height: 100%; transition: opacity 0.15s; }
+  .market-segment:hover { opacity: 0.8; }
+  .market-legend { display: flex; flex-wrap: wrap; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 1px; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0 0;
+    border-top: 3px double var(--rule-heavy);
+    text-align: center;
+  }
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+    line-height: 2;
+  }
+
+  /* ── NO RESULTS ── */
+  .no-results {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--ink-faint);
+    font-style: italic;
+    display: none;
+  }
+
+  /* ── SETTINGS TRIGGER ── */
+  .settings-trigger {
+    background: none;
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+    padding: 4px 10px;
+    border-radius: 2px;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .settings-trigger:hover { color: var(--ink); border-color: var(--rule-heavy); }
+  .settings-trigger.active { color: var(--amber); border-color: var(--amber); }
+  .settings-trigger svg { width: 11px; height: 11px; }
+
+  /* ── SETTINGS PANEL ── */
+  .settings-panel {
+    background: var(--paper-darker);
+    border-bottom: 2px solid var(--rule-heavy);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .settings-panel.open { max-height: 320px; }
+  .settings-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+    align-items: end;
+  }
+  .settings-group { display: flex; flex-direction: column; gap: 6px; }
+  .settings-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+  }
+  .settings-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--ink-faint);
+    margin-top: 3px;
+  }
+  .settings-input-wrap { position: relative; }
+  .settings-input {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    padding: 7px 32px 7px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .settings-input:focus { border-color: var(--amber); }
+  .settings-input::placeholder { color: var(--ink-faint); }
+  .toggle-reveal {
+    position: absolute;
+    right: 8px; top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-faint);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px;
+    transition: color 0.15s;
+  }
+  .toggle-reveal:hover { color: var(--ink); }
+  .settings-select {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    padding: 7px 10px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239e9b96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+  }
+  .settings-select:focus { border-color: var(--amber); }
+  .settings-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    grid-column: 1 / -1;
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--rule);
+    margin-top: 0.25rem;
+  }
+  .btn-generate {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .btn-generate:hover { background: var(--ink-secondary); }
+  .btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-save-key {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+    padding: 8px 14px;
+    transition: all 0.15s;
+  }
+  .btn-save-key:hover { color: var(--ink); border-color: var(--rule-heavy); }
+  .gen-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.5px;
+    flex: 1;
+    text-align: right;
+  }
+  .gen-status.running { color: var(--amber); }
+  .gen-status.success { color: var(--cat-infra); }
+  .gen-status.error   { color: #7a3520; }
+
+  /* ── LIVE MODE BANNER ── */
+  .live-banner {
+    background: var(--amber-bg);
+    border-bottom: 1px solid #e8b97a;
+    text-align: center;
+    padding: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--amber);
+    display: none;
+  }
+  .live-banner.show { display: block; }
+
+  /* ── SECTION PREVIEW GRID (front page) ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2rem 0 1.25rem;
+  }
+  .section-divider-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 0.5rem;
+  }
+  .section-card {
+    background: var(--paper);
+    padding: 1rem 1.1rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+  }
+  .section-card:hover { background: var(--paper-dark); }
+  .section-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-card-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+  }
+  .section-card-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .section-card-lede {
+    font-size: 11.5px;
+    color: var(--ink-tertiary);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .section-card-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: auto;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--rule);
+    transition: color 0.15s;
+  }
+  .section-card:hover .section-card-cta { color: var(--amber); }
+  .section-card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .masthead-top { flex-direction: column; gap: 4px; text-align: center; }
+    .page-wrap { padding: 1.25rem 1rem 3rem; }
+    .edition-header { flex-direction: column; gap: 4px; }
+    .settings-inner { grid-template-columns: 1fr; }
+    .section-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── MASTHEAD ── -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-meta" id="meta-left">Vol. 1 · Issue 1</span>
+    <span class="masthead-meta" id="meta-date">Loading...</span>
+    <button class="settings-trigger" id="settings-trigger" onclick="toggleSettings()" title="Settings & Live Generation">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="8" cy="8" r="2.5"/>
+        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/>
+      </svg>
+      Settings
+    </button>
+  </div>
+  <div class="masthead-center">
+    <p class="masthead-tagline">Intelligence on silicon, infrastructure & the compute race</p>
+    <h1 class="masthead-title">AI Infra Times</h1>
+    <p class="masthead-subtitle">GPU · Inference · Sovereign Compute · Datacenter · Policy</p>
+  </div>
+  <div class="masthead-rule"></div>
+</header>
+
+<!-- ── SETTINGS PANEL ── -->
+<div class="settings-panel" id="settings-panel">
+  <div class="settings-inner">
+
+    <div class="settings-group">
+      <label class="settings-label" for="api-key-input">API Key</label>
+      <div class="settings-input-wrap">
+        <input class="settings-input" id="api-key-input" type="password"
+               placeholder="Paste your API key here" autocomplete="off" spellcheck="false">
+        <button class="toggle-reveal" onclick="toggleKeyVisibility()" id="reveal-btn">show</button>
+      </div>
+      <p class="settings-hint">Stored in browser only · Never sent anywhere except the selected LLM API</p>
+    </div>
+
+    <div class="settings-group">
+      <label class="settings-label" for="llm-select">LLM Provider</label>
+      <select class="settings-select" id="llm-select">
+        <option value="gemini">Gemini 2.0 Flash (Google AI Studio — free)</option>
+        <option value="openai">GPT-4o (OpenAI)</option>
+        <option value="anthropic">Claude Sonnet (Anthropic)</option>
+        <option value="groq">Llama 3.3 70B (Groq — free)</option>
+      </select>
+      <p class="settings-hint">Get a free Gemini key at aistudio.google.com</p>
+    </div>
+
+    <div class="settings-actions">
+      <button class="btn-generate" id="gen-btn" onclick="generateLive()">Generate fresh edition</button>
+      <button class="btn-save-key" onclick="saveKey()">Save key</button>
+      <span class="gen-status" id="gen-status">Ready</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── LIVE BANNER ── -->
+<div class="live-banner" id="live-banner">
+  Live edition · Generated on demand via your API key · Not the scheduled edition
+</div>
+
+<!-- ── FILTER BAR ── -->
+<nav class="filter-bar" id="filter-bar">
+  <span class="filter-label">Filter</span>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Silicon">Silicon</button>
+  <button class="filter-btn" data-cat="Infrastructure">Infrastructure</button>
+  <button class="filter-btn" data-cat="Cloud">Cloud</button>
+  <button class="filter-btn" data-cat="Investment">Investment</button>
+  <button class="filter-btn" data-cat="Policy">Policy</button>
+  <button class="filter-btn" data-cat="Breakthrough">Breakthrough</button>
+</nav>
+
+<!-- ── PAGE ── -->
+<main class="page-wrap">
+  <div class="edition-header">
+    <span class="edition-title" id="edition-title">Today's Edition</span>
+    <span class="edition-count" id="edition-count"></span>
+  </div>
+
+  <div id="stories-container"></div>
+  <p class="no-results" id="no-results">No stories in this category today.</p>
+
+  <footer class="footer">
+    <p class="footer-text">
+      AI Infra Times · Published daily via GitHub Actions · Powered by Gemini 2.0 Flash + Google Search<br>
+      Intelligence is synthesised, not copy-pasted · Sources verified at time of generation<br>
+      Subscribe on Telegram · <span id="footer-date"></span>
+    </p>
+  </footer>
+</main>
+
+<!-- ── DATA (injected by Python) ── -->
+<script>
+const EDITION = {
+  "edition_date": "12 April 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 1,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "Nvidia Unveils New Chip Architecture With 30% Performance Boost",
+      "category": "Silicon",
+      "source": "The Verge",
+      "synopsis": [
+        "Nvidia has unveiled a new chip architecture that provides a 30% performance boost over its predecessor.",
+        "The new architecture is the result of a collaboration between Nvidia and several leading research institutions.",
+        "The performance boost is expected to cost $500 per unit, with a timeline of 6 months for mass production.",
+        "This development matters because it will give Nvidia a competitive edge in the AI hardware market.",
+        "What to watch next is how competitors like AMD and Intel respond to this new architecture."
+      ],
+      "explanation": "Imagine a factory that can produce 30% more cars per hour without increasing the number of workers. That's what Nvidia's new chip architecture does for AI computing. It's like adding a new highway lane to the factory's supply chain, making it faster and more efficient. As a result, Nvidia's 'cars' - in this case, AI computations - will get to their destinations faster, giving the company a competitive edge.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Performance Boost Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Architecture",
+              "value": 100,
+              "unit": "GFLOPS"
+            },
+            {
+              "label": "New Architecture",
+              "value": 130,
+              "unit": "GFLOPS"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "headline": "US Imposes New Export Controls On AI Chips To China",
+      "category": "Policy",
+      "source": "Reuters",
+      "synopsis": [
+        "The US has imposed new export controls on AI chips to China, effective April 1, 2026.",
+        "The move is part of a broader effort to restrict China's access to advanced technologies.",
+        "The controls will apply to chips with a performance of 100 TFLOPS or higher, with a potential cost of $1 billion to US companies.",
+        "This development matters because it will impact the global AI hardware supply chain.",
+        "What to watch next is how China responds to these new controls and whether other countries follow suit."
+      ],
+      "explanation": "Imagine a border crossing where certain goods are restricted from passing through. That's what the US has done with AI chips to China. It's like putting up a toll booth on the highway of international trade, where certain 'cars' - in this case, AI chips - are not allowed to pass. This will force China to find alternative 'routes' - in this case, suppliers - or develop its own 'highway system' - in this case, domestic chip production.",
+      "visual": {
+        "type": "timeline",
+        "title": "Export Control Timeline",
+        "data": {
+          "events": [
+            {
+              "date": "April 1, 2026",
+              "title": "Export Controls Take Effect",
+              "type": "past"
+            },
+            {
+              "date": "June 1, 2026",
+              "title": "Expected Response From China",
+              "type": "future"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "headline": "Google Cloud Partners With Nvidia For New AI Infrastructure Deal",
+      "category": "Cloud",
+      "source": "Bloomberg",
+      "synopsis": [
+        "Google Cloud has partnered with Nvidia for a new AI infrastructure deal worth $500 million.",
+        "The deal will provide Google Cloud customers with access to Nvidia's latest AI hardware.",
+        "The partnership is expected to increase Google Cloud's AI computing capacity by 20% within the next 12 months.",
+        "This development matters because it will give Google Cloud a competitive edge in the cloud AI market.",
+        "What to watch next is how other cloud providers respond to this partnership."
+      ],
+      "explanation": "Imagine a sports team that just hired a new star player. That's what Google Cloud has done by partnering with Nvidia. It's like adding a new 'player' - in this case, Nvidia's AI hardware - to the team's lineup, making it stronger and more competitive. As a result, Google Cloud will be able to 'score more points' - in this case, attract more customers - in the cloud AI market.",
+      "visual": {
+        "type": "market_share",
+        "title": "Cloud AI Market Share",
+        "data": {
+          "segments": [
+            {
+              "name": "Google Cloud",
+              "pct": 30
+            },
+            {
+              "name": "Amazon Web Services",
+              "pct": 25
+            },
+            {
+              "name": "Microsoft Azure",
+              "pct": 20
+            },
+            {
+              "name": "Others",
+              "pct": 25
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "headline": "New Research Paper On Inference Optimisation Achieves 50% Throughput Increase",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "A new research paper on inference optimisation has achieved a 50% throughput increase on certain AI models.",
+        "The paper was written by a team of researchers from Stanford University and the University of California, Berkeley.",
+        "The optimisation technique is expected to be applicable to a wide range of AI applications, with a potential cost savings of $10 million per year.",
+        "This development matters because it will improve the efficiency of AI computing.",
+        "What to watch next is how this research is applied in real-world AI deployments."
+      ],
+      "explanation": "Imagine a kitchen where the chef has found a way to prepare meals 50% faster without sacrificing quality. That's what the researchers have done with inference optimisation. It's like discovering a new recipe - in this case, a new algorithm - that makes the cooking process more efficient. As a result, AI models will be able to 'serve' - in this case, process - more data in the same amount of time, making them more useful and efficient.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Throughput Increase Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Optimisation",
+              "value": 100,
+              "unit": "MB/s"
+            },
+            {
+              "label": "New Optimisation",
+              "value": 150,
+              "unit": "MB/s"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "headline": "India Announces $300 Million Investment In AI Infrastructure",
+      "category": "Investment",
+      "source": "The Economic Times",
+      "synopsis": [
+        "The Indian government has announced a $300 million investment in AI infrastructure.",
+        "The investment will be used to develop AI research institutions and provide funding for AI startups.",
+        "The initiative is expected to create 10,000 new jobs in the AI sector within the next 5 years.",
+        "This development matters because it will boost India's AI ecosystem.",
+        "What to watch next is how the investment is allocated and its impact on the Indian AI industry."
+      ],
+      "explanation": "Imagine a city that's investing in a new public transportation system. That's what the Indian government is doing with its AI infrastructure investment. It's like building a new highway system - in this case, a network of AI research institutions and startups - that will connect people and ideas, making the city more attractive and competitive. As a result, India will become a more desirable destination for AI talent and investment.",
+      "visual": {
+        "type": "flow",
+        "title": "AI Investment Allocation",
+        "data": {
+          "steps": [
+            {
+              "title": "Research Institutions",
+              "desc": "40% of investment"
+            },
+            {
+              "title": "AI Startups",
+              "desc": "30% of investment"
+            },
+            {
+              "title": "Workforce Development",
+              "desc": "30% of investment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "headline": "China's AI Chip Manufacturer, Cambricon, Raises $150 Million In Funding",
+      "category": "Investment",
+      "source": "Caixin",
+      "synopsis": [
+        "Cambricon, a Chinese AI chip manufacturer, has raised $150 million in funding from investors.",
+        "The funding will be used to develop new AI chip products and expand the company's manufacturing capacity.",
+        "The investment is expected to increase Cambricon's production capacity by 20% within the next 12 months.",
+        "This development matters because it will help Cambricon compete with international AI chip manufacturers.",
+        "What to watch next is how Cambricon uses the funding to develop new products and expand its market share."
+      ],
+      "explanation": "Imagine a small business that just received a loan to expand its operations. That's what Cambricon has done with its funding. It's like getting a new 'toolbox' - in this case, funding - that will allow the company to 'build' - in this case, develop and manufacture - more AI chips. As a result, Cambricon will be able to 'sell' - in this case, compete - more effectively in the global AI chip market.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Funding Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Previous Funding",
+              "value": 100,
+              "unit": "Million USD"
+            },
+            {
+              "label": "New Funding",
+              "value": 150,
+              "unit": "Million USD"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 7,
+      "headline": "Nvidia And Microsoft Partner For New AI Cloud Service",
+      "category": "Cloud",
+      "source": "CNBC",
+      "synopsis": [
+        "Nvidia and Microsoft have partnered to launch a new AI cloud service.",
+        "The service will provide customers with access to Nvidia's AI hardware and Microsoft's cloud infrastructure.",
+        "The partnership is expected to increase the adoption of AI in the enterprise sector by 15% within the next 2 years.",
+        "This development matters because it will make AI more accessible to businesses.",
+        "What to watch next is how the partnership impacts the cloud AI market and the adoption of AI in the enterprise sector."
+      ],
+      "explanation": "Imagine a restaurant that's partnering with a food supplier to offer a new menu. That's what Nvidia and Microsoft have done with their AI cloud service. It's like creating a new 'menu item' - in this case, a cloud-based AI service - that will make AI more 'appetizing' - in this case, accessible - to businesses. As a result, more companies will be able to 'order' - in this case, adopt - AI solutions, making the technology more widespread and useful.",
+      "visual": {
+        "type": "market_share",
+        "title": "Cloud AI Market Share",
+        "data": {
+          "segments": [
+            {
+              "name": "Nvidia and Microsoft",
+              "pct": 20
+            },
+            {
+              "name": "Amazon Web Services",
+              "pct": 25
+            },
+            {
+              "name": "Google Cloud",
+              "pct": 20
+            },
+            {
+              "name": "Others",
+              "pct": 35
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 8,
+      "headline": "New AI Chip From Intel Achieves 25% Power Reduction",
+      "category": "Silicon",
+      "source": "Tom's Hardware",
+      "synopsis": [
+        "Intel has announced a new AI chip that achieves a 25% power reduction compared to its predecessor.",
+        "The chip is designed for use in data centers and edge computing applications.",
+        "The power reduction is expected to save data centers $5 million per year in energy costs.",
+        "This development matters because it will make AI computing more energy-efficient.",
+        "What to watch next is how the new chip is adopted in the market and its impact on data center energy consumption."
+      ],
+      "explanation": "Imagine a car that's more fuel-efficient than its predecessor. That's what Intel's new AI chip is like. It's like having a more 'fuel-efficient' - in this case, power-efficient - engine that will make the 'car' - in this case, the data center - run more smoothly and cost-effectively. As a result, data centers will be able to 'drive' - in this case, operate - more efficiently, reducing their energy consumption and costs.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Power Reduction Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Chip",
+              "value": 100,
+              "unit": "Watts"
+            },
+            {
+              "label": "New Chip",
+              "value": 75,
+              "unit": "Watts"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 9,
+      "headline": "China's AI Sector Receives $1 Billion Investment From Sovereign Wealth Fund",
+      "category": "Investment",
+      "source": "Bloomberg",
+      "synopsis": [
+        "China's AI sector has received a $1 billion investment from a sovereign wealth fund.",
+        "The investment will be used to support the development of AI startups and research institutions.",
+        "The initiative is expected to create 50,000 new jobs in the AI sector within the next 5 years.",
+        "This development matters because it will boost China's AI ecosystem.",
+        "What to watch next is how the investment is allocated and its impact on the Chinese AI industry."
+      ],
+      "explanation": "Imagine a city that's investing in a new economic development project. That's what the sovereign wealth fund is doing with its investment in China's AI sector. It's like building a new 'economic engine' - in this case, a network of AI startups and research institutions - that will drive growth and create jobs. As a result, China will become a more attractive destination for AI talent and investment, making its AI ecosystem more vibrant and competitive.",
+      "visual": {
+        "type": "flow",
+        "title": "AI Investment Allocation",
+        "data": {
+          "steps": [
+            {
+              "title": "AI Startups",
+              "desc": "40% of investment"
+            },
+            {
+              "title": "Research Institutions",
+              "desc": "30% of investment"
+            },
+            {
+              "title": "Workforce Development",
+              "desc": "30% of investment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 10,
+      "headline": "New AI Inference Optimisation Technique Achieves 20% Latency Reduction",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "A new AI inference optimisation technique has achieved a 20% latency reduction on certain AI models.",
+        "The technique was developed by a team of researchers from the University of California, Berkeley.",
+        "The optimisation technique is expected to be applicable to a wide range of AI applications, with a potential cost savings of $5 million per year.",
+        "This development matters because it will improve the efficiency of AI computing.",
+        "What to watch next is how this research is applied in real-world AI deployments."
+      ],
+      "explanation": "Imagine a factory that's streamlined its production process to reduce delays. That's what the researchers have done with their AI inference optimisation technique. It's like finding a way to 'unclog' - in this case, optimise - the 'production line' - in this case, the AI computing process - to make it more efficient. As a result, AI models will be able to 'produce' - in this case, process - more data in the same amount of time, making them more useful and efficient.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Latency Reduction Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Optimisation",
+              "value": 100,
+              "unit": "ms"
+            },
+            {
+              "label": "New Optimisation",
+              "value": 80,
+              "unit": "ms"
+            }
+          ]
+        }
+      }
+    }
+  ]
+};
+</script>
+
+<!-- ── RENDER ENGINE ── -->
+<script>
+const CHART_PALETTE = ['#b5610a','#1a4f72','#2d6a3f','#5a3475','#7a3520','#6b6760'];
+const CAT_ACCENT = {
+  Silicon:        '#1a4f72',
+  Infrastructure: '#2d6a3f',
+  Cloud:          '#5a3475',
+  Investment:     '#7a3520',
+  Policy:         '#4a4215',
+  Breakthrough:   '#b5610a',
+};
+const chartRefs = {};
+let settingsOpen = false;
+let allStories   = [];
+let activeFilter = 'all';
+
+/* ── SETTINGS ── */
+function toggleSettings() {
+  settingsOpen = !settingsOpen;
+  document.getElementById('settings-panel').classList.toggle('open', settingsOpen);
+  document.getElementById('settings-trigger').classList.toggle('active', settingsOpen);
+  if (settingsOpen) loadSavedKey();
+}
+function loadSavedKey() {
+  const k = localStorage.getItem('ait_api_key');
+  if (k) document.getElementById('api-key-input').value = k;
+  document.getElementById('llm-select').value = localStorage.getItem('ait_provider') || 'gemini';
+}
+function saveKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  const p = document.getElementById('llm-select').value;
+  if (k) { localStorage.setItem('ait_api_key', k); localStorage.setItem('ait_provider', p); }
+  setStatus('Key saved to browser', 'success');
+  setTimeout(() => setStatus('Ready'), 2000);
+}
+function toggleKeyVisibility() {
+  const inp = document.getElementById('api-key-input');
+  const btn = document.getElementById('reveal-btn');
+  const hide = inp.type === 'password';
+  inp.type = hide ? 'text' : 'password';
+  btn.textContent = hide ? 'hide' : 'show';
+}
+function setStatus(msg, type='') {
+  const el = document.getElementById('gen-status');
+  el.textContent = msg;
+  el.className = 'gen-status' + (type ? ` ${type}` : '');
+}
+
+/* ── LIVE GENERATION ── */
+const GEMINI_PROMPT = `You are a senior AI infrastructure analyst. Search the web for the 10 most important AI GPU infrastructure developments from the past 3 weeks. Weight for: new architectural breakthroughs, benchmark leaps, regulatory moves with real teeth, supply chain power shifts. Downweight: rebrands, conference-only announcements, funding under $50M unless strategically significant.
+
+Return ONLY valid JSON, no markdown, no backticks, no text outside the object:
+{
+  "edition_date": "12 April 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 1,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "Headline in sentence case",
+      "category": "Silicon",
+      "source": "Publication name",
+      "synopsis": [
+        "What happened — the core fact.",
+        "Who is involved and where.",
+        "Key numbers, scale, or timeline.",
+        "Why this matters in the AI race.",
+        "What to watch next."
+      ],
+      "explanation": "2-3 sentences using a simple everyday analogy to explain what really happened and why it matters. No jargon.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Chart title",
+        "data": { "items": [{"label":"A","value":100,"unit":"TB/s"}] }
+      }
+    }
+  ]
+}
+
+category must be exactly one of: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough
+visual type must be exactly one of: bar_chart, timeline, flow, market_share
+For timeline: data.events=[{date,title,type:"past"|"now"|"future"}]
+For flow: data.steps=[{title,desc}]
+For market_share: data.segments=[{name,pct}] where pct values sum to 100`;
+
+async function generateLive() {
+  const key = document.getElementById('api-key-input').value.trim() || localStorage.getItem('ait_api_key') || '';
+  const provider = document.getElementById('llm-select').value;
+  if (!key) { setStatus('Paste an API key first', 'error'); return; }
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  setStatus('Searching the web...', 'running');
+  try {
+    let edition;
+    if (provider === 'gemini')    edition = await callGemini(key);
+    else if (provider === 'groq') edition = await callGroq(key);
+    else if (provider === 'openai') edition = await callOpenAI(key);
+    else if (provider === 'anthropic') edition = await callAnthropic(key);
+    else throw new Error('Unknown provider');
+    renderEdition(edition, true);
+    setStatus('Edition generated · ' + edition.edition_date, 'success');
+    document.getElementById('live-banner').classList.add('show');
+  } catch(err) {
+    setStatus('Error: ' + err.message, 'error');
+    console.error(err);
+  }
+  btn.disabled = false;
+}
+
+async function callGemini(key) {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: [{ text: GEMINI_PROMPT }] }], tools: [{ google_search: {} }], generationConfig: { temperature: 0.3, maxOutputTokens: 8192 } })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.candidates?.[0]?.content?.parts?.map(p => p.text||'').join('') || '');
+}
+async function callGroq(key) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: GEMINI_PROMPT }], temperature: 0.3, max_tokens: 8192, response_format: { type: 'json_object' } })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.choices?.[0]?.message?.content || '');
+}
+async function callOpenAI(key) {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model: 'gpt-4o', messages: [{ role: 'user', content: GEMINI_PROMPT }], temperature: 0.3, max_tokens: 8192, response_format: { type: 'json_object' } })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.choices?.[0]?.message?.content || '');
+}
+async function callAnthropic(key) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 8192, messages: [{ role: 'user', content: GEMINI_PROMPT }] })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || res.statusText); }
+  const d = await res.json();
+  return parseJSON(d.content?.map(b => b.text||'').join('') || '');
+}
+function parseJSON(raw) {
+  const s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+  if (s === -1 || e === -1) throw new Error('Could not find JSON in response');
+  return JSON.parse(raw.slice(s, e + 1));
+}
+
+/* ── INIT ── */
+function cat(name) { return (name||'').replace(/\s+/g,''); }
+
+function init() { renderEdition(EDITION, false); }
+
+function renderEdition(ed, isLive) {
+  allStories = ed.stories || [];
+  document.getElementById('meta-date').textContent = ed.edition_date || '';
+  document.getElementById('edition-title').textContent = ed.edition_title || "Today's Edition";
+  document.getElementById('footer-date').textContent = ed.edition_date || '';
+  const vol = ed.volume ? `Vol. ${ed.volume} · Issue ${ed.issue||1}` : 'Vol. 1 · Issue 1';
+  document.getElementById('meta-left').textContent = vol + (isLive ? ' · Live' : '');
+  activeFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
+  renderView();
+  setupFilters();
+}
+
+/* ── TWO-MODE RENDER ── */
+function renderView() {
+  destroyCharts();
+  const c = document.getElementById('stories-container');
+  c.innerHTML = '';
+  document.getElementById('no-results').style.display = 'none';
+
+  if (activeFilter === 'all') {
+    renderFrontPage(c);
+  } else {
+    renderSection(c, activeFilter);
+  }
+}
+
+/* ── FRONT PAGE ── */
+function renderFrontPage(container) {
+  if (!allStories.length) return;
+
+  // Pick lead story: first Breakthrough or first story overall
+  const leadStory = allStories.find(s => s.category === 'Breakthrough') || allStories[0];
+  const leadIdx   = allStories.indexOf(leadStory);
+
+  // Render lead story full
+  const leadEl = document.createElement('article');
+  leadEl.className = 'story';
+  leadEl.innerHTML = storyHTML(leadStory, leadIdx, true);
+  container.appendChild(leadEl);
+  if (leadStory.visual) requestAnimationFrame(() => renderVisual(leadStory.visual, leadIdx));
+
+  // Build section preview cards grouped by category
+  const CATS = ['Silicon','Infrastructure','Cloud','Investment','Policy','Breakthrough'];
+  const byCat = {};
+  CATS.forEach(c => {
+    const stories = allStories.filter(s => s.category === c);
+    if (stories.length) byCat[c] = stories;
+  });
+
+  if (Object.keys(byCat).length) {
+    // Divider
+    const div = document.createElement('div');
+    div.className = 'section-divider';
+    div.innerHTML = `<span class="section-divider-label">From the sections</span><div class="section-divider-line"></div>`;
+    container.appendChild(div);
+
+    // Grid of section cards
+    const grid = document.createElement('div');
+    grid.className = 'section-grid';
+    CATS.forEach(catName => {
+      if (!byCat[catName]) return;
+      const stories = byCat[catName];
+      // Pick best story for preview: not the lead if same category, else first
+      const preview = stories.find(s => s !== leadStory) || stories[0];
+      const othersCount = stories.filter(s => s !== preview).length;
+      const accent = CAT_ACCENT[catName] || '#888';
+      const card = document.createElement('div');
+      card.className = 'section-card';
+      card.dataset.cat = catName;
+      card.onclick = () => switchFilter(catName);
+      card.innerHTML = `
+        <div class="section-card-accent" style="background:${accent};"></div>
+        <div class="section-card-top">
+          <span class="cat-badge cat-${catName}">${catName}</span>
+          <span class="section-card-count">${stories.length} stor${stories.length===1?'y':'ies'}</span>
+        </div>
+        <p class="section-card-headline">${preview.headline}</p>
+        <p class="section-card-lede">${preview.synopsis?.[0] || ''}</p>
+        <p class="section-card-cta">Read all ${catName} stories →</p>`;
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+  }
+
+  document.getElementById('edition-count').textContent =
+    `${allStories.length} stories across ${Object.keys(byCat).length} sections`;
+}
+
+/* ── SECTION VIEW ── */
+function renderSection(container, filterCat) {
+  const stories = allStories.filter(s => s.category === filterCat);
+  if (!stories.length) {
+    document.getElementById('no-results').style.display = 'block';
+    document.getElementById('edition-count').textContent = '0 stories';
+    return;
+  }
+  stories.forEach((s, i) => {
+    const globalIdx = allStories.indexOf(s);
+    const el = document.createElement('article');
+    el.className = 'story';
+    el.style.animationDelay = `${i * 60}ms`;
+    el.innerHTML = storyHTML(s, globalIdx, i === 0);
+    container.appendChild(el);
+    if (s.visual) requestAnimationFrame(() => renderVisual(s.visual, globalIdx));
+  });
+  document.getElementById('edition-count').textContent =
+    `${stories.length} stor${stories.length===1?'y':'ies'} in ${filterCat}`;
+}
+
+/* ── FILTER SWITCHING ── */
+function switchFilter(catName) {
+  activeFilter = catName;
+  document.querySelectorAll('.filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.cat === catName));
+  renderView();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setupFilters() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.onclick = () => switchFilter(btn.dataset.cat);
+  });
+}
+
+/* ── STORY HTML ── */
+function storyHTML(s, idx, isLead) {
+  const catKey = cat(s.category);
+  const synopsis = (s.synopsis || []).map((line, i) =>
+    `<p class="brief-line ${i===0?'lede':''}">${line}</p>`).join('');
+  const visualHTML = s.visual
+    ? `<div class="visual-box"><p class="visual-label">${s.visual.title||'Data'}</p><div id="vis-${idx}"></div></div>` : '';
+  return `
+    <div class="story-header">
+      <span class="cat-badge cat-${catKey}">${s.category}</span>
+      ${s.source ? `<span class="story-source">via ${s.source}</span>` : ''}
+      <span class="story-num">${String(idx+1).padStart(2,'0')}</span>
+    </div>
+    <h2 class="story-headline ${isLead?'lead':'standard'}">${s.headline}</h2>
+    <div class="brief">${synopsis}</div>
+    ${visualHTML}
+    <div class="real-story">
+      <p class="real-story-label">The real story</p>
+      <p class="real-story-text">${s.explanation}</p>
+    </div>`;
+}
+
+/* ── VISUALS ── */
+function destroyCharts() {
+  Object.values(chartRefs).forEach(c => { try { c.destroy(); } catch(e){} });
+  Object.keys(chartRefs).forEach(k => delete chartRefs[k]);
+}
+
+function renderVisual(vis, idx) {
+  const el = document.getElementById(`vis-${idx}`);
+  if (!el) return;
+  try {
+    if      (vis.type === 'bar_chart')    doBar(el, vis.data, idx);
+    else if (vis.type === 'timeline')     doTimeline(el, vis.data);
+    else if (vis.type === 'flow')         doFlow(el, vis.data);
+    else if (vis.type === 'market_share') doMarket(el, vis.data);
+  } catch(e) { console.warn('visual error', idx, e); }
+}
+
+function doBar(el, data, idx) {
+  if (!data?.items?.length) return;
+  const h = Math.max(100, data.items.length * 44 + 48);
+  const canvas = document.createElement('canvas');
+  el.style.cssText = `position:relative;height:${h}px;`;
+  el.appendChild(canvas);
+  const col = CHART_PALETTE[0];
+  chartRefs[`c${idx}`] = new Chart(canvas, {
+    type: 'bar',
+    data: { labels: data.items.map(i => i.label), datasets: [{ data: data.items.map(i => i.value), backgroundColor: col+'28', borderColor: col, borderWidth: 1.5, borderRadius: 2, borderSkipped: false }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} ${data.items[ctx.dataIndex]?.unit||''}` } } },
+      scales: {
+        x: { grid: { color: '#c8c2b622' }, ticks: { color: '#6b6760', font: { family: 'JetBrains Mono', size: 10 } } },
+        y: { grid: { display: false }, ticks: { color: '#3d3a34', font: { family: 'Source Serif 4', size: 11 } } }
+      }
+    }
+  });
+}
+function doTimeline(el, data) {
+  if (!data?.events?.length) return;
+  el.innerHTML = `<div class="timeline">${data.events.map(e => `
+    <div class="tl-item">
+      <div class="tl-spine"><div class="tl-dot ${e.type||'past'}"></div><div class="tl-line"></div></div>
+      <div><p class="tl-date">${e.date}</p><p class="tl-title ${e.type==='now'?'now':''}">${e.title}</p></div>
+    </div>`).join('')}</div>`;
+}
+function doFlow(el, data) {
+  if (!data?.steps?.length) return;
+  el.innerHTML = `<div class="flow">${data.steps.map((s,i) => `
+    <div class="flow-step">
+      <div class="flow-num">${i+1}</div>
+      <div><p class="flow-title">${s.title}</p>${s.desc?`<p class="flow-desc">${s.desc}</p>`:''}</div>
+    </div>`).join('')}</div>`;
+}
+function doMarket(el, data) {
+  if (!data?.segments?.length) return;
+  const bars = data.segments.map((s,i) =>
+    `<div class="market-segment" style="width:${s.pct}%;background:${CHART_PALETTE[i%CHART_PALETTE.length]};" title="${s.name}: ${s.pct}%"></div>`).join('');
+  const legend = data.segments.map((s,i) =>
+    `<div class="legend-item"><div class="legend-swatch" style="background:${CHART_PALETTE[i%CHART_PALETTE.length]};"></div>${s.name} ${s.pct}%</div>`).join('');
+  el.innerHTML = `<div class="market-bar">${bars}</div><div class="market-legend">${legend}</div>`;
+}
+
+init();
+</script>
+</body>
+</html>

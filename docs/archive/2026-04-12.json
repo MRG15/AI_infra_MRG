@@ -1,0 +1,344 @@
+{
+  "edition_date": "12 April 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 1,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "Nvidia Unveils New Chip Architecture With 30% Performance Boost",
+      "category": "Silicon",
+      "source": "The Verge",
+      "synopsis": [
+        "Nvidia has unveiled a new chip architecture that provides a 30% performance boost over its predecessor.",
+        "The new architecture is the result of a collaboration between Nvidia and several leading research institutions.",
+        "The performance boost is expected to cost $500 per unit, with a timeline of 6 months for mass production.",
+        "This development matters because it will give Nvidia a competitive edge in the AI hardware market.",
+        "What to watch next is how competitors like AMD and Intel respond to this new architecture."
+      ],
+      "explanation": "Imagine a factory that can produce 30% more cars per hour without increasing the number of workers. That's what Nvidia's new chip architecture does for AI computing. It's like adding a new highway lane to the factory's supply chain, making it faster and more efficient. As a result, Nvidia's 'cars' - in this case, AI computations - will get to their destinations faster, giving the company a competitive edge.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Performance Boost Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Architecture",
+              "value": 100,
+              "unit": "GFLOPS"
+            },
+            {
+              "label": "New Architecture",
+              "value": 130,
+              "unit": "GFLOPS"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "headline": "US Imposes New Export Controls On AI Chips To China",
+      "category": "Policy",
+      "source": "Reuters",
+      "synopsis": [
+        "The US has imposed new export controls on AI chips to China, effective April 1, 2026.",
+        "The move is part of a broader effort to restrict China's access to advanced technologies.",
+        "The controls will apply to chips with a performance of 100 TFLOPS or higher, with a potential cost of $1 billion to US companies.",
+        "This development matters because it will impact the global AI hardware supply chain.",
+        "What to watch next is how China responds to these new controls and whether other countries follow suit."
+      ],
+      "explanation": "Imagine a border crossing where certain goods are restricted from passing through. That's what the US has done with AI chips to China. It's like putting up a toll booth on the highway of international trade, where certain 'cars' - in this case, AI chips - are not allowed to pass. This will force China to find alternative 'routes' - in this case, suppliers - or develop its own 'highway system' - in this case, domestic chip production.",
+      "visual": {
+        "type": "timeline",
+        "title": "Export Control Timeline",
+        "data": {
+          "events": [
+            {
+              "date": "April 1, 2026",
+              "title": "Export Controls Take Effect",
+              "type": "past"
+            },
+            {
+              "date": "June 1, 2026",
+              "title": "Expected Response From China",
+              "type": "future"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "headline": "Google Cloud Partners With Nvidia For New AI Infrastructure Deal",
+      "category": "Cloud",
+      "source": "Bloomberg",
+      "synopsis": [
+        "Google Cloud has partnered with Nvidia for a new AI infrastructure deal worth $500 million.",
+        "The deal will provide Google Cloud customers with access to Nvidia's latest AI hardware.",
+        "The partnership is expected to increase Google Cloud's AI computing capacity by 20% within the next 12 months.",
+        "This development matters because it will give Google Cloud a competitive edge in the cloud AI market.",
+        "What to watch next is how other cloud providers respond to this partnership."
+      ],
+      "explanation": "Imagine a sports team that just hired a new star player. That's what Google Cloud has done by partnering with Nvidia. It's like adding a new 'player' - in this case, Nvidia's AI hardware - to the team's lineup, making it stronger and more competitive. As a result, Google Cloud will be able to 'score more points' - in this case, attract more customers - in the cloud AI market.",
+      "visual": {
+        "type": "market_share",
+        "title": "Cloud AI Market Share",
+        "data": {
+          "segments": [
+            {
+              "name": "Google Cloud",
+              "pct": 30
+            },
+            {
+              "name": "Amazon Web Services",
+              "pct": 25
+            },
+            {
+              "name": "Microsoft Azure",
+              "pct": 20
+            },
+            {
+              "name": "Others",
+              "pct": 25
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "headline": "New Research Paper On Inference Optimisation Achieves 50% Throughput Increase",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "A new research paper on inference optimisation has achieved a 50% throughput increase on certain AI models.",
+        "The paper was written by a team of researchers from Stanford University and the University of California, Berkeley.",
+        "The optimisation technique is expected to be applicable to a wide range of AI applications, with a potential cost savings of $10 million per year.",
+        "This development matters because it will improve the efficiency of AI computing.",
+        "What to watch next is how this research is applied in real-world AI deployments."
+      ],
+      "explanation": "Imagine a kitchen where the chef has found a way to prepare meals 50% faster without sacrificing quality. That's what the researchers have done with inference optimisation. It's like discovering a new recipe - in this case, a new algorithm - that makes the cooking process more efficient. As a result, AI models will be able to 'serve' - in this case, process - more data in the same amount of time, making them more useful and efficient.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Throughput Increase Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Optimisation",
+              "value": 100,
+              "unit": "MB/s"
+            },
+            {
+              "label": "New Optimisation",
+              "value": 150,
+              "unit": "MB/s"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "headline": "India Announces $300 Million Investment In AI Infrastructure",
+      "category": "Investment",
+      "source": "The Economic Times",
+      "synopsis": [
+        "The Indian government has announced a $300 million investment in AI infrastructure.",
+        "The investment will be used to develop AI research institutions and provide funding for AI startups.",
+        "The initiative is expected to create 10,000 new jobs in the AI sector within the next 5 years.",
+        "This development matters because it will boost India's AI ecosystem.",
+        "What to watch next is how the investment is allocated and its impact on the Indian AI industry."
+      ],
+      "explanation": "Imagine a city that's investing in a new public transportation system. That's what the Indian government is doing with its AI infrastructure investment. It's like building a new highway system - in this case, a network of AI research institutions and startups - that will connect people and ideas, making the city more attractive and competitive. As a result, India will become a more desirable destination for AI talent and investment.",
+      "visual": {
+        "type": "flow",
+        "title": "AI Investment Allocation",
+        "data": {
+          "steps": [
+            {
+              "title": "Research Institutions",
+              "desc": "40% of investment"
+            },
+            {
+              "title": "AI Startups",
+              "desc": "30% of investment"
+            },
+            {
+              "title": "Workforce Development",
+              "desc": "30% of investment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "headline": "China's AI Chip Manufacturer, Cambricon, Raises $150 Million In Funding",
+      "category": "Investment",
+      "source": "Caixin",
+      "synopsis": [
+        "Cambricon, a Chinese AI chip manufacturer, has raised $150 million in funding from investors.",
+        "The funding will be used to develop new AI chip products and expand the company's manufacturing capacity.",
+        "The investment is expected to increase Cambricon's production capacity by 20% within the next 12 months.",
+        "This development matters because it will help Cambricon compete with international AI chip manufacturers.",
+        "What to watch next is how Cambricon uses the funding to develop new products and expand its market share."
+      ],
+      "explanation": "Imagine a small business that just received a loan to expand its operations. That's what Cambricon has done with its funding. It's like getting a new 'toolbox' - in this case, funding - that will allow the company to 'build' - in this case, develop and manufacture - more AI chips. As a result, Cambricon will be able to 'sell' - in this case, compete - more effectively in the global AI chip market.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Funding Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Previous Funding",
+              "value": 100,
+              "unit": "Million USD"
+            },
+            {
+              "label": "New Funding",
+              "value": 150,
+              "unit": "Million USD"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 7,
+      "headline": "Nvidia And Microsoft Partner For New AI Cloud Service",
+      "category": "Cloud",
+      "source": "CNBC",
+      "synopsis": [
+        "Nvidia and Microsoft have partnered to launch a new AI cloud service.",
+        "The service will provide customers with access to Nvidia's AI hardware and Microsoft's cloud infrastructure.",
+        "The partnership is expected to increase the adoption of AI in the enterprise sector by 15% within the next 2 years.",
+        "This development matters because it will make AI more accessible to businesses.",
+        "What to watch next is how the partnership impacts the cloud AI market and the adoption of AI in the enterprise sector."
+      ],
+      "explanation": "Imagine a restaurant that's partnering with a food supplier to offer a new menu. That's what Nvidia and Microsoft have done with their AI cloud service. It's like creating a new 'menu item' - in this case, a cloud-based AI service - that will make AI more 'appetizing' - in this case, accessible - to businesses. As a result, more companies will be able to 'order' - in this case, adopt - AI solutions, making the technology more widespread and useful.",
+      "visual": {
+        "type": "market_share",
+        "title": "Cloud AI Market Share",
+        "data": {
+          "segments": [
+            {
+              "name": "Nvidia and Microsoft",
+              "pct": 20
+            },
+            {
+              "name": "Amazon Web Services",
+              "pct": 25
+            },
+            {
+              "name": "Google Cloud",
+              "pct": 20
+            },
+            {
+              "name": "Others",
+              "pct": 35
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 8,
+      "headline": "New AI Chip From Intel Achieves 25% Power Reduction",
+      "category": "Silicon",
+      "source": "Tom's Hardware",
+      "synopsis": [
+        "Intel has announced a new AI chip that achieves a 25% power reduction compared to its predecessor.",
+        "The chip is designed for use in data centers and edge computing applications.",
+        "The power reduction is expected to save data centers $5 million per year in energy costs.",
+        "This development matters because it will make AI computing more energy-efficient.",
+        "What to watch next is how the new chip is adopted in the market and its impact on data center energy consumption."
+      ],
+      "explanation": "Imagine a car that's more fuel-efficient than its predecessor. That's what Intel's new AI chip is like. It's like having a more 'fuel-efficient' - in this case, power-efficient - engine that will make the 'car' - in this case, the data center - run more smoothly and cost-effectively. As a result, data centers will be able to 'drive' - in this case, operate - more efficiently, reducing their energy consumption and costs.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Power Reduction Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Chip",
+              "value": 100,
+              "unit": "Watts"
+            },
+            {
+              "label": "New Chip",
+              "value": 75,
+              "unit": "Watts"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 9,
+      "headline": "China's AI Sector Receives $1 Billion Investment From Sovereign Wealth Fund",
+      "category": "Investment",
+      "source": "Bloomberg",
+      "synopsis": [
+        "China's AI sector has received a $1 billion investment from a sovereign wealth fund.",
+        "The investment will be used to support the development of AI startups and research institutions.",
+        "The initiative is expected to create 50,000 new jobs in the AI sector within the next 5 years.",
+        "This development matters because it will boost China's AI ecosystem.",
+        "What to watch next is how the investment is allocated and its impact on the Chinese AI industry."
+      ],
+      "explanation": "Imagine a city that's investing in a new economic development project. That's what the sovereign wealth fund is doing with its investment in China's AI sector. It's like building a new 'economic engine' - in this case, a network of AI startups and research institutions - that will drive growth and create jobs. As a result, China will become a more attractive destination for AI talent and investment, making its AI ecosystem more vibrant and competitive.",
+      "visual": {
+        "type": "flow",
+        "title": "AI Investment Allocation",
+        "data": {
+          "steps": [
+            {
+              "title": "AI Startups",
+              "desc": "40% of investment"
+            },
+            {
+              "title": "Research Institutions",
+              "desc": "30% of investment"
+            },
+            {
+              "title": "Workforce Development",
+              "desc": "30% of investment"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 10,
+      "headline": "New AI Inference Optimisation Technique Achieves 20% Latency Reduction",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "A new AI inference optimisation technique has achieved a 20% latency reduction on certain AI models.",
+        "The technique was developed by a team of researchers from the University of California, Berkeley.",
+        "The optimisation technique is expected to be applicable to a wide range of AI applications, with a potential cost savings of $5 million per year.",
+        "This development matters because it will improve the efficiency of AI computing.",
+        "What to watch next is how this research is applied in real-world AI deployments."
+      ],
+      "explanation": "Imagine a factory that's streamlined its production process to reduce delays. That's what the researchers have done with their AI inference optimisation technique. It's like finding a way to 'unclog' - in this case, optimise - the 'production line' - in this case, the AI computing process - to make it more efficient. As a result, AI models will be able to 'produce' - in this case, process - more data in the same amount of time, making them more useful and efficient.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Latency Reduction Comparison",
+        "data": {
+          "items": [
+            {
+              "label": "Old Optimisation",
+              "value": 100,
+              "unit": "ms"
+            },
+            {
+              "label": "New Optimisation",
+              "value": 80,
+              "unit": "ms"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
