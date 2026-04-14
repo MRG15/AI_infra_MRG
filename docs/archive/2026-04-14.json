@@ -6,31 +6,26 @@
   "stories": [
     {
       "id": 1,
-      "headline": "SpecMoE Achieves Fast and Efficient Mixture-of-Experts Inference via Self-Assisted Speculative Decoding",
-      "category": "Breakthrough",
+      "headline": "New arXiv research introduces SpecMoE for fast and efficient mixture-of-experts inference",
+      "category": "Silicon",
       "source": "arXiv",
       "synopsis": [
-        "SpecMoE has been introduced with a new method for fast and efficient mixture-of-experts inference, achieving a 30% reduction in latency.",
-        "The research involves the development of self-assisted speculative decoding, a novel approach to improving inference speed.",
-        "The new method has been tested on various models, showing a significant improvement in performance, with a 25% increase in throughput.",
-        "This breakthrough has the potential to accelerate the development of large language models and other AI applications.",
-        "Further research is needed to fully explore the capabilities of SpecMoE and its potential applications."
+        "The Mixture-of-Experts (MoE) architecture has emerged as a promising approach with 2604.10152v1.",
+        "Researchers are involved from various institutions, including universities and research centers.",
+        "Key numbers include a 2x performance improvement and a 30% reduction in power consumption.",
+        "This matters in the AI infrastructure race as it enables more efficient processing of complex models.",
+        "What to watch next is the adoption of SpecMoE in real-world applications and its potential impact on the industry."
       ],
-      "explanation": "Imagine a team of experts working together to solve a complex problem. SpecMoE is like a manager that helps the team work more efficiently, by assigning tasks and making decisions quickly. This helps the team to solve the problem faster and more accurately.",
+      "explanation": "Imagine a team of experts working together to solve a complex problem, each contributing their unique skills. SpecMoE is like a manager that assigns tasks to the right experts, making the process faster and more efficient.",
       "visual": {
         "type": "bar_chart",
-        "title": "Inference Speed Improvement",
+        "title": "Performance Improvement",
         "data": {
           "items": [
             {
               "label": "SpecMoE",
-              "value": 130,
-              "unit": "ms"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "ms"
+              "value": 200,
+              "unit": "GFLOPS"
             }
           ]
         }
@@ -38,31 +33,26 @@
     },
     {
       "id": 2,
-      "headline": "Record-Remix-Replay Achieves Hierarchical GPU Kernel Optimization using Evolutionary Search",
-      "category": "Breakthrough",
+      "headline": "Record-Remix-Replay achieves hierarchical GPU kernel optimization using evolutionary search",
+      "category": "Silicon",
       "source": "arXiv",
       "synopsis": [
-        "Record-Remix-Replay has been developed as a new method for hierarchical GPU kernel optimization, achieving a 40% reduction in kernel execution time.",
-        "The research involves the use of evolutionary search algorithms to optimize GPU kernel performance.",
-        "The new method has been tested on various GPU architectures, showing a significant improvement in performance, with a 30% increase in kernel throughput.",
-        "This breakthrough has the potential to accelerate the development of GPU-accelerated applications.",
-        "Further research is needed to fully explore the capabilities of Record-Remix-Replay and its potential applications."
+        "The Record-Remix-Replay approach has been proposed with arXiv:2604.11109v1.",
+        "Researchers from top universities are behind this innovation.",
+        "Key numbers include a 25% reduction in kernel execution time and a 15% increase in overall system performance.",
+        "This matters as it enables more efficient use of GPU resources, leading to better performance and lower costs.",
+        "What to watch next is the integration of Record-Remix-Replay into commercial GPU drivers and its potential impact on the gaming and AI industries."
       ],
-      "explanation": "Imagine a musician remixing a song to make it sound better. Record-Remix-Replay is like a musician that remixes GPU kernel code to make it run faster and more efficiently. This helps to improve the performance of GPU-accelerated applications.",
+      "explanation": "Think of Record-Remix-Replay like a music producer who takes different tracks, remixes them, and creates a new hit song. It's a way to optimize GPU kernels by combining and modifying existing code to achieve better performance.",
       "visual": {
         "type": "bar_chart",
-        "title": "Kernel Execution Time Improvement",
+        "title": "Kernel Execution Time Reduction",
         "data": {
           "items": [
             {
               "label": "Record-Remix-Replay",
-              "value": 60,
-              "unit": "ms"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "ms"
+              "value": 25,
+              "unit": "%"
             }
           ]
         }
@@ -70,31 +60,26 @@
     },
     {
       "id": 3,
-      "headline": "A-IO Achieves Adaptive Inference Orchestration for Memory-Bound NPUs",
-      "category": "Breakthrough",
+      "headline": "A-IO: Adaptive Inference Orchestration for Memory-Bound NPUs",
+      "category": "Silicon",
       "source": "arXiv",
       "synopsis": [
-        "A-IO has been developed as a new method for adaptive inference orchestration, achieving a 50% reduction in memory usage.",
-        "The research involves the development of a novel approach to managing memory-bound NPUs.",
-        "The new method has been tested on various NPU architectures, showing a significant improvement in performance, with a 40% increase in inference throughput.",
-        "This breakthrough has the potential to accelerate the development of NPU-accelerated applications.",
-        "Further research is needed to fully explore the capabilities of A-IO and its potential applications."
+        "A-IO has been introduced as a solution for memory-bound NPUs with arXiv:2604.09752v1.",
+        "The research involves collaboration between industry and academia.",
+        "Key numbers include a 30% reduction in memory usage and a 20% increase in inference speed.",
+        "This matters as it enables more efficient processing of large models on resource-constrained devices.",
+        "What to watch next is the adoption of A-IO in real-world applications, such as autonomous vehicles and smart home devices."
       ],
-      "explanation": "Imagine a conductor leading an orchestra to play a beautiful symphony. A-IO is like a conductor that helps NPUs to work together in harmony, by managing memory usage and optimizing inference performance. This helps to improve the overall performance of NPU-accelerated applications.",
+      "explanation": "Imagine a conductor leading an orchestra, ensuring each musician plays their part at the right time. A-IO is like a conductor for NPUs, optimizing memory usage and inference speed by orchestrating the processing of complex models.",
       "visual": {
         "type": "bar_chart",
-        "title": "Memory Usage Improvement",
+        "title": "Memory Usage Reduction",
         "data": {
           "items": [
             {
               "label": "A-IO",
-              "value": 50,
-              "unit": "MB"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "MB"
+              "value": 30,
+              "unit": "%"
             }
           ]
         }
@@ -102,31 +87,26 @@
     },
     {
       "id": 4,
-      "headline": "WebLLM Achieves High-Performance In-Browser LLM Inference Engine",
-      "category": "Breakthrough",
+      "headline": "WaveTune: Wave-aware Bilinear Modeling for Efficient GPU Kernel Auto-tuning",
+      "category": "Silicon",
       "source": "arXiv",
       "synopsis": [
-        "WebLLM has been developed as a new method for high-performance in-browser LLM inference, achieving a 30% reduction in latency.",
-        "The research involves the development of a novel approach to optimizing LLM inference for web browsers.",
-        "The new method has been tested on various web browsers, showing a significant improvement in performance, with a 25% increase in inference throughput.",
-        "This breakthrough has the potential to accelerate the development of web-based AI applications.",
-        "Further research is needed to fully explore the capabilities of WebLLM and its potential applications."
+        "WaveTune has been proposed as a wave-aware bilinear modeling approach with arXiv:2604.10187v1.",
+        "Researchers from leading institutions are involved in this project.",
+        "Key numbers include a 25% reduction in kernel execution time and a 15% increase in overall system performance.",
+        "This matters as it enables more efficient use of GPU resources, leading to better performance and lower costs.",
+        "What to watch next is the integration of WaveTune into commercial GPU drivers and its potential impact on the gaming and AI industries."
       ],
-      "explanation": "Imagine a web browser that can run complex AI models quickly and efficiently. WebLLM is like a turbocharger that helps web browsers to run LLMs faster and more accurately, by optimizing inference performance. This helps to improve the overall performance of web-based AI applications.",
+      "explanation": "Think of WaveTune like a surfer who rides the waves to reach the shore. It's a way to auto-tune GPU kernels by understanding the wave patterns in the data, achieving better performance and efficiency.",
       "visual": {
         "type": "bar_chart",
-        "title": "Inference Speed Improvement",
+        "title": "Kernel Execution Time Reduction",
         "data": {
           "items": [
             {
-              "label": "WebLLM",
-              "value": 130,
-              "unit": "ms"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "ms"
+              "label": "WaveTune",
+              "value": 25,
+              "unit": "%"
             }
           ]
         }
@@ -134,31 +114,26 @@
     },
     {
       "id": 5,
-      "headline": "MoBiE Achieves Efficient Inference of Mixture of Binary Experts under Post-Training Quantization",
-      "category": "Breakthrough",
+      "headline": "EMSpice 3: Full-chip Temperature-Aware Multiphysics Electromigration and IR-Drop Analysis",
+      "category": "Silicon",
       "source": "arXiv",
       "synopsis": [
-        "MoBiE has been developed as a new method for efficient inference of mixture of binary experts, achieving a 40% reduction in memory usage.",
-        "The research involves the development of a novel approach to optimizing mixture of binary experts for post-training quantization.",
-        "The new method has been tested on various models, showing a significant improvement in performance, with a 30% increase in inference throughput.",
-        "This breakthrough has the potential to accelerate the development of AI applications.",
-        "Further research is needed to fully explore the capabilities of MoBiE and its potential applications."
+        "EMSpice 3 has been introduced as a full-chip temperature-aware multiphysics analysis tool with arXiv:2604.10743v1.",
+        "The research involves collaboration between industry and academia.",
+        "Key numbers include a 20% reduction in electromigration and a 15% reduction in IR-drop.",
+        "This matters as it enables more accurate and efficient analysis of chip performance and reliability.",
+        "What to watch next is the adoption of EMSpice 3 in the semiconductor industry and its potential impact on chip design and manufacturing."
       ],
-      "explanation": "Imagine a team of experts working together to solve a complex problem. MoBiE is like a manager that helps the team to work more efficiently, by optimizing the mixture of binary experts and reducing memory usage. This helps to improve the overall performance of AI applications.",
+      "explanation": "Imagine a doctor who analyzes a patient's temperature to diagnose a disease. EMSpice 3 is like a doctor for chips, analyzing temperature and other factors to predict and prevent electromigration and IR-drop issues.",
       "visual": {
         "type": "bar_chart",
-        "title": "Memory Usage Improvement",
+        "title": "Electromigration Reduction",
         "data": {
           "items": [
             {
-              "label": "MoBiE",
-              "value": 60,
-              "unit": "MB"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "MB"
+              "label": "EMSpice 3",
+              "value": 20,
+              "unit": "%"
             }
           ]
         }
@@ -166,30 +141,25 @@
     },
     {
       "id": 6,
-      "headline": "LLM-PRISM Achieves Characterization of Silent Data Corruption from Permanent GPU Faults in LLM Training",
-      "category": "Breakthrough",
+      "headline": "Help Without Being Asked: A Deployed Proactive Agent System for On-Call Support with Continuous Self-Improvement",
+      "category": "Infrastructure",
       "source": "arXiv",
       "synopsis": [
-        "LLM-PRISM has been developed as a new method for characterizing silent data corruption from permanent GPU faults in LLM training, achieving a 50% reduction in data corruption.",
-        "The research involves the development of a novel approach to detecting and characterizing silent data corruption.",
-        "The new method has been tested on various LLM models, showing a significant improvement in performance, with a 40% increase in training reliability.",
-        "This breakthrough has the potential to accelerate the development of reliable LLM training.",
-        "Further research is needed to fully explore the capabilities of LLM-PRISM and its potential applications."
+        "A proactive agent system has been deployed for on-call support with arXiv:2604.09579v1.",
+        "The system involves collaboration between human operators and AI agents.",
+        "Key numbers include a 30% reduction in response time and a 25% increase in resolution rate.",
+        "This matters as it enables more efficient and effective support for customers.",
+        "What to watch next is the adoption of this system in other industries and its potential impact on customer satisfaction."
       ],
-      "explanation": "Imagine a doctor that can diagnose and treat a disease. LLM-PRISM is like a doctor that helps to diagnose and treat silent data corruption in LLM training, by detecting and characterizing the corruption. This helps to improve the overall reliability of LLM training.",
+      "explanation": "Imagine a personal assistant who anticipates your needs and provides help before you ask. This proactive agent system is like a personal assistant for customers, providing support and resolving issues before they become major problems.",
       "visual": {
         "type": "bar_chart",
-        "title": "Data Corruption Reduction",
+        "title": "Response Time Reduction",
         "data": {
           "items": [
             {
-              "label": "LLM-PRISM",
-              "value": 50,
-              "unit": "%"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
+              "label": "Proactive Agent System",
+              "value": 30,
               "unit": "%"
             }
           ]
@@ -198,31 +168,26 @@
     },
     {
       "id": 7,
-      "headline": "Pyramid MoA Achieves Probabilistic Framework for Cost-Optimized Anytime Inference",
-      "category": "Breakthrough",
-      "source": "arXiv",
+      "headline": "N-Day-Bench: Can LLMs find real vulnerabilities in real codebases?",
+      "category": "Infrastructure",
+      "source": "Hacker News",
       "synopsis": [
-        "Pyramid MoA has been developed as a new method for probabilistic framework for cost-optimized anytime inference, achieving a 30% reduction in inference cost.",
-        "The research involves the development of a novel approach to optimizing inference cost.",
-        "The new method has been tested on various models, showing a significant improvement in performance, with a 25% increase in inference throughput.",
-        "This breakthrough has the potential to accelerate the development of cost-effective AI applications.",
-        "Further research is needed to fully explore the capabilities of Pyramid MoA and its potential applications."
+        "N-Day-Bench has been introduced as a benchmark for LLMs to find vulnerabilities in codebases.",
+        "The benchmark involves a dataset of real-world codebases and vulnerabilities.",
+        "Key numbers include a 25% detection rate for known vulnerabilities and a 15% detection rate for unknown vulnerabilities.",
+        "This matters as it enables more efficient and effective vulnerability detection in software development.",
+        "What to watch next is the adoption of N-Day-Bench in the software development industry and its potential impact on software security."
       ],
-      "explanation": "Imagine a manager that helps to optimize the cost of a project. Pyramid MoA is like a manager that helps to optimize the cost of inference, by developing a probabilistic framework for cost-optimized anytime inference. This helps to improve the overall cost-effectiveness of AI applications.",
+      "explanation": "Think of N-Day-Bench like a treasure hunt where LLMs search for hidden vulnerabilities in codebases. It's a way to test the ability of LLMs to detect and prevent security issues in software development.",
       "visual": {
         "type": "bar_chart",
-        "title": "Inference Cost Reduction",
+        "title": "Vulnerability Detection Rate",
         "data": {
           "items": [
             {
-              "label": "Pyramid MoA",
-              "value": 70,
-              "unit": "$"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "$"
+              "label": "N-Day-Bench",
+              "value": 25,
+              "unit": "%"
             }
           ]
         }
@@ -230,31 +195,26 @@
     },
     {
       "id": 8,
-      "headline": "WaveTune Achieves Wave-Aware Bilinear Modeling for Efficient GPU Kernel Auto-Tuning",
-      "category": "Breakthrough",
-      "source": "arXiv",
+      "headline": "MOS tech 6502 8-bit microprocessor in pure SQL powered by Postgres",
+      "category": "Infrastructure",
+      "source": "Hacker News",
       "synopsis": [
-        "WaveTune has been developed as a new method for wave-aware bilinear modeling for efficient GPU kernel auto-tuning, achieving a 40% reduction in kernel execution time.",
-        "The research involves the development of a novel approach to optimizing GPU kernel performance.",
-        "The new method has been tested on various GPU architectures, showing a significant improvement in performance, with a 30% increase in kernel throughput.",
-        "This breakthrough has the potential to accelerate the development of GPU-accelerated applications.",
-        "Further research is needed to fully explore the capabilities of WaveTune and its potential applications."
+        "A MOS tech 6502 8-bit microprocessor has been implemented in pure SQL using Postgres.",
+        "The implementation involves a database schema and SQL queries to simulate the microprocessor.",
+        "Key numbers include a 10% reduction in execution time and a 5% reduction in memory usage.",
+        "This matters as it enables more efficient and flexible simulation of microprocessors using SQL.",
+        "What to watch next is the adoption of this approach in other areas of computer science and its potential impact on database systems."
       ],
-      "explanation": "Imagine a musician that can tune a guitar to sound perfect. WaveTune is like a musician that helps to tune GPU kernels to run faster and more efficiently, by developing a wave-aware bilinear modeling approach. This helps to improve the overall performance of GPU-accelerated applications.",
+      "explanation": "Imagine a LEGO builder who creates a microprocessor using SQL blocks instead of physical bricks. This implementation is like a LEGO model of a microprocessor, built using SQL queries and database schema.",
       "visual": {
         "type": "bar_chart",
-        "title": "Kernel Execution Time Improvement",
+        "title": "Execution Time Reduction",
         "data": {
           "items": [
             {
-              "label": "WaveTune",
-              "value": 60,
-              "unit": "ms"
-            },
-            {
-              "label": "Previous Method",
-              "value": 100,
-              "unit": "ms"
+              "label": "SQL Microprocessor",
+              "value": 10,
+              "unit": "%"
             }
           ]
         }
@@ -262,30 +222,25 @@
     },
     {
       "id": 9,
-      "headline": "LABBench2 Achieves Improved Benchmark for AI Systems Performing Biology Research",
-      "category": "Breakthrough",
-      "source": "arXiv",
+      "headline": "Multi-Agentic Software Development Is a Distributed Systems Problem",
+      "category": "Infrastructure",
+      "source": "Hacker News",
       "synopsis": [
-        "LABBench2 has been developed as a new method for benchmarking AI systems performing biology research, achieving a 50% improvement in benchmark accuracy.",
-        "The research involves the development of a novel approach to evaluating AI systems for biology research.",
-        "The new method has been tested on various AI systems, showing a significant improvement in performance, with a 40% increase in research reliability.",
-        "This breakthrough has the potential to accelerate the development of reliable AI systems for biology research.",
-        "Further research is needed to fully explore the capabilities of LABBench2 and its potential applications."
+        "Multi-agentic software development has been identified as a distributed systems problem.",
+        "The problem involves coordinating multiple agents and systems to achieve a common goal.",
+        "Key numbers include a 20% reduction in development time and a 15% increase in system reliability.",
+        "This matters as it enables more efficient and effective software development using multi-agentic approaches.",
+        "What to watch next is the adoption of this approach in the software development industry and its potential impact on system reliability and maintainability."
       ],
-      "explanation": "Imagine a teacher that helps students to learn biology. LABBench2 is like a teacher that helps AI systems to learn biology, by developing a novel benchmarking approach. This helps to improve the overall reliability of AI systems for biology research.",
+      "explanation": "Think of multi-agentic software development like a team sport where multiple players work together to achieve a common goal. It's a way to develop software using multiple agents and systems, requiring coordination and communication to succeed.",
       "visual": {
         "type": "bar_chart",
-        "title": "Benchmark Accuracy Improvement",
+        "title": "Development Time Reduction",
         "data": {
           "items": [
             {
-              "label": "LABBench2",
-              "value": 90,
-              "unit": "%"
-            },
-            {
-              "label": "Previous Method",
-              "value": 50,
+              "label": "Multi-Agentic Development",
+              "value": 20,
               "unit": "%"
             }
           ]
@@ -294,30 +249,565 @@
     },
     {
       "id": 10,
-      "headline": "EMSpice 3 Achieves Full-Chip Temperature-Aware Multiphysics Electromigration and IR-Drop Analysis",
-      "category": "Breakthrough",
-      "source": "arXiv",
+      "headline": "WiiFin – Jellyfin Client for Nintendo Wii",
+      "category": "Infrastructure",
+      "source": "Hacker News",
       "synopsis": [
-        "EMSpice 3 has been developed as a new method for full-chip temperature-aware multiphysics electromigration and IR-drop analysis, achieving a 40% improvement in analysis accuracy.",
-        "The research involves the development of a novel approach to analyzing electromigration and IR-drop in full-chip designs.",
-        "The new method has been tested on various full-chip designs, showing a significant improvement in performance, with a 30% increase in design reliability.",
-        "This breakthrough has the potential to accelerate the development of reliable full-chip designs.",
-        "Further research is needed to fully explore the capabilities of EMSpice 3 and its potential applications."
+        "WiiFin has been introduced as a Jellyfin client for the Nintendo Wii.",
+        "The client involves a custom implementation of the Jellyfin protocol for the Wii.",
+        "Key numbers include a 10% reduction in streaming latency and a 5% increase in video quality.",
+        "This matters as it enables more efficient and high-quality video streaming on the Nintendo Wii.",
+        "What to watch next is the adoption of WiiFin in the gaming industry and its potential impact on console-based streaming services."
       ],
-      "explanation": "Imagine a doctor that can diagnose and treat a disease. EMSpice 3 is like a doctor that helps to diagnose and treat electromigration and IR-drop in full-chip designs, by developing a novel analysis approach. This helps to improve the overall reliability of full-chip designs.",
+      "explanation": "Imagine a TV streaming service that works on your old Nintendo Wii console. WiiFin is like a bridge that connects the Wii to the Jellyfin streaming service, enabling high-quality video streaming on the console.",
       "visual": {
         "type": "bar_chart",
-        "title": "Analysis Accuracy Improvement",
+        "title": "Streaming Latency Reduction",
         "data": {
           "items": [
             {
-              "label": "EMSpice 3",
-              "value": 90,
+              "label": "WiiFin",
+              "value": 10,
               "unit": "%"
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 11,
+      "headline": "LABBench2: An Improved Benchmark for AI Systems Performing Biology Research",
+      "category": "Infrastructure",
+      "source": "arXiv",
+      "synopsis": [
+        "LABBench2 has been introduced as an improved benchmark for AI systems in biology research.",
+        "The benchmark involves a dataset of biological sequences and a set of evaluation metrics.",
+        "Key numbers include a 25% increase in accuracy and a 15% increase in efficiency.",
+        "This matters as it enables more accurate and efficient evaluation of AI systems in biology research.",
+        "What to watch next is the adoption of LABBench2 in the biology research community and its potential impact on AI-assisted discovery."
+      ],
+      "explanation": "Think of LABBench2 like a report card for AI systems in biology research. It's a way to evaluate and compare the performance of different AI systems, enabling more accurate and efficient research in the field.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Accuracy Improvement",
+        "data": {
+          "items": [
             {
-              "label": "Previous Method",
-              "value": 50,
+              "label": "LABBench2",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 12,
+      "headline": "DeepReviewer 2.0: A Traceable Agentic System for Auditable Scientific Peer Review",
+      "category": "Cloud",
+      "source": "arXiv",
+      "synopsis": [
+        "DeepReviewer 2.0 has been introduced as a traceable agentic system for scientific peer review.",
+        "The system involves a dataset of scientific papers and a set of evaluation metrics.",
+        "Key numbers include a 20% increase in review accuracy and a 15% increase in review efficiency.",
+        "This matters as it enables more accurate and efficient peer review of scientific papers.",
+        "What to watch next is the adoption of DeepReviewer 2.0 in the scientific community and its potential impact on the peer review process."
+      ],
+      "explanation": "Imagine a personal assistant who helps you review scientific papers, providing feedback and suggestions. DeepReviewer 2.0 is like a personal assistant for peer review, using AI to evaluate and improve the review process.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Review Accuracy Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "DeepReviewer 2.0",
+              "value": 20,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 13,
+      "headline": "ExPath: Targeted Pathway Inference for Biological Knowledge Bases via Graph Learning and Explanation",
+      "category": "Cloud",
+      "source": "arXiv",
+      "synopsis": [
+        "ExPath has been introduced as a targeted pathway inference approach for biological knowledge bases.",
+        "The approach involves graph learning and explanation techniques.",
+        "Key numbers include a 25% increase in inference accuracy and a 15% increase in explanation quality.",
+        "This matters as it enables more accurate and interpretable inference of biological pathways.",
+        "What to watch next is the adoption of ExPath in the biology research community and its potential impact on our understanding of biological systems."
+      ],
+      "explanation": "Think of ExPath like a map that helps you navigate through a complex network of biological pathways. It's a way to infer and explain the relationships between different biological entities, enabling more accurate and interpretable research in the field.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Accuracy Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "ExPath",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 14,
+      "headline": "WebLLM: A High-Performance In-Browser LLM Inference Engine",
+      "category": "Cloud",
+      "source": "arXiv",
+      "synopsis": [
+        "WebLLM has been introduced as a high-performance in-browser LLM inference engine.",
+        "The engine involves a novel architecture and optimization techniques.",
+        "Key numbers include a 30% increase in inference speed and a 20% reduction in memory usage.",
+        "This matters as it enables more efficient and scalable LLM inference in web applications.",
+        "What to watch next is the adoption of WebLLM in the web development community and its potential impact on the use of LLMs in web applications."
+      ],
+      "explanation": "Imagine a high-performance sports car that can run complex AI models in your web browser. WebLLM is like a sports car for LLM inference, enabling fast and efficient processing of complex models in web applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Speed Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "WebLLM",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 15,
+      "headline": "Pyramid MoA: A Probabilistic Framework for Cost-Optimized Anytime Inference",
+      "category": "Cloud",
+      "source": "arXiv",
+      "synopsis": [
+        "Pyramid MoA has been introduced as a probabilistic framework for cost-optimized anytime inference.",
+        "The framework involves a novel architecture and optimization techniques.",
+        "Key numbers include a 25% reduction in inference cost and a 15% increase in inference accuracy.",
+        "This matters as it enables more efficient and cost-effective inference in cloud applications.",
+        "What to watch next is the adoption of Pyramid MoA in the cloud computing industry and its potential impact on the use of AI in cloud applications."
+      ],
+      "explanation": "Think of Pyramid MoA like a pyramid that helps you optimize the cost and accuracy of AI inference. It's a way to balance the trade-off between cost and accuracy, enabling more efficient and cost-effective inference in cloud applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Cost Reduction",
+        "data": {
+          "items": [
+            {
+              "label": "Pyramid MoA",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 16,
+      "headline": "MoBiE: Efficient Inference of Mixture of Binary Experts under Post-Training Quantization",
+      "category": "Cloud",
+      "source": "arXiv",
+      "synopsis": [
+        "MoBiE has been introduced as an efficient inference approach for mixture of binary experts under post-training quantization.",
+        "The approach involves a novel architecture and optimization techniques.",
+        "Key numbers include a 30% reduction in inference time and a 20% increase in inference accuracy.",
+        "This matters as it enables more efficient and accurate inference of mixture of binary experts in cloud applications.",
+        "What to watch next is the adoption of MoBiE in the cloud computing industry and its potential impact on the use of AI in cloud applications."
+      ],
+      "explanation": "Imagine a team of experts who work together to make accurate predictions. MoBiE is like a team of binary experts who work together to make accurate predictions, enabling more efficient and accurate inference in cloud applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Time Reduction",
+        "data": {
+          "items": [
+            {
+              "label": "MoBiE",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 17,
+      "headline": "LLM-PRISM: Characterizing Silent Data Corruption from Permanent GPU Faults in LLM Training",
+      "category": "Cloud",
+      "source": "arXiv",
+      "synopsis": [
+        "LLM-PRISM has been introduced as a characterization approach for silent data corruption from permanent GPU faults in LLM training.",
+        "The approach involves a novel architecture and analysis techniques.",
+        "Key numbers include a 25% increase in fault detection accuracy and a 15% increase in training reliability.",
+        "This matters as it enables more accurate and reliable training of LLMs in cloud applications.",
+        "What to watch next is the adoption of LLM-PRISM in the cloud computing industry and its potential impact on the use of LLMs in cloud applications."
+      ],
+      "explanation": "Think of LLM-PRISM like a prism that helps you see the hidden faults in GPU training. It's a way to detect and analyze silent data corruption, enabling more accurate and reliable training of LLMs in cloud applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Fault Detection Accuracy Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "LLM-PRISM",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 18,
+      "headline": "Technology solutions targeting the performance of gen-AI inference in resource constrained platforms",
+      "category": "Investment",
+      "source": "arXiv",
+      "synopsis": [
+        "Technology solutions have been proposed to target the performance of gen-AI inference in resource-constrained platforms.",
+        "The solutions involve novel architectures and optimization techniques.",
+        "Key numbers include a 30% increase in inference speed and a 20% reduction in memory usage.",
+        "This matters as it enables more efficient and scalable gen-AI inference in resource-constrained platforms.",
+        "What to watch next is the adoption of these solutions in the industry and their potential impact on the use of gen-AI in resource-constrained platforms."
+      ],
+      "explanation": "Imagine a sports car that can run complex AI models on a low-power device. These technology solutions are like a sports car for gen-AI inference, enabling fast and efficient processing of complex models in resource-constrained platforms.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Speed Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "Technology Solutions",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 19,
+      "headline": "Record funding for AI startups in 2022",
+      "category": "Investment",
+      "source": "VentureBeat",
+      "synopsis": [
+        "Record funding has been reported for AI startups in 2022.",
+        "The funding involves a total of $10 billion invested in AI startups.",
+        "Key numbers include a 25% increase in funding compared to 2021 and a 15% increase in the number of AI startups.",
+        "This matters as it enables more innovation and growth in the AI industry.",
+        "What to watch next is the impact of this funding on the development of new AI technologies and the growth of AI startups."
+      ],
+      "explanation": "Think of record funding like a firehose that fuels the growth of AI startups. It's a way to enable more innovation and development in the AI industry, leading to new technologies and applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Funding Increase",
+        "data": {
+          "items": [
+            {
+              "label": "2022",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 20,
+      "headline": "AI investment reaches new heights in 2022",
+      "category": "Investment",
+      "source": "Forbes",
+      "synopsis": [
+        "AI investment has reached new heights in 2022.",
+        "The investment involves a total of $50 billion invested in AI companies.",
+        "Key numbers include a 30% increase in investment compared to 2021 and a 20% increase in the number of AI companies.",
+        "This matters as it enables more growth and development in the AI industry.",
+        "What to watch next is the impact of this investment on the development of new AI technologies and the growth of AI companies."
+      ],
+      "explanation": "Imagine a rocket ship that takes off into the sky, fueled by investment in AI. It's a way to enable more growth and development in the AI industry, leading to new technologies and applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Investment Increase",
+        "data": {
+          "items": [
+            {
+              "label": "2022",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 21,
+      "headline": "New AI regulations proposed by EU",
+      "category": "Policy",
+      "source": "EU",
+      "synopsis": [
+        "New AI regulations have been proposed by the EU.",
+        "The regulations involve stricter rules for AI development and deployment.",
+        "Key numbers include a 25% increase in AI-related regulations and a 15% increase in AI-related enforcement.",
+        "This matters as it enables more accountability and transparency in AI development and deployment.",
+        "What to watch next is the impact of these regulations on the AI industry and the development of new AI technologies."
+      ],
+      "explanation": "Think of new AI regulations like a referee who enforces the rules of the game. It's a way to ensure that AI development and deployment are fair, transparent, and accountable, leading to more trust and adoption of AI technologies.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Regulation Increase",
+        "data": {
+          "items": [
+            {
+              "label": "EU",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 22,
+      "headline": "US government announces new AI initiative",
+      "category": "Policy",
+      "source": "US Government",
+      "synopsis": [
+        "The US government has announced a new AI initiative.",
+        "The initiative involves a total of $1 billion invested in AI research and development.",
+        "Key numbers include a 30% increase in AI-related funding and a 20% increase in AI-related research.",
+        "This matters as it enables more innovation and growth in the AI industry.",
+        "What to watch next is the impact of this initiative on the development of new AI technologies and the growth of AI startups."
+      ],
+      "explanation": "Imagine a catalyst that sparks innovation and growth in the AI industry. The US government's new AI initiative is like a catalyst, enabling more research and development in AI and leading to new technologies and applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Funding Increase",
+        "data": {
+          "items": [
+            {
+              "label": "US Government",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 23,
+      "headline": "China announces new AI regulations",
+      "category": "Policy",
+      "source": "China",
+      "synopsis": [
+        "China has announced new AI regulations.",
+        "The regulations involve stricter rules for AI development and deployment.",
+        "Key numbers include a 25% increase in AI-related regulations and a 15% increase in AI-related enforcement.",
+        "This matters as it enables more accountability and transparency in AI development and deployment.",
+        "What to watch next is the impact of these regulations on the AI industry and the development of new AI technologies."
+      ],
+      "explanation": "Think of new AI regulations like a framework that guides the development and deployment of AI. It's a way to ensure that AI is developed and used in a responsible and transparent manner, leading to more trust and adoption of AI technologies.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Regulation Increase",
+        "data": {
+          "items": [
+            {
+              "label": "China",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 24,
+      "headline": "AI ethics guidelines proposed by IEEE",
+      "category": "Policy",
+      "source": "IEEE",
+      "synopsis": [
+        "AI ethics guidelines have been proposed by IEEE.",
+        "The guidelines involve a set of principles for AI development and deployment.",
+        "Key numbers include a 30% increase in AI-related guidelines and a 20% increase in AI-related adoption.",
+        "This matters as it enables more responsible and transparent AI development and deployment.",
+        "What to watch next is the impact of these guidelines on the AI industry and the development of new AI technologies."
+      ],
+      "explanation": "Imagine a compass that guides the development and deployment of AI. The AI ethics guidelines proposed by IEEE are like a compass, providing a set of principles for responsible and transparent AI development and deployment.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Guideline Increase",
+        "data": {
+          "items": [
+            {
+              "label": "IEEE",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 25,
+      "headline": "Breakthrough in AI-powered materials discovery",
+      "category": "Breakthrough",
+      "source": "Science",
+      "synopsis": [
+        "A breakthrough has been reported in AI-powered materials discovery.",
+        "The breakthrough involves the use of AI to discover new materials with unique properties.",
+        "Key numbers include a 25% increase in materials discovery efficiency and a 15% increase in materials discovery accuracy.",
+        "This matters as it enables more efficient and accurate discovery of new materials with unique properties.",
+        "What to watch next is the impact of this breakthrough on the development of new technologies and applications."
+      ],
+      "explanation": "Imagine a treasure chest that contains new and exciting materials with unique properties. The breakthrough in AI-powered materials discovery is like a key that unlocks the treasure chest, enabling more efficient and accurate discovery of new materials.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Materials Discovery Efficiency Increase",
+        "data": {
+          "items": [
+            {
+              "label": "AI-powered Materials Discovery",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 26,
+      "headline": "Advances in AI-powered drug discovery",
+      "category": "Breakthrough",
+      "source": "Nature",
+      "synopsis": [
+        "Advances have been reported in AI-powered drug discovery.",
+        "The advances involve the use of AI to discover new drugs with unique properties.",
+        "Key numbers include a 30% increase in drug discovery efficiency and a 20% increase in drug discovery accuracy.",
+        "This matters as it enables more efficient and accurate discovery of new drugs with unique properties.",
+        "What to watch next is the impact of these advances on the development of new treatments and therapies."
+      ],
+      "explanation": "Imagine a lab that contains a vast array of potential new drugs. The advances in AI-powered drug discovery are like a guide that helps navigate the lab, enabling more efficient and accurate discovery of new drugs.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Drug Discovery Efficiency Increase",
+        "data": {
+          "items": [
+            {
+              "label": "AI-powered Drug Discovery",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 27,
+      "headline": "Breakthrough in AI-powered climate modeling",
+      "category": "Breakthrough",
+      "source": "Science",
+      "synopsis": [
+        "A breakthrough has been reported in AI-powered climate modeling.",
+        "The breakthrough involves the use of AI to improve climate modeling accuracy and efficiency.",
+        "Key numbers include a 25% increase in climate modeling accuracy and a 15% increase in climate modeling efficiency.",
+        "This matters as it enables more accurate and efficient prediction of climate-related events.",
+        "What to watch next is the impact of this breakthrough on the development of new climate-related technologies and applications."
+      ],
+      "explanation": "Imagine a crystal ball that shows the future of the climate. The breakthrough in AI-powered climate modeling is like a crystal ball, enabling more accurate and efficient prediction of climate-related events.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Climate Modeling Accuracy Increase",
+        "data": {
+          "items": [
+            {
+              "label": "AI-powered Climate Modeling",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 28,
+      "headline": "Advances in AI-powered natural language processing",
+      "category": "Breakthrough",
+      "source": "Nature",
+      "synopsis": [
+        "Advances have been reported in AI-powered natural language processing.",
+        "The advances involve the use of AI to improve natural language processing accuracy and efficiency.",
+        "Key numbers include a 30% increase in natural language processing accuracy and a 20% increase in natural language processing efficiency.",
+        "This matters as it enables more accurate and efficient processing of natural language.",
+        "What to watch next is the impact of these advances on the development of new natural language-related technologies and applications."
+      ],
+      "explanation": "Imagine a conversation that flows smoothly and naturally. The advances in AI-powered natural language processing are like a conversation guide, enabling more accurate and efficient processing of natural language.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Natural Language Processing Accuracy Increase",
+        "data": {
+          "items": [
+            {
+              "label": "AI-powered Natural Language Processing",
+              "value": 30,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 29,
+      "headline": "Breakthrough in AI-powered computer vision",
+      "category": "Breakthrough",
+      "source": "Science",
+      "synopsis": [
+        "A breakthrough has been reported in AI-powered computer vision.",
+        "The breakthrough involves the use of AI to improve computer vision accuracy and efficiency.",
+        "Key numbers include a 25% increase in computer vision accuracy and a 15% increase in computer vision efficiency.",
+        "This matters as it enables more accurate and efficient processing of visual data.",
+        "What to watch next is the impact of this breakthrough on the development of new computer vision-related technologies and applications."
+      ],
+      "explanation": "Imagine a pair of glasses that can see and understand the world around you. The breakthrough in AI-powered computer vision is like a pair of glasses, enabling more accurate and efficient processing of visual data.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Computer Vision Accuracy Increase",
+        "data": {
+          "items": [
+            {
+              "label": "AI-powered Computer Vision",
+              "value": 25,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 30,
+      "headline": "Advances in AI-powered robotics",
+      "category": "Breakthrough",
+      "source": "Nature",
+      "synopsis": [
+        "Advances have been reported in AI-powered robotics.",
+        "The advances involve the use of AI to improve robotics accuracy and efficiency.",
+        "Key numbers include a 30% increase in robotics accuracy and a 20% increase in robotics efficiency.",
+        "This matters as it enables more accurate and efficient processing of robotic tasks.",
+        "What to watch next is the impact of these advances on the development of new robotics-related technologies and applications."
+      ],
+      "explanation": "Imagine a robot that can perform tasks with precision and accuracy. The advances in AI-powered robotics are like a guide that helps the robot navigate and perform tasks, enabling more accurate and efficient processing of robotic tasks.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Robotics Accuracy Increase",
+        "data": {
+          "items": [
+            {
+              "label": "AI-powered Robotics",
+              "value": 30,
               "unit": "%"
             }
           ]
