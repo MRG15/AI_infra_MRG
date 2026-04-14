@@ -1,11 +1,11 @@
 # AI Infra Times · GitHub Actions Workflow
 #
-# Runs daily at 6:30 AM IST (1:00 AM UTC)
+# Runs daily at 5:00 PM IST (11:30 AM UTC)
 # Also triggerable manually from GitHub UI (Actions tab → Run workflow)
 #
 # Required setup (one-time):
 #   GitHub repo → Settings → Secrets and variables → Actions → New repository secret
-#   Name: GEMINI_API_KEY   Value: your key from aistudio.google.com
+#   Name: GROQ_API_KEY   Value: your key from console.groq.com
 #
 # Required repo settings (one-time):
 #   GitHub repo → Settings → Pages → Source: Deploy from a branch → Branch: main → /docs
@@ -42,7 +42,7 @@ jobs:
       # ── 3. Generate edition ───────────────────────────────────────────────
       - name: Generate today's edition
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           cd ai_infra_times
           python generate.py
