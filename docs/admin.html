@@ -439,12 +439,17 @@ async function publishChanges() {
 
 // ── DELETE EDITION ────────────────────────────────────────────────────────────
 function dateToISO(dateStr) {
-  // "14 April 2026" → "2026-04-14"
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d)) return null;
-    return d.toISOString().slice(0, 10);
-  } catch(e) { return null; }
+  // Parses "14 April 2026" → "2026-04-14"  (JS Date() can't parse this format)
+  const MONTHS = {
+    january:'01', february:'02', march:'03',    april:'04',
+    may:'05',     june:'06',     july:'07',      august:'08',
+    september:'09', october:'10', november:'11', december:'12'
+  };
+  const m = (dateStr || '').trim().match(/^(\d{1,2})\s+(\w+)\s+(\d{4})$/);
+  if (!m) return null;
+  const mon = MONTHS[m[2].toLowerCase()];
+  if (!mon) return null;
+  return `${m[3]}-${mon}-${m[1].padStart(2, '0')}`;
 }
 
 function promptDeleteEdition() {

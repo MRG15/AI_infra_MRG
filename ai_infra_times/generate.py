@@ -185,23 +185,25 @@ def build_prompt(items: list) -> str:
 
     return f"""You are the editor of AI Infra Times, a daily intelligence briefing on AI GPU and infrastructure.
 
-Below are real RSS headlines from the last 72 hours. Return exactly 42 stories — 7 per category — covering ALL six categories: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough.
+Below are real RSS headlines from the last 72 hours. Return exactly 42 stories — 7 per category — covering ALL six categories.
 
 TODAY: {today_str}  |  Vol. {VOLUME}, Issue {issue}
 
 RSS HEADLINES:
 {feed_block}
 
-CATEGORY DISTRIBUTION — you MUST return exactly 7 stories for each:
-- Silicon        (7 stories): chips, GPUs, tape-outs, benchmark breakthroughs, new architectures
-- Infrastructure (7 stories): datacenters, cooling, power, networking, cables, racks
-- Cloud          (7 stories): hyperscaler deployments, cloud AI services, pricing, regions
-- Investment     (7 stories): funding rounds, M&A, strategic deals, CapEx announcements
-- Policy         (7 stories): export controls, regulations, AI acts, government compute
-- Breakthrough   (7 stories): research shipped to production, inference optimisations, new techniques
+UNIQUENESS RULE: Every story across all 42 must be a distinct real-world event. Never assign the same news item to multiple categories. Each RSS item may appear in ONE story only. If a funding round relates to a chip company, put it in Investment — not Silicon. If an AI service launches on a cloud platform, put it in Cloud — not Breakthrough. When in doubt, use the category that matches the PRIMARY news angle.
 
-If a category has no strong RSS match, synthesise from adjacent context in the feed. Never leave a category empty.
-The FIRST story in each category should be the most important / highest-impact one (it appears as the section lead).
+CATEGORY DEFINITIONS — strict:
+- Silicon        (7): Hardware design and manufacturing ONLY. Chip architecture, GPU/NPU/TPU silicon, semiconductor fab, wafer/die, TSMC/ASML/Intel Foundry/NVIDIA/AMD chip news, silicon benchmarks. NOT cloud services. NOT funding. NOT software models.
+- Infrastructure (7): Physical AI compute infrastructure ONLY. Datacenter construction/location/power/cooling, networking fabric (InfiniBand, Ethernet, fiber), server racks, energy contracts for compute facilities. NOT cloud SaaS. NOT chip design.
+- Cloud          (7): Cloud platforms serving AI workloads ONLY. AWS/Azure/GCP/Oracle/OCI AI service launches, cloud GPU instance types and pricing, AI API availability, hyperscaler region expansions for AI. NOT datacenter construction. NOT chip news.
+- Investment     (7): Capital flows into AI infrastructure ONLY. VC/PE funding rounds, M&A deals, hyperscaler CapEx announcements, government infrastructure spend commitments. The story must be primarily about money changing hands.
+- Policy         (7): Government and regulatory actions ONLY. Export controls on chips/hardware, AI regulation laws/bills, national AI strategies, government compute procurement programmes, international AI governance agreements. NOT corporate strategy.
+- Breakthrough   (7): Specific technical advances with measurable results. New inference techniques (with numbers), model efficiency records, open-source model releases, training optimisations, hardware-software co-design results. Must cite a specific technique, benchmark, or paper — NOT vague "AI improves X" claims.
+
+If a category genuinely has fewer than 7 matching RSS items, synthesise plausible near-term stories from adjacent context — but never reuse an event already placed in another category.
+The FIRST story in each category must be the highest-impact one (it appears as the section lead on the front page).
 
 RETURN ONLY valid JSON — no markdown fences, no backticks, no text outside the object:
 
@@ -239,7 +241,7 @@ RULES:
 - flow:         data.steps    = [{{title, desc}}]
 - market_share: data.segments = [{{name, pct}}]  — pct values must sum to 100
 - Every story must have a visual
-- Return exactly 42 stories, exactly 7 per category
+- Return exactly 42 stories, exactly 7 per category, all unique events
 - Headline must lead with the news, not just the company name
 - Synopsis line 1 must contain at least one specific number, name, or date"""
 
@@ -297,6 +299,10 @@ def parse_json(raw: str) -> dict:
 def validate(edition: dict) -> dict:
     valid_cats = {"Silicon", "Infrastructure", "Cloud", "Investment", "Policy", "Breakthrough"}
     valid_vis  = {"bar_chart", "timeline", "flow", "market_share"}
+
+    seen_headlines = set()
+    clean_stories  = []
+
     for s in edition.get("stories", []):
         if s.get("category") not in valid_cats:
             s["category"] = "Silicon"
@@ -306,7 +312,20 @@ def validate(edition: dict) -> dict:
             s["synopsis"] = [s.get("synopsis", ""), "", ""]
         while len(s["synopsis"]) < 3:
             s["synopsis"].append("")
-    edition["stories"] = edition.get("stories", [])[:42]
+
+        # Dedup: normalise headline to first 55 alphanumeric chars, lowercase
+        norm = re.sub(r'[^a-z0-9]', '', s.get("headline", "").lower())[:55]
+        if norm and norm not in seen_headlines:
+            seen_headlines.add(norm)
+            clean_stories.append(s)
+        else:
+            print(f"    ⚠  Duplicate removed [{s.get('category','')}]: {s.get('headline','')[:70]}")
+
+    removed = len(edition.get("stories", [])) - len(clean_stories)
+    if removed:
+        print(f"        {removed} duplicate story/stories removed")
+
+    edition["stories"] = clean_stories[:42]
     return edition
 
 # ── STEP 4: OUTPUT ────────────────────────────────────────────────────────────
