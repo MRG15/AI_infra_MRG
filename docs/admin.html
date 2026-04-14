@@ -197,7 +197,19 @@
     <span class="toolbar-label">Stories</span>
     <button class="btn" style="background:var(--ink);color:white;" onclick="triggerRegenerate()">⟳ Regenerate Edition</button>
     <button class="btn" style="background:#eae5dd;color:var(--ink);border:1px solid var(--rule);" onclick="restoreAll()">Restore All</button>
+    <span style="width:1px;height:20px;background:var(--rule);display:inline-block;margin:0 4px;"></span>
+    <button class="btn btn-danger" onclick="promptDeleteEdition()">✕ Delete Edition</button>
+    <button class="btn" style="background:#eae5dd;color:var(--ink);border:1px solid var(--rule);" onclick="showArchivePicker()">Browse Archive</button>
     <span class="status-msg" id="status-msg"></span>
+  </div>
+
+  <!-- Archive Picker (hidden by default) -->
+  <div id="archive-picker" style="display:none;background:#fff8f0;border-bottom:1px solid #e8c090;padding:14px 24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);">Past Editions — click to load &amp; manage</span>
+      <button class="btn" style="background:transparent;color:var(--ink-faint);border:1px solid var(--rule);padding:4px 10px;" onclick="document.getElementById('archive-picker').style.display='none'">✕ Close</button>
+    </div>
+    <div id="archive-list" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
   </div>
 
   <div class="stories-wrap" id="stories-wrap"></div>
@@ -423,6 +435,157 @@ async function publishChanges() {
       document.getElementById('publish-btn').disabled = false;
     }
   );
+}
+
+// ── DELETE EDITION ────────────────────────────────────────────────────────────
+function dateToISO(dateStr) {
+  // "14 April 2026" → "2026-04-14"
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d)) return null;
+    return d.toISOString().slice(0, 10);
+  } catch(e) { return null; }
+}
+
+function promptDeleteEdition() {
+  if (!edition) { setStatus('No edition loaded.', 'err'); return; }
+  const isoDate = dateToISO(edition.edition_date);
+  if (!isoDate) { setStatus('Could not determine edition date.', 'err'); return; }
+  openModal(
+    'Delete Edition',
+    `Permanently delete the ${edition.edition_date} edition from the archive?\n\nThis removes archive/${isoDate}.json and archive/${isoDate}.html, and updates the archive index. The live index.html is not affected.\n\nThis cannot be undone.`,
+    () => { closeModal(); deleteEdition(isoDate); }
+  );
+}
+
+async function deleteEdition(isoDate) {
+  const token = localStorage.getItem('ait_gh_token') || document.getElementById('gh-token-input').value.trim();
+  if (!token) {
+    document.getElementById('token-bar').style.display = 'flex';
+    setStatus('Enter your GitHub token first.', 'err');
+    return;
+  }
+
+  setStatus(`Deleting edition ${isoDate}...`, 'running');
+  const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+
+  try {
+    // Delete archive JSON and HTML
+    for (const path of [`docs/archive/${isoDate}.json`, `docs/archive/${isoDate}.html`]) {
+      const metaResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, { headers });
+      if (metaResp.status === 404) continue;  // already gone
+      if (!metaResp.ok) throw new Error(`GET ${path}: ${metaResp.status}`);
+      const meta = await metaResp.json();
+      const delResp = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+        method: 'DELETE', headers,
+        body: JSON.stringify({ message: `Admin: delete edition ${isoDate}`, sha: meta.sha })
+      });
+      if (!delResp.ok) {
+        const err = await delResp.json();
+        throw new Error(`DELETE ${path}: ${err.message || delResp.statusText}`);
+      }
+    }
+
+    // Rebuild archive.html — fetch current, strip this edition's entry, push back
+    await rebuildArchiveHTML(isoDate, token, headers);
+
+    setStatus(`Edition ${isoDate} deleted. Archive updated.`, 'ok');
+  } catch(e) {
+    setStatus('Delete failed: ' + e.message, 'err');
+  }
+}
+
+async function rebuildArchiveHTML(removedDate, token, headers) {
+  // Fetch current archive.html
+  const metaResp = await fetch(`https://api.github.com/repos/${REPO}/contents/docs/archive.html`, { headers });
+  if (!metaResp.ok) return;  // no archive.html yet, skip
+  const meta = await metaResp.json();
+  const current = decodeURIComponent(escape(atob(meta.content.replace(/\n/g,''))));
+
+  // Remove the <a href="archive/YYYY-MM-DD.html" ...>...</a> block for this date
+  const escaped = removedDate.replace(/[-]/g, '\\-');
+  const re = new RegExp(`<a href="archive\\/${escaped}\\.html"[\\s\\S]*?<\\/a>`, 'g');
+  const updated = current.replace(re, '');
+
+  const encoded = btoa(unescape(encodeURIComponent(updated)));
+  const putResp = await fetch(`https://api.github.com/repos/${REPO}/contents/docs/archive.html`, {
+    method: 'PUT', headers,
+    body: JSON.stringify({ message: `Admin: remove ${removedDate} from archive`, content: encoded, sha: meta.sha })
+  });
+  if (!putResp.ok) {
+    const err = await putResp.json();
+    throw new Error('Archive update: ' + (err.message || putResp.statusText));
+  }
+}
+
+// ── ARCHIVE PICKER ────────────────────────────────────────────────────────────
+async function showArchivePicker() {
+  const token = localStorage.getItem('ait_gh_token') || document.getElementById('gh-token-input').value.trim();
+  const picker = document.getElementById('archive-picker');
+  const list   = document.getElementById('archive-list');
+
+  picker.style.display = 'block';
+  list.innerHTML = '<span style="font-size:11px;color:var(--ink-faint);">Loading...</span>';
+
+  try {
+    const headers = token
+      ? { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+      : { Accept: 'application/vnd.github.v3+json' };
+
+    const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/docs/archive`, { headers });
+    if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
+    const files = await resp.json();
+
+    const editions = files
+      .filter(f => f.name.endsWith('.json'))
+      .sort((a, b) => b.name.localeCompare(a.name));
+
+    if (!editions.length) {
+      list.innerHTML = '<span style="font-size:11px;color:var(--ink-faint);font-style:italic;">No archive editions found.</span>';
+      return;
+    }
+
+    list.innerHTML = '';
+    editions.forEach(f => {
+      const isoDate = f.name.replace('.json', '');
+      const d = new Date(isoDate);
+      const niceName = isNaN(d) ? isoDate : d.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.style.cssText = 'background:white;color:var(--ink);border:1px solid var(--rule);font-size:10px;display:flex;flex-direction:column;gap:2px;text-align:left;padding:8px 12px;';
+      btn.innerHTML = `<span style="font-weight:600;">${niceName}</span><span style="color:var(--ink-faint);font-size:8px;">${isoDate}</span>`;
+      btn.onclick = () => loadEditionByDate(isoDate, token);
+      list.appendChild(btn);
+    });
+  } catch(e) {
+    list.innerHTML = `<span style="font-size:11px;color:var(--red);">Error: ${e.message}</span>`;
+  }
+}
+
+async function loadEditionByDate(isoDate, token) {
+  setStatus(`Loading edition ${isoDate}...`, 'running');
+  document.getElementById('archive-picker').style.display = 'none';
+  try {
+    const headers = token
+      ? { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.v3+json' }
+      : { Accept: 'application/vnd.github.v3+json' };
+    const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/docs/archive/${isoDate}.json`, { headers });
+    if (!resp.ok) throw new Error(`${resp.status}`);
+    const meta = await resp.json();
+    const raw  = decodeURIComponent(escape(atob(meta.content.replace(/\n/g,''))));
+    edition  = JSON.parse(raw);
+    stories  = edition.stories.map((s, i) => ({ ...s, _deleted: false, _origIdx: i }));
+    renderStories();
+    document.getElementById('top-edition-meta').textContent =
+      `Vol. ${edition.volume} · Issue ${edition.issue} · ${edition.edition_date} (archive)`;
+    document.getElementById('meta-title').value  = edition.edition_title || '';
+    document.getElementById('meta-volume').value = edition.volume || 1;
+    document.getElementById('meta-issue').value  = edition.issue  || 1;
+    document.getElementById('meta-date').value   = edition.edition_date || '';
+    setStatus(`Loaded archive edition: ${edition.edition_date} — ${stories.length} stories`, 'ok');
+  } catch(e) {
+    setStatus('Could not load archive edition: ' + e.message, 'err');
+  }
 }
 
 // ── REGENERATE ────────────────────────────────────────────────────────────────

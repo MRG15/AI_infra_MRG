@@ -588,7 +588,7 @@ function renderView() {
   }
 }
 
-/* ── FRONT PAGE ── */
+/* ── FRONT PAGE — 1 lead story per section ── */
 function renderFrontPage(container) {
   if (!allStories.length) return;
 
@@ -600,12 +600,16 @@ function renderFrontPage(container) {
   });
 
   const catCount = Object.keys(byCat).length;
+
+  // Top lead story (very first story overall)
   let isFirst = true;
 
-  CATS.forEach(catName => {
+  CATS.forEach((catName, catIdx) => {
     if (!byCat[catName]) return;
     const stories = byCat[catName];
     const accent  = CAT_ACCENT[catName] || '#888';
+    const lead    = stories[0];  // hottest story = first in category
+    const globalIdx = allStories.indexOf(lead);
 
     // Section header — clickable to switch filter
     const divider = document.createElement('div');
@@ -614,27 +618,24 @@ function renderFrontPage(container) {
     divider.onclick = () => switchFilter(catName);
     divider.innerHTML = `
       <span class="section-divider-label" style="color:${accent};font-size:13px;letter-spacing:.14em;">${catName.toUpperCase()}</span>
-      <div class="section-divider-line" style="border-color:${accent};opacity:.35;"></div>
+      <div class="section-divider-line" style="background:${accent};opacity:.25;"></div>
       <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-faint);letter-spacing:.1em;white-space:nowrap;flex-shrink:0;">
-        ${stories.length} stor${stories.length===1?'y':'ies'} · filter →
+        ${stories.length} stor${stories.length===1?'y':'ies'} · read all →
       </span>`;
     container.appendChild(divider);
 
-    // Show up to 5 stories per section on the front page
-    stories.slice(0, 5).forEach((s, i) => {
-      const globalIdx = allStories.indexOf(s);
-      const el = document.createElement('article');
-      el.className = 'story';
-      el.style.animationDelay = `${i * 40}ms`;
-      el.innerHTML = storyHTML(s, globalIdx, isFirst);
-      container.appendChild(el);
-      if (s.visual) requestAnimationFrame(() => renderVisual(s.visual, globalIdx));
-      isFirst = false;
-    });
+    // Show only the top story for this section
+    const el = document.createElement('article');
+    el.className = 'story';
+    el.style.animationDelay = `${catIdx * 60}ms`;
+    el.innerHTML = storyHTML(lead, globalIdx, isFirst);
+    container.appendChild(el);
+    if (lead.visual) requestAnimationFrame(() => renderVisual(lead.visual, globalIdx));
+    isFirst = false;
   });
 
   document.getElementById('edition-count').textContent =
-    `${allStories.length} stories across ${catCount} section${catCount===1?'':'s'}`;
+    `${catCount} sections · ${allStories.length} total stories · click a section to read all`;
 }
 
 /* ── SECTION VIEW ── */

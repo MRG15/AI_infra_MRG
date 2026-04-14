@@ -176,31 +176,32 @@ def build_prompt(items: list) -> str:
     today_str = today.strftime("%-d %B %Y")
 
     lines = []
-    for i, item in enumerate(items[:30], 1):
+    for i, item in enumerate(items[:42], 1):
         lines.append(f"{i}. [{item['source']} · {item['date']}] {item['title']}")
         if item["summary"]:
-            lines.append(f"   {item['summary'][:120]}")
+            lines.append(f"   {item['summary'][:100]}")
 
     feed_block = "\n".join(lines)
 
     return f"""You are the editor of AI Infra Times, a daily intelligence briefing on AI GPU and infrastructure.
 
-Below are real RSS headlines from the last 72 hours. Return exactly 30 stories — 5 per category — covering ALL six categories: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough.
+Below are real RSS headlines from the last 72 hours. Return exactly 42 stories — 7 per category — covering ALL six categories: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough.
 
 TODAY: {today_str}  |  Vol. {VOLUME}, Issue {issue}
 
 RSS HEADLINES:
 {feed_block}
 
-CATEGORY DISTRIBUTION — you MUST return exactly 5 stories for each:
-- Silicon        (5 stories): chips, GPUs, tape-outs, benchmark breakthroughs, new architectures
-- Infrastructure (5 stories): datacenters, cooling, power, networking, cables, racks
-- Cloud          (5 stories): hyperscaler deployments, cloud AI services, pricing, regions
-- Investment     (5 stories): funding rounds, M&A, strategic deals, CapEx announcements
-- Policy         (5 stories): export controls, regulations, AI acts, government compute
-- Breakthrough   (5 stories): research shipped to production, inference optimisations, new techniques
+CATEGORY DISTRIBUTION — you MUST return exactly 7 stories for each:
+- Silicon        (7 stories): chips, GPUs, tape-outs, benchmark breakthroughs, new architectures
+- Infrastructure (7 stories): datacenters, cooling, power, networking, cables, racks
+- Cloud          (7 stories): hyperscaler deployments, cloud AI services, pricing, regions
+- Investment     (7 stories): funding rounds, M&A, strategic deals, CapEx announcements
+- Policy         (7 stories): export controls, regulations, AI acts, government compute
+- Breakthrough   (7 stories): research shipped to production, inference optimisations, new techniques
 
 If a category has no strong RSS match, synthesise from adjacent context in the feed. Never leave a category empty.
+The FIRST story in each category should be the most important / highest-impact one (it appears as the section lead).
 
 RETURN ONLY valid JSON — no markdown fences, no backticks, no text outside the object:
 
@@ -217,12 +218,10 @@ RETURN ONLY valid JSON — no markdown fences, no backticks, no text outside the
       "source": "Publication name",
       "synopsis": [
         "What happened — core fact with a specific number or name.",
-        "Who is involved: companies, countries, people.",
-        "Key numbers: scale, cost, timeline, performance delta.",
-        "Why this matters in the AI infrastructure race.",
+        "Who is involved and what is at stake.",
         "What to watch next — the forward-looking signal."
       ],
-      "explanation": "2-3 sentences using a simple everyday analogy. Zero jargon. Like explaining to a smart non-technical friend at dinner.",
+      "explanation": "1-2 sentences using a simple everyday analogy. Zero jargon.",
       "visual": {{
         "type": "bar_chart",
         "title": "Chart title with unit",
@@ -240,7 +239,7 @@ RULES:
 - flow:         data.steps    = [{{title, desc}}]
 - market_share: data.segments = [{{name, pct}}]  — pct values must sum to 100
 - Every story must have a visual
-- Return exactly 30 stories, exactly 5 per category
+- Return exactly 42 stories, exactly 7 per category
 - Headline must lead with the news, not just the company name
 - Synopsis line 1 must contain at least one specific number, name, or date"""
 
@@ -304,10 +303,10 @@ def validate(edition: dict) -> dict:
         if "visual" in s and s["visual"].get("type") not in valid_vis:
             s["visual"]["type"] = "bar_chart"
         if not isinstance(s.get("synopsis"), list):
-            s["synopsis"] = [s.get("synopsis", ""), "", "", "", ""]
-        while len(s["synopsis"]) < 5:
+            s["synopsis"] = [s.get("synopsis", ""), "", ""]
+        while len(s["synopsis"]) < 3:
             s["synopsis"].append("")
-    edition["stories"] = edition.get("stories", [])[:30]
+    edition["stories"] = edition.get("stories", [])[:42]
     return edition
 
 # ── STEP 4: OUTPUT ────────────────────────────────────────────────────────────
@@ -442,7 +441,7 @@ def main():
         return sum(1 for kw in high_signal if kw in t)
     relevant.sort(key=score, reverse=True)
 
-    print(f"\n[ 3/5 ] Calling Groq API ({GROQ_MODEL}) with {min(len(relevant), 30)} items...")
+    print(f"\n[ 3/5 ] Calling Groq API ({GROQ_MODEL}) with {min(len(relevant), 42)} items...")
     edition = call_groq(GROQ_API_KEY, relevant)
     print(f"        {len(edition.get('stories', []))} stories returned")
 
