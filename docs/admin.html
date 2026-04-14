@@ -171,6 +171,28 @@
     <span style="font-size:10px;color:var(--ink-faint);">Stored in browser only</span>
   </div>
 
+  <!-- Edition Metadata Editor -->
+  <div style="background:#eae5dd;border-bottom:1px solid var(--rule);padding:14px 24px;display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;">
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <label style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);">Edition Title</label>
+      <input id="meta-title" style="border:1px solid var(--rule);background:white;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;width:220px;outline:none;" placeholder="Today's Edition">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <label style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);">Volume</label>
+      <input id="meta-volume" type="number" min="1" style="border:1px solid var(--rule);background:white;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;width:80px;outline:none;" placeholder="1">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <label style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);">Issue</label>
+      <input id="meta-issue" type="number" min="1" style="border:1px solid var(--rule);background:white;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;width:80px;outline:none;" placeholder="1">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <label style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);">Edition Date</label>
+      <input id="meta-date" style="border:1px solid var(--rule);background:white;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:12px;width:160px;outline:none;" placeholder="14 April 2026">
+    </div>
+    <button class="btn" style="background:var(--amber);color:white;margin-bottom:1px;" onclick="applyMetadata()">Apply</button>
+    <span style="font-size:10px;color:var(--ink-faint);align-self:center;">Changes apply on next Publish</span>
+  </div>
+
   <div class="toolbar">
     <span class="toolbar-label">Stories</span>
     <button class="btn" style="background:var(--ink);color:white;" onclick="triggerRegenerate()">⟳ Regenerate Edition</button>
@@ -241,6 +263,11 @@ async function loadEdition() {
     renderStories();
     document.getElementById('top-edition-meta').textContent =
       `Vol. ${edition.volume} · Issue ${edition.issue} · ${edition.edition_date}`;
+    // Pre-fill metadata fields
+    document.getElementById('meta-title').value  = edition.edition_title || '';
+    document.getElementById('meta-volume').value = edition.volume || 1;
+    document.getElementById('meta-issue').value  = edition.issue  || 1;
+    document.getElementById('meta-date').value   = edition.edition_date || '';
     setStatus('Edition loaded — ' + stories.length + ' stories', 'ok');
   } catch(e) {
     setStatus('Error loading edition: ' + e.message, 'err');
@@ -306,6 +333,21 @@ function toggleDelete(idx) {
   renderStories();
   const count = stories.filter(s => s._deleted).length;
   setStatus(count > 0 ? `${count} story${count>1?'s':''} marked for deletion` : '', count > 0 ? 'err' : '');
+}
+
+function applyMetadata() {
+  if (!edition) { setStatus('No edition loaded yet.', 'err'); return; }
+  const title  = document.getElementById('meta-title').value.trim();
+  const volume = parseInt(document.getElementById('meta-volume').value);
+  const issue  = parseInt(document.getElementById('meta-issue').value);
+  const date   = document.getElementById('meta-date').value.trim();
+  if (title)        edition.edition_title = title;
+  if (!isNaN(volume) && volume > 0) edition.volume = volume;
+  if (!isNaN(issue)  && issue  > 0) edition.issue  = issue;
+  if (date)         edition.edition_date = date;
+  document.getElementById('top-edition-meta').textContent =
+    `Vol. ${edition.volume} · Issue ${edition.issue} · ${edition.edition_date}`;
+  setStatus('Metadata updated — click Publish Changes to save to live site.', 'ok');
 }
 
 function restoreAll() {

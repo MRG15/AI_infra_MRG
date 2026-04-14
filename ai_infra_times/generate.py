@@ -185,22 +185,22 @@ def build_prompt(items: list) -> str:
 
     return f"""You are the editor of AI Infra Times, a daily intelligence briefing on AI GPU and infrastructure.
 
-Below are real RSS headlines fetched in the last 72 hours. Select the 10 most breakthrough-worthy stories and return them in the exact JSON schema below.
+Below are real RSS headlines from the last 72 hours. Return exactly 30 stories — 5 per category — covering ALL six categories: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough.
 
 TODAY: {today_str}  |  Vol. {VOLUME}, Issue {issue}
 
 RSS HEADLINES:
 {feed_block}
 
-SELECTION — weight heavily:
-- New chip architectures, tape-outs, benchmark breakthroughs
-- Export controls, AI Acts, regulatory moves with real teeth
-- Supply chain shifts: fab deals, HBM constraints, cooling
-- Sovereign AI infrastructure deals >$200M
-- Inference optimisation with measured throughput/latency numbers
-- Research shipped into production
+CATEGORY DISTRIBUTION — you MUST return exactly 5 stories for each:
+- Silicon        (5 stories): chips, GPUs, tape-outs, benchmark breakthroughs, new architectures
+- Infrastructure (5 stories): datacenters, cooling, power, networking, cables, racks
+- Cloud          (5 stories): hyperscaler deployments, cloud AI services, pricing, regions
+- Investment     (5 stories): funding rounds, M&A, strategic deals, CapEx announcements
+- Policy         (5 stories): export controls, regulations, AI acts, government compute
+- Breakthrough   (5 stories): research shipped to production, inference optimisations, new techniques
 
-Weight lightly: funding <$100M, keynote-only announcements, rebrands
+If a category has no strong RSS match, synthesise from adjacent context in the feed. Never leave a category empty.
 
 RETURN ONLY valid JSON — no markdown fences, no backticks, no text outside the object:
 
@@ -240,10 +240,9 @@ RULES:
 - flow:         data.steps    = [{{title, desc}}]
 - market_share: data.segments = [{{name, pct}}]  — pct values must sum to 100
 - Every story must have a visual
-- Return exactly 10 stories
+- Return exactly 30 stories, exactly 5 per category
 - Headline must lead with the news, not just the company name
-- Synopsis line 1 must contain at least one specific number, name, or date
-- explanation must not use: significant, important, crucial, key, leverage, paradigm"""
+- Synopsis line 1 must contain at least one specific number, name, or date"""
 
 def call_groq(api_key: str, items: list, retries: int = 3) -> dict:
     prompt  = build_prompt(items)
@@ -308,7 +307,7 @@ def validate(edition: dict) -> dict:
             s["synopsis"] = [s.get("synopsis", ""), "", "", "", ""]
         while len(s["synopsis"]) < 5:
             s["synopsis"].append("")
-    edition["stories"] = edition.get("stories", [])[:10]
+    edition["stories"] = edition.get("stories", [])[:30]
     return edition
 
 # ── STEP 4: OUTPUT ────────────────────────────────────────────────────────────

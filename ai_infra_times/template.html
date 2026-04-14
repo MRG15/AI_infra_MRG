@@ -529,8 +529,8 @@
 
   <footer class="footer">
     <p class="footer-text">
-      AI Infra Times · Published daily via GitHub Actions · Powered by Gemini 2.0 Flash + Google Search<br>
-      Intelligence is synthesised, not copy-pasted · Sources verified at time of generation<br>
+      AI Infra Times · Published daily via GitHub Actions · Powered by RSS + Groq<br>
+      Intelligence is synthesised from live feeds · Sources verified at time of generation<br>
       Subscribe on Telegram · <span id="footer-date"></span>
     </p>
   </footer>
@@ -592,18 +592,6 @@ function renderView() {
 function renderFrontPage(container) {
   if (!allStories.length) return;
 
-  // Pick lead story: first Breakthrough or first story overall
-  const leadStory = allStories.find(s => s.category === 'Breakthrough') || allStories[0];
-  const leadIdx   = allStories.indexOf(leadStory);
-
-  // Render lead story full
-  const leadEl = document.createElement('article');
-  leadEl.className = 'story';
-  leadEl.innerHTML = storyHTML(leadStory, leadIdx, true);
-  container.appendChild(leadEl);
-  if (leadStory.visual) requestAnimationFrame(() => renderVisual(leadStory.visual, leadIdx));
-
-  // Build section preview cards grouped by category
   const CATS = ['Silicon','Infrastructure','Cloud','Investment','Policy','Breakthrough'];
   const byCat = {};
   CATS.forEach(c => {
@@ -611,43 +599,42 @@ function renderFrontPage(container) {
     if (stories.length) byCat[c] = stories;
   });
 
-  if (Object.keys(byCat).length) {
-    // Divider
-    const div = document.createElement('div');
-    div.className = 'section-divider';
-    div.innerHTML = `<span class="section-divider-label">From the sections</span><div class="section-divider-line"></div>`;
-    container.appendChild(div);
+  const catCount = Object.keys(byCat).length;
+  let isFirst = true;
 
-    // Grid of section cards
-    const grid = document.createElement('div');
-    grid.className = 'section-grid';
-    CATS.forEach(catName => {
-      if (!byCat[catName]) return;
-      const stories = byCat[catName];
-      // Pick best story for preview: not the lead if same category, else first
-      const preview = stories.find(s => s !== leadStory) || stories[0];
-      const othersCount = stories.filter(s => s !== preview).length;
-      const accent = CAT_ACCENT[catName] || '#888';
-      const card = document.createElement('div');
-      card.className = 'section-card';
-      card.dataset.cat = catName;
-      card.onclick = () => switchFilter(catName);
-      card.innerHTML = `
-        <div class="section-card-accent" style="background:${accent};"></div>
-        <div class="section-card-top">
-          <span class="cat-badge cat-${catName}">${catName}</span>
-          <span class="section-card-count">${stories.length} stor${stories.length===1?'y':'ies'}</span>
-        </div>
-        <p class="section-card-headline">${preview.headline}</p>
-        <p class="section-card-lede">${preview.synopsis?.[0] || ''}</p>
-        <p class="section-card-cta">Read all ${catName} stories →</p>`;
-      grid.appendChild(card);
+  CATS.forEach(catName => {
+    if (!byCat[catName]) return;
+    const stories = byCat[catName];
+    const accent  = CAT_ACCENT[catName] || '#888';
+
+    // Section header — clickable to switch filter
+    const divider = document.createElement('div');
+    divider.className = 'section-divider';
+    divider.style.cssText = 'cursor:pointer;';
+    divider.onclick = () => switchFilter(catName);
+    divider.innerHTML = `
+      <span class="section-divider-label" style="color:${accent};font-size:13px;letter-spacing:.14em;">${catName.toUpperCase()}</span>
+      <div class="section-divider-line" style="border-color:${accent};opacity:.35;"></div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink-faint);letter-spacing:.1em;white-space:nowrap;flex-shrink:0;">
+        ${stories.length} stor${stories.length===1?'y':'ies'} · filter →
+      </span>`;
+    container.appendChild(divider);
+
+    // Show up to 5 stories per section on the front page
+    stories.slice(0, 5).forEach((s, i) => {
+      const globalIdx = allStories.indexOf(s);
+      const el = document.createElement('article');
+      el.className = 'story';
+      el.style.animationDelay = `${i * 40}ms`;
+      el.innerHTML = storyHTML(s, globalIdx, isFirst);
+      container.appendChild(el);
+      if (s.visual) requestAnimationFrame(() => renderVisual(s.visual, globalIdx));
+      isFirst = false;
     });
-    container.appendChild(grid);
-  }
+  });
 
   document.getElementById('edition-count').textContent =
-    `${allStories.length} stories across ${Object.keys(byCat).length} sections`;
+    `${allStories.length} stories across ${catCount} section${catCount===1?'':'s'}`;
 }
 
 /* ── SECTION VIEW ── */
