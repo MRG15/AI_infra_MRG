@@ -176,10 +176,10 @@ def build_prompt(items: list) -> str:
     today_str = today.strftime("%-d %B %Y")
 
     lines = []
-    for i, item in enumerate(items[:80], 1):
+    for i, item in enumerate(items[:30], 1):
         lines.append(f"{i}. [{item['source']} · {item['date']}] {item['title']}")
         if item["summary"]:
-            lines.append(f"   {item['summary'][:220]}")
+            lines.append(f"   {item['summary'][:120]}")
 
     feed_block = "\n".join(lines)
 
@@ -435,7 +435,15 @@ def main():
         print("ERROR: No items found from any feed. Check network.")
         sys.exit(1)
 
-    print(f"\n[ 3/5 ] Calling Groq API ({GROQ_MODEL}) with {min(len(relevant), 80)} items...")
+    # Score and sort: items whose TITLE contains keywords rank higher
+    high_signal = ["nvidia","amd","tsmc","h100","h200","b200","blackwell","inference",
+                   "chip","gpu","datacenter","export","sovereign","hbm","fab","foundry"]
+    def score(item):
+        t = item["title"].lower()
+        return sum(1 for kw in high_signal if kw in t)
+    relevant.sort(key=score, reverse=True)
+
+    print(f"\n[ 3/5 ] Calling Groq API ({GROQ_MODEL}) with {min(len(relevant), 30)} items...")
     edition = call_groq(GROQ_API_KEY, relevant)
     print(f"        {len(edition.get('stories', []))} stories returned")
 
