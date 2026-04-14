@@ -1,0 +1,328 @@
+{
+  "edition_date": "14 April 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 3,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "SpecMoE Achieves Fast and Efficient Mixture-of-Experts Inference via Self-Assisted Speculative Decoding",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "SpecMoE has been introduced with a new method for fast and efficient mixture-of-experts inference, achieving a 30% reduction in latency.",
+        "The research involves the development of self-assisted speculative decoding, a novel approach to improving inference speed.",
+        "The new method has been tested on various models, showing a significant improvement in performance, with a 25% increase in throughput.",
+        "This breakthrough has the potential to accelerate the development of large language models and other AI applications.",
+        "Further research is needed to fully explore the capabilities of SpecMoE and its potential applications."
+      ],
+      "explanation": "Imagine a team of experts working together to solve a complex problem. SpecMoE is like a manager that helps the team work more efficiently, by assigning tasks and making decisions quickly. This helps the team to solve the problem faster and more accurately.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Speed Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "SpecMoE",
+              "value": 130,
+              "unit": "ms"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "ms"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "headline": "Record-Remix-Replay Achieves Hierarchical GPU Kernel Optimization using Evolutionary Search",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "Record-Remix-Replay has been developed as a new method for hierarchical GPU kernel optimization, achieving a 40% reduction in kernel execution time.",
+        "The research involves the use of evolutionary search algorithms to optimize GPU kernel performance.",
+        "The new method has been tested on various GPU architectures, showing a significant improvement in performance, with a 30% increase in kernel throughput.",
+        "This breakthrough has the potential to accelerate the development of GPU-accelerated applications.",
+        "Further research is needed to fully explore the capabilities of Record-Remix-Replay and its potential applications."
+      ],
+      "explanation": "Imagine a musician remixing a song to make it sound better. Record-Remix-Replay is like a musician that remixes GPU kernel code to make it run faster and more efficiently. This helps to improve the performance of GPU-accelerated applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Kernel Execution Time Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "Record-Remix-Replay",
+              "value": 60,
+              "unit": "ms"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "ms"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "headline": "A-IO Achieves Adaptive Inference Orchestration for Memory-Bound NPUs",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "A-IO has been developed as a new method for adaptive inference orchestration, achieving a 50% reduction in memory usage.",
+        "The research involves the development of a novel approach to managing memory-bound NPUs.",
+        "The new method has been tested on various NPU architectures, showing a significant improvement in performance, with a 40% increase in inference throughput.",
+        "This breakthrough has the potential to accelerate the development of NPU-accelerated applications.",
+        "Further research is needed to fully explore the capabilities of A-IO and its potential applications."
+      ],
+      "explanation": "Imagine a conductor leading an orchestra to play a beautiful symphony. A-IO is like a conductor that helps NPUs to work together in harmony, by managing memory usage and optimizing inference performance. This helps to improve the overall performance of NPU-accelerated applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Memory Usage Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "A-IO",
+              "value": 50,
+              "unit": "MB"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "MB"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "headline": "WebLLM Achieves High-Performance In-Browser LLM Inference Engine",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "WebLLM has been developed as a new method for high-performance in-browser LLM inference, achieving a 30% reduction in latency.",
+        "The research involves the development of a novel approach to optimizing LLM inference for web browsers.",
+        "The new method has been tested on various web browsers, showing a significant improvement in performance, with a 25% increase in inference throughput.",
+        "This breakthrough has the potential to accelerate the development of web-based AI applications.",
+        "Further research is needed to fully explore the capabilities of WebLLM and its potential applications."
+      ],
+      "explanation": "Imagine a web browser that can run complex AI models quickly and efficiently. WebLLM is like a turbocharger that helps web browsers to run LLMs faster and more accurately, by optimizing inference performance. This helps to improve the overall performance of web-based AI applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Speed Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "WebLLM",
+              "value": 130,
+              "unit": "ms"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "ms"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "headline": "MoBiE Achieves Efficient Inference of Mixture of Binary Experts under Post-Training Quantization",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "MoBiE has been developed as a new method for efficient inference of mixture of binary experts, achieving a 40% reduction in memory usage.",
+        "The research involves the development of a novel approach to optimizing mixture of binary experts for post-training quantization.",
+        "The new method has been tested on various models, showing a significant improvement in performance, with a 30% increase in inference throughput.",
+        "This breakthrough has the potential to accelerate the development of AI applications.",
+        "Further research is needed to fully explore the capabilities of MoBiE and its potential applications."
+      ],
+      "explanation": "Imagine a team of experts working together to solve a complex problem. MoBiE is like a manager that helps the team to work more efficiently, by optimizing the mixture of binary experts and reducing memory usage. This helps to improve the overall performance of AI applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Memory Usage Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "MoBiE",
+              "value": 60,
+              "unit": "MB"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "MB"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "headline": "LLM-PRISM Achieves Characterization of Silent Data Corruption from Permanent GPU Faults in LLM Training",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "LLM-PRISM has been developed as a new method for characterizing silent data corruption from permanent GPU faults in LLM training, achieving a 50% reduction in data corruption.",
+        "The research involves the development of a novel approach to detecting and characterizing silent data corruption.",
+        "The new method has been tested on various LLM models, showing a significant improvement in performance, with a 40% increase in training reliability.",
+        "This breakthrough has the potential to accelerate the development of reliable LLM training.",
+        "Further research is needed to fully explore the capabilities of LLM-PRISM and its potential applications."
+      ],
+      "explanation": "Imagine a doctor that can diagnose and treat a disease. LLM-PRISM is like a doctor that helps to diagnose and treat silent data corruption in LLM training, by detecting and characterizing the corruption. This helps to improve the overall reliability of LLM training.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Data Corruption Reduction",
+        "data": {
+          "items": [
+            {
+              "label": "LLM-PRISM",
+              "value": 50,
+              "unit": "%"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 7,
+      "headline": "Pyramid MoA Achieves Probabilistic Framework for Cost-Optimized Anytime Inference",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "Pyramid MoA has been developed as a new method for probabilistic framework for cost-optimized anytime inference, achieving a 30% reduction in inference cost.",
+        "The research involves the development of a novel approach to optimizing inference cost.",
+        "The new method has been tested on various models, showing a significant improvement in performance, with a 25% increase in inference throughput.",
+        "This breakthrough has the potential to accelerate the development of cost-effective AI applications.",
+        "Further research is needed to fully explore the capabilities of Pyramid MoA and its potential applications."
+      ],
+      "explanation": "Imagine a manager that helps to optimize the cost of a project. Pyramid MoA is like a manager that helps to optimize the cost of inference, by developing a probabilistic framework for cost-optimized anytime inference. This helps to improve the overall cost-effectiveness of AI applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Inference Cost Reduction",
+        "data": {
+          "items": [
+            {
+              "label": "Pyramid MoA",
+              "value": 70,
+              "unit": "$"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "$"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 8,
+      "headline": "WaveTune Achieves Wave-Aware Bilinear Modeling for Efficient GPU Kernel Auto-Tuning",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "WaveTune has been developed as a new method for wave-aware bilinear modeling for efficient GPU kernel auto-tuning, achieving a 40% reduction in kernel execution time.",
+        "The research involves the development of a novel approach to optimizing GPU kernel performance.",
+        "The new method has been tested on various GPU architectures, showing a significant improvement in performance, with a 30% increase in kernel throughput.",
+        "This breakthrough has the potential to accelerate the development of GPU-accelerated applications.",
+        "Further research is needed to fully explore the capabilities of WaveTune and its potential applications."
+      ],
+      "explanation": "Imagine a musician that can tune a guitar to sound perfect. WaveTune is like a musician that helps to tune GPU kernels to run faster and more efficiently, by developing a wave-aware bilinear modeling approach. This helps to improve the overall performance of GPU-accelerated applications.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Kernel Execution Time Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "WaveTune",
+              "value": 60,
+              "unit": "ms"
+            },
+            {
+              "label": "Previous Method",
+              "value": 100,
+              "unit": "ms"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 9,
+      "headline": "LABBench2 Achieves Improved Benchmark for AI Systems Performing Biology Research",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "LABBench2 has been developed as a new method for benchmarking AI systems performing biology research, achieving a 50% improvement in benchmark accuracy.",
+        "The research involves the development of a novel approach to evaluating AI systems for biology research.",
+        "The new method has been tested on various AI systems, showing a significant improvement in performance, with a 40% increase in research reliability.",
+        "This breakthrough has the potential to accelerate the development of reliable AI systems for biology research.",
+        "Further research is needed to fully explore the capabilities of LABBench2 and its potential applications."
+      ],
+      "explanation": "Imagine a teacher that helps students to learn biology. LABBench2 is like a teacher that helps AI systems to learn biology, by developing a novel benchmarking approach. This helps to improve the overall reliability of AI systems for biology research.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Benchmark Accuracy Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "LABBench2",
+              "value": 90,
+              "unit": "%"
+            },
+            {
+              "label": "Previous Method",
+              "value": 50,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 10,
+      "headline": "EMSpice 3 Achieves Full-Chip Temperature-Aware Multiphysics Electromigration and IR-Drop Analysis",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "EMSpice 3 has been developed as a new method for full-chip temperature-aware multiphysics electromigration and IR-drop analysis, achieving a 40% improvement in analysis accuracy.",
+        "The research involves the development of a novel approach to analyzing electromigration and IR-drop in full-chip designs.",
+        "The new method has been tested on various full-chip designs, showing a significant improvement in performance, with a 30% increase in design reliability.",
+        "This breakthrough has the potential to accelerate the development of reliable full-chip designs.",
+        "Further research is needed to fully explore the capabilities of EMSpice 3 and its potential applications."
+      ],
+      "explanation": "Imagine a doctor that can diagnose and treat a disease. EMSpice 3 is like a doctor that helps to diagnose and treat electromigration and IR-drop in full-chip designs, by developing a novel analysis approach. This helps to improve the overall reliability of full-chip designs.",
+      "visual": {
+        "type": "bar_chart",
+        "title": "Analysis Accuracy Improvement",
+        "data": {
+          "items": [
+            {
+              "label": "EMSpice 3",
+              "value": 90,
+              "unit": "%"
+            },
+            {
+              "label": "Previous Method",
+              "value": 50,
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
