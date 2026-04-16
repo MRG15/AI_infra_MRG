@@ -223,24 +223,13 @@ RETURN ONLY valid JSON — no markdown fences, no backticks, no text outside the
         "Who is involved and what is at stake.",
         "What to watch next — the forward-looking signal."
       ],
-      "explanation": "1-2 sentences using a simple everyday analogy. Zero jargon.",
-      "visual": {{
-        "type": "bar_chart",
-        "title": "Chart title with unit",
-        "data": {{ "items": [{{"label": "A", "value": 100, "unit": "TB/s"}}] }}
-      }}
+      "explanation": "1-2 sentences using a simple everyday analogy. Zero jargon."
     }}
   ]
 }}
 
 RULES:
 - category must be exactly one of: Silicon, Infrastructure, Cloud, Investment, Policy, Breakthrough
-- visual.type must be exactly one of: bar_chart, timeline, flow, market_share
-- bar_chart:    data.items    = [{{label, value, unit}}]
-- timeline:     data.events   = [{{date, title, type: "past"|"now"|"future"}}]
-- flow:         data.steps    = [{{title, desc}}]
-- market_share: data.segments = [{{name, pct}}]  — pct values must sum to 100
-- Every story must have a visual
 - Return exactly 42 stories, exactly 7 per category, all unique events
 - Headline must lead with the news, not just the company name
 - Synopsis line 1 must contain at least one specific number, name, or date"""
@@ -298,7 +287,6 @@ def parse_json(raw: str) -> dict:
 
 def validate(edition: dict) -> dict:
     valid_cats = {"Silicon", "Infrastructure", "Cloud", "Investment", "Policy", "Breakthrough"}
-    valid_vis  = {"bar_chart", "timeline", "flow", "market_share"}
 
     seen_headlines = set()
     clean_stories  = []
@@ -306,12 +294,12 @@ def validate(edition: dict) -> dict:
     for s in edition.get("stories", []):
         if s.get("category") not in valid_cats:
             s["category"] = "Silicon"
-        if "visual" in s and s["visual"].get("type") not in valid_vis:
-            s["visual"]["type"] = "bar_chart"
         if not isinstance(s.get("synopsis"), list):
             s["synopsis"] = [s.get("synopsis", ""), "", ""]
         while len(s["synopsis"]) < 3:
             s["synopsis"].append("")
+        # Drop leftover visual fields from old editions
+        s.pop("visual", None)
 
         # Dedup: normalise headline to first 55 alphanumeric chars, lowercase
         norm = re.sub(r'[^a-z0-9]', '', s.get("headline", "").lower())[:55]
@@ -326,6 +314,22 @@ def validate(edition: dict) -> dict:
         print(f"        {removed} duplicate story/stories removed")
 
     edition["stories"] = clean_stories[:42]
+    return edition
+
+
+def attach_urls(edition: dict, rss_items: list) -> dict:
+    """Match each story back to the closest RSS item and attach its URL."""
+    for story in edition.get("stories", []):
+        headline_words = set(re.findall(r'\b\w{4,}\b', story.get("headline", "").lower()))
+        best_score, best_url = 0, ""
+        for item in rss_items:
+            rss_words = set(re.findall(r'\b\w{4,}\b', item["title"].lower()))
+            overlap   = len(headline_words & rss_words)
+            if overlap > best_score:
+                best_score = overlap
+                best_url   = item.get("url", "")
+        if best_score >= 2 and best_url:
+            story["source_url"] = best_url
     return edition
 
 # ── STEP 4: OUTPUT ────────────────────────────────────────────────────────────
@@ -464,8 +468,11 @@ def main():
     edition = call_groq(GROQ_API_KEY, relevant)
     print(f"        {len(edition.get('stories', []))} stories returned")
 
-    print("\n[ 4/5 ] Validating edition data...")
+    print("\n[ 4/5 ] Validating & enriching edition data...")
     edition = validate(edition)
+    edition = attach_urls(edition, relevant)
+    linked  = sum(1 for s in edition["stories"] if s.get("source_url"))
+    print(f"        {linked}/{len(edition['stories'])} stories matched to source URLs")
 
     print("\n[ 5/5 ] Writing output files...")
     html = inject(edition)

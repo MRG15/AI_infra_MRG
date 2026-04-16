@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
     --ink: #1a1814;
@@ -214,7 +213,9 @@
     font-size: 9px;
     color: var(--ink-faint);
     letter-spacing: 0.5px;
+    text-decoration: none;
   }
+  a.story-source:hover { color: var(--amber); text-decoration: underline; }
   .story-num {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 11px;
@@ -251,23 +252,6 @@
     font-size: 14px;
   }
 
-  /* ── VISUAL BOX ── */
-  .visual-box {
-    background: var(--paper-dark);
-    border: 1px solid var(--rule);
-    border-top: 2px solid var(--rule-heavy);
-    padding: 1.25rem 1.25rem 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .visual-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin-bottom: 0.75rem;
-  }
-
   /* ── REAL STORY ── */
   .real-story {
     background: var(--amber-bg);
@@ -289,77 +273,6 @@
     line-height: 1.85;
     font-style: italic;
   }
-
-  /* ── TIMELINE VISUAL ── */
-  .timeline { padding: 0.25rem 0; }
-  .tl-item { display: flex; gap: 14px; padding-bottom: 14px; position: relative; }
-  .tl-item:last-child { padding-bottom: 0; }
-  .tl-spine {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    width: 16px;
-  }
-  .tl-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 5px;
-  }
-  .tl-dot.past   { background: var(--rule-heavy); }
-  .tl-dot.now    { background: var(--amber); box-shadow: 0 0 0 3px #e8b97a44; }
-  .tl-dot.future { background: var(--paper); border: 1.5px solid var(--rule); }
-  .tl-line {
-    width: 1px;
-    flex: 1;
-    background: var(--rule);
-    margin-top: 4px;
-  }
-  .tl-item:last-child .tl-line { display: none; }
-  .tl-date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: var(--ink-faint);
-    margin-bottom: 2px;
-  }
-  .tl-title { font-size: 12px; color: var(--ink-secondary); line-height: 1.4; }
-  .tl-title.now { color: var(--ink); font-weight: 600; }
-
-  /* ── FLOW VISUAL ── */
-  .flow { display: flex; flex-direction: column; gap: 0; }
-  .flow-step {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 10px 12px;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-bottom: none;
-  }
-  .flow-step:first-child { border-radius: 3px 3px 0 0; }
-  .flow-step:last-child  { border-bottom: 1px solid var(--rule); border-radius: 0 0 3px 3px; }
-  .flow-num {
-    width: 20px; height: 20px; min-width: 20px;
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .flow-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
-  .flow-desc  { font-size: 11.5px; color: var(--ink-tertiary); line-height: 1.5; }
-
-  /* ── MARKET SHARE ── */
-  .market-bar { height: 28px; border-radius: 2px; overflow: hidden; display: flex; margin-bottom: 10px; }
-  .market-segment { height: 100%; transition: opacity 0.15s; }
-  .market-segment:hover { opacity: 0.8; }
-  .market-legend { display: flex; flex-wrap: wrap; gap: 10px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-secondary); }
-  .legend-swatch { width: 10px; height: 10px; border-radius: 1px; flex-shrink: 0; }
 
   /* ── FOOTER ── */
   .footer {
@@ -543,7 +456,6 @@ const EDITION = {{EDITION_DATA}};
 
 <!-- ── RENDER ENGINE ── -->
 <script>
-const CHART_PALETTE = ['#b5610a','#1a4f72','#2d6a3f','#5a3475','#7a3520','#6b6760'];
 const CAT_ACCENT = {
   Silicon:        '#1a4f72',
   Infrastructure: '#2d6a3f',
@@ -552,7 +464,6 @@ const CAT_ACCENT = {
   Policy:         '#4a4215',
   Breakthrough:   '#b5610a',
 };
-const chartRefs = {};
 let allStories   = [];
 let activeFilter = 'all';
 
@@ -576,7 +487,6 @@ function renderEdition(ed, isLive) {
 
 /* ── TWO-MODE RENDER ── */
 function renderView() {
-  destroyCharts();
   const c = document.getElementById('stories-container');
   c.innerHTML = '';
   document.getElementById('no-results').style.display = 'none';
@@ -630,7 +540,6 @@ function renderFrontPage(container) {
     el.style.animationDelay = `${catIdx * 60}ms`;
     el.innerHTML = storyHTML(lead, globalIdx, isFirst);
     container.appendChild(el);
-    if (lead.visual) requestAnimationFrame(() => renderVisual(lead.visual, globalIdx));
     isFirst = false;
   });
 
@@ -653,7 +562,6 @@ function renderSection(container, filterCat) {
     el.style.animationDelay = `${i * 60}ms`;
     el.innerHTML = storyHTML(s, globalIdx, i === 0);
     container.appendChild(el);
-    if (s.visual) requestAnimationFrame(() => renderVisual(s.visual, globalIdx));
   });
   document.getElementById('edition-count').textContent =
     `${stories.length} stor${stories.length===1?'y':'ies'} in ${filterCat}`;
@@ -679,83 +587,23 @@ function storyHTML(s, idx, isLead) {
   const catKey = cat(s.category);
   const synopsis = (s.synopsis || []).map((line, i) =>
     `<p class="brief-line ${i===0?'lede':''}">${line}</p>`).join('');
-  const visualHTML = s.visual
-    ? `<div class="visual-box"><p class="visual-label">${s.visual.title||'Data'}</p><div id="vis-${idx}"></div></div>` : '';
+  const sourceHTML = s.source
+    ? (s.source_url
+        ? `<a class="story-source" href="${s.source_url}" target="_blank" rel="noopener">via ${s.source} ↗</a>`
+        : `<span class="story-source">via ${s.source}</span>`)
+    : '';
   return `
     <div class="story-header">
       <span class="cat-badge cat-${catKey}">${s.category}</span>
-      ${s.source ? `<span class="story-source">via ${s.source}</span>` : ''}
+      ${sourceHTML}
       <span class="story-num">${String(idx+1).padStart(2,'0')}</span>
     </div>
     <h2 class="story-headline ${isLead?'lead':'standard'}">${s.headline}</h2>
     <div class="brief">${synopsis}</div>
-    ${visualHTML}
     <div class="real-story">
       <p class="real-story-label">The real story</p>
       <p class="real-story-text">${s.explanation}</p>
     </div>`;
-}
-
-/* ── VISUALS ── */
-function destroyCharts() {
-  Object.values(chartRefs).forEach(c => { try { c.destroy(); } catch(e){} });
-  Object.keys(chartRefs).forEach(k => delete chartRefs[k]);
-}
-
-function renderVisual(vis, idx) {
-  const el = document.getElementById(`vis-${idx}`);
-  if (!el) return;
-  try {
-    if      (vis.type === 'bar_chart')    doBar(el, vis.data, idx);
-    else if (vis.type === 'timeline')     doTimeline(el, vis.data);
-    else if (vis.type === 'flow')         doFlow(el, vis.data);
-    else if (vis.type === 'market_share') doMarket(el, vis.data);
-  } catch(e) { console.warn('visual error', idx, e); }
-}
-
-function doBar(el, data, idx) {
-  if (!data?.items?.length) return;
-  const h = Math.max(100, data.items.length * 44 + 48);
-  const canvas = document.createElement('canvas');
-  el.style.cssText = `position:relative;height:${h}px;`;
-  el.appendChild(canvas);
-  const col = CHART_PALETTE[0];
-  chartRefs[`c${idx}`] = new Chart(canvas, {
-    type: 'bar',
-    data: { labels: data.items.map(i => i.label), datasets: [{ data: data.items.map(i => i.value), backgroundColor: col+'28', borderColor: col, borderWidth: 1.5, borderRadius: 2, borderSkipped: false }] },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} ${data.items[ctx.dataIndex]?.unit||''}` } } },
-      scales: {
-        x: { grid: { color: '#c8c2b622' }, ticks: { color: '#6b6760', font: { family: 'JetBrains Mono', size: 10 } } },
-        y: { grid: { display: false }, ticks: { color: '#3d3a34', font: { family: 'Source Serif 4', size: 11 } } }
-      }
-    }
-  });
-}
-function doTimeline(el, data) {
-  if (!data?.events?.length) return;
-  el.innerHTML = `<div class="timeline">${data.events.map(e => `
-    <div class="tl-item">
-      <div class="tl-spine"><div class="tl-dot ${e.type||'past'}"></div><div class="tl-line"></div></div>
-      <div><p class="tl-date">${e.date}</p><p class="tl-title ${e.type==='now'?'now':''}">${e.title}</p></div>
-    </div>`).join('')}</div>`;
-}
-function doFlow(el, data) {
-  if (!data?.steps?.length) return;
-  el.innerHTML = `<div class="flow">${data.steps.map((s,i) => `
-    <div class="flow-step">
-      <div class="flow-num">${i+1}</div>
-      <div><p class="flow-title">${s.title}</p>${s.desc?`<p class="flow-desc">${s.desc}</p>`:''}</div>
-    </div>`).join('')}</div>`;
-}
-function doMarket(el, data) {
-  if (!data?.segments?.length) return;
-  const bars = data.segments.map((s,i) =>
-    `<div class="market-segment" style="width:${s.pct}%;background:${CHART_PALETTE[i%CHART_PALETTE.length]};" title="${s.name}: ${s.pct}%"></div>`).join('');
-  const legend = data.segments.map((s,i) =>
-    `<div class="legend-item"><div class="legend-swatch" style="background:${CHART_PALETTE[i%CHART_PALETTE.length]};"></div>${s.name} ${s.pct}%</div>`).join('');
-  el.innerHTML = `<div class="market-bar">${bars}</div><div class="market-legend">${legend}</div>`;
 }
 
 init();
