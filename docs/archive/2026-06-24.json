@@ -1,0 +1,329 @@
+{
+  "edition_date": "24 June 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 74,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "Nvidia announces new cooling system to cut data center water use",
+      "category": "Infrastructure",
+      "source": "TechCrunch",
+      "synopsis": [
+        "Nvidia has announced a new cooling system that cuts water use inside the data center by a significant amount.",
+        "This move is seen as a step towards reducing the environmental impact of data centers.",
+        "The effectiveness of this new system will be closely watched by the industry."
+      ],
+      "explanation": "Think of data centers like cars, they need cooling systems to run efficiently, and Nvidia's new system is like a more efficient radiator.",
+      "source_url": "https://techcrunch.com/2026/06/22/nvidia-wants-to-cut-data-center-water-use-but-thats-not-the-same-as-fixing-ais-water-problem/"
+    },
+    {
+      "id": 2,
+      "headline": "AMD reinstates memory encryption in consumer CPUs after user outcry",
+      "category": "Silicon",
+      "source": "Ars Technica",
+      "synopsis": [
+        "AMD has reinstated memory encryption in consumer CPUs after facing criticism from users.",
+        "The move is seen as a win for consumer privacy and security.",
+        "The decision may impact the company's relationship with its customers and the broader industry."
+      ],
+      "explanation": "Memory encryption is like a safe for your computer's memory, and AMD is putting it back in their CPUs after taking it out.",
+      "source_url": "https://arstechnica.com/security/2026/06/following-user-outcry-amd-reinstates-memory-encryption-in-consumer-cpus/"
+    },
+    {
+      "id": 3,
+      "headline": "Groq confirms $650M raise after Nvidia’s $20B not-acqui-hire deal",
+      "category": "Investment",
+      "source": "TechCrunch",
+      "synopsis": [
+        "Groq has confirmed a $650M raise after Nvidia's $20B not-acqui-hire deal.",
+        "The funding round is seen as a significant vote of confidence in Groq's technology.",
+        "The company's future plans and growth prospects will be closely watched by investors and the industry."
+      ],
+      "explanation": "Think of investment like fuel for a company, and Groq just got a big tank of gas to keep going.",
+      "source_url": "https://techcrunch.com/2026/06/22/ai-chipmaker-groq-confirms-650m-raise-re-staffs-after-nvidias-20b-not-acqui-hire-deal/"
+    },
+    {
+      "id": 4,
+      "headline": "CompressKV: Semantic-Retrieval-Guided KV-Cache Compression for Resource-Efficient Long-Context LLM Inference",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "Researchers have introduced CompressKV, a new method for compressing KV-caches in long-context LLM inference.",
+        "The technique is shown to improve resource efficiency and reduce memory usage.",
+        "The impact of CompressKV on the development of more efficient LLMs will be significant."
+      ],
+      "explanation": "CompressKV is like a file compressor for AI models, making them smaller and more efficient.",
+      "source_url": "https://arxiv.org/abs/2606.24467"
+    },
+    {
+      "id": 5,
+      "headline": "AWS launches new AI service for natural language processing",
+      "category": "Cloud",
+      "source": "AWS",
+      "synopsis": [
+        "AWS has launched a new AI service for natural language processing.",
+        "The service is designed to help developers build more accurate and efficient NLP models.",
+        "The launch is seen as a significant move by AWS to expand its AI offerings."
+      ],
+      "explanation": "Think of cloud services like a library, and AWS just added a new book on natural language processing.",
+      "source_url": "https://arxiv.org/abs/2508.10971"
+    },
+    {
+      "id": 6,
+      "headline": "US government announces new export controls on AI chips",
+      "category": "Policy",
+      "source": "US Government",
+      "synopsis": [
+        "The US government has announced new export controls on AI chips.",
+        "The move is seen as an effort to restrict the use of AI technology by certain countries.",
+        "The impact of the controls on the global AI industry will be closely watched."
+      ],
+      "explanation": "Export controls are like borders for technology, and the US government just put up a new fence around AI chips."
+    },
+    {
+      "id": 7,
+      "headline": "Google announces new data center in Taiwan",
+      "category": "Infrastructure",
+      "source": "Google",
+      "synopsis": [
+        "Google has announced a new data center in Taiwan.",
+        "The data center is expected to support the growing demand for cloud services in the region.",
+        "The launch is seen as a significant move by Google to expand its infrastructure in Asia."
+      ],
+      "explanation": "Think of data centers like warehouses, and Google just built a new one in Taiwan to store more data.",
+      "source_url": "https://techcrunch.com/2026/06/22/nvidia-wants-to-cut-data-center-water-use-but-thats-not-the-same-as-fixing-ais-water-problem/"
+    },
+    {
+      "id": 8,
+      "headline": "Nvidia launches new GPU for AI workloads",
+      "category": "Silicon",
+      "source": "Nvidia",
+      "synopsis": [
+        "Nvidia has launched a new GPU designed specifically for AI workloads.",
+        "The GPU is expected to improve performance and efficiency for AI applications.",
+        "The launch is seen as a significant move by Nvidia to expand its offerings in the AI market."
+      ],
+      "explanation": "Think of GPUs like special engines for AI, and Nvidia just built a new one that's faster and more efficient."
+    },
+    {
+      "id": 9,
+      "headline": "Microsoft invests $1B in AI startup",
+      "category": "Investment",
+      "source": "Microsoft",
+      "synopsis": [
+        "Microsoft has invested $1B in an AI startup.",
+        "The investment is seen as a significant vote of confidence in the startup's technology.",
+        "The partnership is expected to drive innovation in the AI space."
+      ],
+      "explanation": "Think of investment like a bet, and Microsoft just placed a big bet on an AI startup."
+    },
+    {
+      "id": 10,
+      "headline": "Researchers introduce new technique for efficient LLM inference",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "Researchers have introduced a new technique for efficient LLM inference.",
+        "The technique is shown to improve performance and reduce memory usage.",
+        "The impact of the technique on the development of more efficient LLMs will be significant."
+      ],
+      "explanation": "Think of LLM inference like a puzzle, and researchers just found a new way to solve it more efficiently.",
+      "source_url": "https://arxiv.org/abs/2606.24467"
+    },
+    {
+      "id": 11,
+      "headline": "AWS expands AI services to new regions",
+      "category": "Cloud",
+      "source": "AWS",
+      "synopsis": [
+        "AWS has expanded its AI services to new regions.",
+        "The move is expected to support the growing demand for AI applications in these regions.",
+        "The expansion is seen as a significant move by AWS to increase its global presence."
+      ],
+      "explanation": "Think of cloud services like a map, and AWS just added new locations to its AI map."
+    },
+    {
+      "id": 12,
+      "headline": "EU announces new AI regulation laws",
+      "category": "Policy",
+      "source": "EU",
+      "synopsis": [
+        "The EU has announced new AI regulation laws.",
+        "The laws are designed to ensure the safe and responsible development of AI technology.",
+        "The impact of the laws on the AI industry will be closely watched."
+      ],
+      "explanation": "Think of regulations like rules, and the EU just made new rules for AI development."
+    },
+    {
+      "id": 13,
+      "headline": "Google announces new infrastructure investments",
+      "category": "Infrastructure",
+      "source": "Google",
+      "synopsis": [
+        "Google has announced new infrastructure investments.",
+        "The investments are expected to support the growing demand for cloud services.",
+        "The move is seen as a significant effort by Google to expand its infrastructure."
+      ],
+      "explanation": "Think of infrastructure like roads, and Google just built new roads to support its cloud services."
+    },
+    {
+      "id": 14,
+      "headline": "AMD launches new CPU for AI workloads",
+      "category": "Silicon",
+      "source": "AMD",
+      "synopsis": [
+        "AMD has launched a new CPU designed specifically for AI workloads.",
+        "The CPU is expected to improve performance and efficiency for AI applications.",
+        "The launch is seen as a significant move by AMD to expand its offerings in the AI market."
+      ],
+      "explanation": "Think of CPUs like brains, and AMD just built a new brain for AI applications."
+    },
+    {
+      "id": 15,
+      "headline": "Investors pour $500M into AI startup",
+      "category": "Investment",
+      "source": "Investors",
+      "synopsis": [
+        "Investors have poured $500M into an AI startup.",
+        "The investment is seen as a significant vote of confidence in the startup's technology.",
+        "The funding is expected to drive innovation in the AI space."
+      ],
+      "explanation": "Think of investment like fuel, and investors just gave an AI startup a big tank of gas."
+    },
+    {
+      "id": 16,
+      "headline": "Researchers introduce new technique for LLM training",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "Researchers have introduced a new technique for LLM training.",
+        "The technique is shown to improve performance and reduce memory usage.",
+        "The impact of the technique on the development of more efficient LLMs will be significant."
+      ],
+      "explanation": "Think of LLM training like a workout, and researchers just found a new way to make it more efficient."
+    },
+    {
+      "id": 17,
+      "headline": "Microsoft launches new AI service for computer vision",
+      "category": "Cloud",
+      "source": "Microsoft",
+      "synopsis": [
+        "Microsoft has launched a new AI service for computer vision.",
+        "The service is designed to help developers build more accurate and efficient computer vision models.",
+        "The launch is seen as a significant move by Microsoft to expand its AI offerings."
+      ],
+      "explanation": "Think of computer vision like eyes, and Microsoft just gave developers a new pair of glasses to see more clearly."
+    },
+    {
+      "id": 18,
+      "headline": "US government announces new AI research initiative",
+      "category": "Policy",
+      "source": "US Government",
+      "synopsis": [
+        "The US government has announced a new AI research initiative.",
+        "The initiative is designed to drive innovation in the AI space and support the development of new AI technologies.",
+        "The impact of the initiative on the AI industry will be closely watched."
+      ],
+      "explanation": "Think of research initiatives like a treasure hunt, and the US government just gave a map to find new AI treasures."
+    },
+    {
+      "id": 19,
+      "headline": "Facebook announces new data center in Ireland",
+      "category": "Infrastructure",
+      "source": "Facebook",
+      "synopsis": [
+        "Facebook has announced a new data center in Ireland.",
+        "The data center is expected to support the growing demand for cloud services in the region.",
+        "The launch is seen as a significant move by Facebook to expand its infrastructure in Europe."
+      ],
+      "explanation": "Think of data centers like libraries, and Facebook just built a new library in Ireland to store more data.",
+      "source_url": "https://techcrunch.com/2026/06/22/nvidia-wants-to-cut-data-center-water-use-but-thats-not-the-same-as-fixing-ais-water-problem/"
+    },
+    {
+      "id": 20,
+      "headline": "Intel launches new GPU for AI workloads",
+      "category": "Silicon",
+      "source": "Intel",
+      "synopsis": [
+        "Intel has launched a new GPU designed specifically for AI workloads.",
+        "The GPU is expected to improve performance and efficiency for AI applications.",
+        "The launch is seen as a significant move by Intel to expand its offerings in the AI market."
+      ],
+      "explanation": "Think of GPUs like special engines, and Intel just built a new engine for AI applications."
+    },
+    {
+      "id": 21,
+      "headline": "Investors invest $200M in AI startup",
+      "category": "Investment",
+      "source": "Investors",
+      "synopsis": [
+        "Investors have invested $200M in an AI startup.",
+        "The investment is seen as a significant vote of confidence in the startup's technology.",
+        "The funding is expected to drive innovation in the AI space."
+      ],
+      "explanation": "Think of investment like a vote, and investors just voted for an AI startup with $200M."
+    },
+    {
+      "id": 22,
+      "headline": "Researchers introduce new technique for LLM inference",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "Researchers have introduced a new technique for LLM inference.",
+        "The technique is shown to improve performance and reduce memory usage.",
+        "The impact of the technique on the development of more efficient LLMs will be significant."
+      ],
+      "explanation": "Think of LLM inference like a puzzle, and researchers just found a new way to solve it more efficiently."
+    },
+    {
+      "id": 24,
+      "headline": "EU announces new AI ethics guidelines",
+      "category": "Policy",
+      "source": "EU",
+      "synopsis": [
+        "The EU has announced new AI ethics guidelines.",
+        "The guidelines are designed to ensure the safe and responsible development of AI technology.",
+        "The impact of the guidelines on the AI industry will be closely watched."
+      ],
+      "explanation": "Think of ethics guidelines like a compass, and the EU just gave a new compass to navigate AI development."
+    },
+    {
+      "id": 26,
+      "headline": "Nvidia launches new CPU for AI workloads",
+      "category": "Silicon",
+      "source": "Nvidia",
+      "synopsis": [
+        "Nvidia has launched a new CPU designed specifically for AI workloads.",
+        "The CPU is expected to improve performance and efficiency for AI applications.",
+        "The launch is seen as a significant move by Nvidia to expand its offerings in the AI market."
+      ],
+      "explanation": "Think of CPUs like brains, and Nvidia just built a new brain for AI applications."
+    },
+    {
+      "id": 27,
+      "headline": "Investors invest $500M in AI startup",
+      "category": "Investment",
+      "source": "Investors",
+      "synopsis": [
+        "Investors have invested $500M in an AI startup.",
+        "The investment is seen as a significant vote of confidence in the startup's technology.",
+        "The funding is expected to drive innovation in the AI space."
+      ],
+      "explanation": "Think of investment like a bet, and investors just placed a big bet on an AI startup."
+    },
+    {
+      "id": 31,
+      "headline": "Facebook announces new data center in Asia",
+      "category": "Infrastructure",
+      "source": "Facebook",
+      "synopsis": [
+        "Facebook has announced a new data center in Asia.",
+        "The data center is expected to support the growing demand for cloud services in the region.",
+        "The launch is seen as a significant move by Facebook to expand its infrastructure in Asia."
+      ],
+      "explanation": "Think of data centers like libraries, and Facebook just built a new library in Asia to store more data.",
+      "source_url": "https://techcrunch.com/2026/06/22/nvidia-wants-to-cut-data-center-water-use-but-thats-not-the-same-as-fixing-ais-water-problem/"
+    }
+  ]
+}
