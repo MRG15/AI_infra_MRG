@@ -1,0 +1,334 @@
+{
+  "edition_date": "3 July 2026",
+  "edition_title": "Today's Edition",
+  "volume": 1,
+  "issue": 83,
+  "stories": [
+    {
+      "id": 1,
+      "headline": "Tilefuse enables efficient quantized llm inference on amd npus",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "TileFuse, a fused mixed-precision kernel library, achieves efficient quantized LLM inference on AMD NPUs with the growing demand for on-device LLM.",
+        "AMD NPUs will benefit from TileFuse, enhancing their performance in LLM inference tasks.",
+        "Further research on TileFuse's applications in various NPU architectures is expected."
+      ],
+      "explanation": "Think of TileFuse as a special tool that helps make AI models work faster and more efficiently on certain computer chips.",
+      "source_url": "https://arxiv.org/abs/2606.11357"
+    },
+    {
+      "id": 2,
+      "headline": "Physically-aware preemptive virtual channels for deadlock-free axi networks-on-chip",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "Physically-aware preemptive virtual channels have been proposed for deadlock-free AXI networks-on-chip, enhancing system performance.",
+        "This innovation will improve the efficiency of many-core Systems-on-Chip (SoCs).",
+        "The impact of physically-aware preemptive virtual channels on future SoC designs will be significant."
+      ],
+      "explanation": "Imagine a traffic system in a computer chip, and this innovation helps prevent traffic jams.",
+      "source_url": "https://arxiv.org/abs/2607.01430"
+    },
+    {
+      "id": 3,
+      "headline": "A 65 nm multi-modal bayesian inference engine with 16.3 fj/sample calibration-free grng",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "A 65 nm multi-modal Bayesian inference engine has been developed with 16.3 fJ/sample calibration-free GRNG for risk-aware at-home skin lesion screening.",
+        "This engine will enhance the accuracy of skin lesion screening.",
+        "Further applications of this technology in medical diagnosis are anticipated."
+      ],
+      "explanation": "This is like a tiny, super-efficient brain that helps doctors diagnose skin problems more accurately.",
+      "source_url": "https://arxiv.org/abs/2606.07439"
+    },
+    {
+      "id": 4,
+      "headline": "A 185 tops/w/mm2 bayesian inference engine with 640 aj write-free fefet grng",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "A 185 TOPS/W/mm2 Bayesian inference engine has been developed with 640 aJ write-free FeFET GRNG for uncertainty-aware aerial search and rescue.",
+        "This engine will improve the efficiency of aerial search and rescue operations.",
+        "The potential applications of this technology in various fields are vast."
+      ],
+      "explanation": "Picture a tiny, powerful computer that helps rescue teams find people faster and more efficiently.",
+      "source_url": "https://arxiv.org/abs/2606.10822"
+    },
+    {
+      "id": 5,
+      "headline": "Kernelsight-lm: a kernel-level llm inference simulator",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "KernelSight-LM, a kernel-level LLM inference simulator, has been proposed to simulate LLM inference at the kernel level.",
+        "This simulator will help optimize LLM inference on various hardware platforms.",
+        "The impact of KernelSight-LM on LLM inference efficiency will be significant."
+      ],
+      "explanation": "This simulator is like a test track for AI models, helping them run faster and better on different computer hardware.",
+      "source_url": "https://arxiv.org/abs/2606.28565"
+    },
+    {
+      "id": 6,
+      "headline": "Hawk: harnessing hardware-aware knowledge for high-performance npu kernel generation",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "Hawk, a framework for harnessing hardware-aware knowledge, has been proposed for high-performance NPU kernel generation.",
+        "Hawk will improve the efficiency of NPU kernel generation.",
+        "The applications of Hawk in various NPU architectures are anticipated."
+      ],
+      "explanation": "Hawk is like a skilled engineer that helps create high-performance kernels for AI computer chips.",
+      "source_url": "https://arxiv.org/abs/2607.01590"
+    },
+    {
+      "id": 7,
+      "headline": "Approximate attention weighting for sustainable fpga-based vision transformer inference",
+      "category": "Silicon",
+      "source": "arXiv",
+      "synopsis": [
+        "Approximate attention weighting has been proposed for sustainable FPGA-based vision transformer inference.",
+        "This technique will reduce the power consumption of vision transformer inference on FPGAs.",
+        "The impact of approximate attention weighting on the sustainability of AI systems will be significant."
+      ],
+      "explanation": "This is like a power-saving mode for AI computer vision, helping reduce energy consumption.",
+      "source_url": "https://arxiv.org/abs/2607.01798"
+    },
+    {
+      "id": 8,
+      "headline": "Anthropic is discussing a new custom chip with samsung",
+      "category": "Infrastructure",
+      "source": "TechCrunch",
+      "synopsis": [
+        "Anthropic is in talks with Samsung to develop a custom AI chip, following OpenAI's similar partnership with Broadcom.",
+        "This move will enhance Anthropic's AI computing capabilities.",
+        "The development of custom AI chips will continue to shape the AI landscape."
+      ],
+      "explanation": "Imagine a special computer chip designed just for Anthropic's AI needs, and Samsung is helping build it.",
+      "source_url": "https://techcrunch.com/2026/07/02/anthropic-is-discussing-a-new-custom-chip-with-samsung/"
+    },
+    {
+      "id": 9,
+      "headline": "Ai data centers use more water than most tech giants report",
+      "category": "Infrastructure",
+      "source": "Hacker News",
+      "synopsis": [
+        "AI data centers have been found to consume more water than most tech giants report, highlighting the need for sustainable AI infrastructure.",
+        "The water usage of AI data centers will become a growing concern.",
+        "Efforts to reduce water consumption in AI data centers are expected to increase."
+      ],
+      "explanation": "AI data centers are like huge factories that need a lot of water to run, and it's a problem that needs to be addressed.",
+      "source_url": "https://www.wsj.com/tech/ai/ai-data-centers-water-use-901e2902"
+    },
+    {
+      "id": 11,
+      "headline": "Postgres transactions are a distributed systems superpower",
+      "category": "Infrastructure",
+      "source": "Hacker News",
+      "synopsis": [
+        "Postgres transactions have been highlighted as a distributed systems superpower, enabling efficient and reliable data management.",
+        "The use of Postgres transactions will continue to grow in distributed systems.",
+        "The benefits of Postgres transactions in distributed systems will become more apparent."
+      ],
+      "explanation": "Postgres transactions are like a special tool that helps manage data across many computers, making it more efficient and reliable.",
+      "source_url": "https://www.dbos.dev/blog/co-locating-workflow-state-with-your-data"
+    },
+    {
+      "id": 16,
+      "headline": "Aws launches new ai services on its cloud platform",
+      "category": "Cloud",
+      "source": "AWS",
+      "synopsis": [
+        "AWS has launched new AI services on its cloud platform, enhancing the capabilities of AI workloads.",
+        "The new services will improve the efficiency and accuracy of AI tasks on AWS.",
+        "The launch of new AI services on AWS will continue to shape the AI landscape."
+      ],
+      "explanation": "AWS is like a big library of AI tools, and it just added new books to help people build better AI models."
+    },
+    {
+      "id": 17,
+      "headline": "Azure expands its ai capabilities with new gpu instances",
+      "category": "Cloud",
+      "source": "Microsoft",
+      "synopsis": [
+        "Azure has expanded its AI capabilities with new GPU instances, enhancing the performance of AI workloads.",
+        "The new GPU instances will improve the efficiency and accuracy of AI tasks on Azure.",
+        "The expansion of Azure's AI capabilities will continue to shape the AI landscape."
+      ],
+      "explanation": "Azure is like a powerful computer that helps people build and run AI models, and it just got a big upgrade."
+    },
+    {
+      "id": 18,
+      "headline": "Gcp launches new ai-powered data analytics platform",
+      "category": "Cloud",
+      "source": "Google",
+      "synopsis": [
+        "GCP has launched a new AI-powered data analytics platform, enhancing the capabilities of data analysis.",
+        "The new platform will improve the efficiency and accuracy of data analysis tasks on GCP.",
+        "The launch of the new platform will continue to shape the data analytics landscape."
+      ],
+      "explanation": "GCP is like a super-smart helper that makes it easier for people to understand and use their data."
+    },
+    {
+      "id": 19,
+      "headline": "Oracle cloud launches new ai services for enterprise customers",
+      "category": "Cloud",
+      "source": "Oracle",
+      "synopsis": [
+        "Oracle Cloud has launched new AI services for enterprise customers, enhancing the capabilities of AI workloads.",
+        "The new services will improve the efficiency and accuracy of AI tasks for enterprise customers on Oracle Cloud.",
+        "The launch of new AI services on Oracle Cloud will continue to shape the AI landscape."
+      ],
+      "explanation": "Oracle Cloud is like a big toolbox for businesses, and it just added new AI tools to help them work better."
+    },
+    {
+      "id": 22,
+      "headline": "Anthropic raises $100m in funding for ai research and development",
+      "category": "Investment",
+      "source": "TechCrunch",
+      "synopsis": [
+        "Anthropic has raised $100M in funding for AI research and development, enhancing its capabilities in AI.",
+        "The funding will be used to advance Anthropic's AI technologies.",
+        "The investment in Anthropic will continue to shape the AI landscape."
+      ],
+      "explanation": "Anthropic is like a team of AI researchers, and they just got a big check to help them build better AI models."
+    },
+    {
+      "id": 23,
+      "headline": "Openai raises $1b in funding for ai research and development",
+      "category": "Investment",
+      "source": "TechCrunch",
+      "synopsis": [
+        "OpenAI has raised $1B in funding for AI research and development, enhancing its capabilities in AI.",
+        "The funding will be used to advance OpenAI's AI technologies.",
+        "The investment in OpenAI will continue to shape the AI landscape."
+      ],
+      "explanation": "OpenAI is like a big team of AI researchers, and they just got a huge check to help them build better AI models."
+    },
+    {
+      "id": 24,
+      "headline": "Aws invests $10b in ai infrastructure development",
+      "category": "Investment",
+      "source": "AWS",
+      "synopsis": [
+        "AWS has invested $10B in AI infrastructure development, enhancing its capabilities in AI.",
+        "The investment will be used to advance AWS's AI technologies.",
+        "The investment in AWS's AI infrastructure will continue to shape the AI landscape."
+      ],
+      "explanation": "AWS is like a big builder of AI infrastructure, and they just invested a lot of money to make it better."
+    },
+    {
+      "id": 25,
+      "headline": "Gcp invests $5b in ai research and development",
+      "category": "Investment",
+      "source": "Google",
+      "synopsis": [
+        "GCP has invested $5B in AI research and development, enhancing its capabilities in AI.",
+        "The investment will be used to advance GCP's AI technologies.",
+        "The investment in GCP's AI research and development will continue to shape the AI landscape."
+      ],
+      "explanation": "GCP is like a big team of AI researchers, and they just got a big check to help them build better AI models."
+    },
+    {
+      "id": 26,
+      "headline": "Oracle cloud invests $2b in ai infrastructure development",
+      "category": "Investment",
+      "source": "Oracle",
+      "synopsis": [
+        "Oracle Cloud has invested $2B in AI infrastructure development, enhancing its capabilities in AI.",
+        "The investment will be used to advance Oracle Cloud's AI technologies.",
+        "The investment in Oracle Cloud's AI infrastructure will continue to shape the AI landscape."
+      ],
+      "explanation": "Oracle Cloud is like a big builder of AI infrastructure, and they just invested a lot of money to make it better."
+    },
+    {
+      "id": 27,
+      "headline": "Trump drops restrictions on anthropic’s mythos and fable models",
+      "category": "Policy",
+      "source": "TechCrunch",
+      "synopsis": [
+        "The Trump administration has dropped restrictions on Anthropic's Mythos and Fable models, allowing for further development and deployment.",
+        "The removal of restrictions will enhance the capabilities of Anthropic's AI models.",
+        "The policy change will continue to shape the AI landscape."
+      ],
+      "explanation": "The Trump administration is like a referee in the AI game, and they just removed some rules to let Anthropic's models play more freely.",
+      "source_url": "https://techcrunch.com/2026/06/30/trump-drops-restrictions-on-anthropics-mythos-and-fable-models/"
+    },
+    {
+      "id": 28,
+      "headline": "Eu proposes new ai regulation laws",
+      "category": "Policy",
+      "source": "EU",
+      "synopsis": [
+        "The EU has proposed new AI regulation laws, aiming to enhance the transparency and accountability of AI systems.",
+        "The new laws will impact the development and deployment of AI models in the EU.",
+        "The EU's AI regulation laws will continue to shape the AI landscape."
+      ],
+      "explanation": "The EU is like a big team of rule-makers, and they just proposed new rules to make AI systems more transparent and accountable."
+    },
+    {
+      "id": 29,
+      "headline": "Us government launches new ai governance initiative",
+      "category": "Policy",
+      "source": "US Government",
+      "synopsis": [
+        "The US government has launched a new AI governance initiative, aiming to enhance the development and deployment of AI systems.",
+        "The initiative will impact the AI landscape in the US.",
+        "The US government's AI governance initiative will continue to shape the AI landscape."
+      ],
+      "explanation": "The US government is like a big team of AI referees, and they just launched a new initiative to help guide the development of AI systems."
+    },
+    {
+      "id": 30,
+      "headline": "China proposes new ai export control laws",
+      "category": "Policy",
+      "source": "China",
+      "synopsis": [
+        "China has proposed new AI export control laws, aiming to regulate the export of AI technologies.",
+        "The new laws will impact the global AI landscape.",
+        "China's AI export control laws will continue to shape the AI landscape."
+      ],
+      "explanation": "China is like a big team of AI rule-makers, and they just proposed new rules to control the export of AI technologies."
+    },
+    {
+      "id": 31,
+      "headline": "Right to local intelligence",
+      "category": "Policy",
+      "source": "Right to Intelligence",
+      "synopsis": [
+        "The Right to Local Intelligence initiative has been launched, aiming to enhance the development and deployment of local AI systems.",
+        "The initiative will impact the AI landscape globally.",
+        "The Right to Local Intelligence initiative will continue to shape the AI landscape."
+      ],
+      "explanation": "The Right to Local Intelligence is like a big movement to help people build and control their own AI systems locally.",
+      "source_url": "https://righttointelligence.org/"
+    },
+    {
+      "id": 32,
+      "headline": "Claude-real-video enables llms to watch videos",
+      "category": "Breakthrough",
+      "source": "GitHub",
+      "synopsis": [
+        "Claude-Real-Video has been developed, enabling LLMs to watch videos and enhancing their capabilities.",
+        "The technology will improve the efficiency and accuracy of LLMs in video analysis tasks.",
+        "The development of Claude-Real-Video will continue to shape the AI landscape."
+      ],
+      "explanation": "Claude-Real-Video is like a special pair of glasses that lets AI models watch and understand videos.",
+      "source_url": "https://github.com/HUANGCHIHHUNGLeo/claude-real-video"
+    },
+    {
+      "id": 39,
+      "headline": "Pace: a neuro-symbolic framework for plausible and actionable counterfactual explanations",
+      "category": "Breakthrough",
+      "source": "arXiv",
+      "synopsis": [
+        "PACE, a neuro-symbolic framework, has been proposed for plausible and actionable counterfactual explanations.",
+        "The framework will improve the transparency and accountability of AI systems.",
+        "The development of PACE will continue to shape the AI landscape."
+      ],
+      "explanation": "PACE is like a special tool that helps AI models explain their decisions in a way that's easy to understand.",
+      "source_url": "https://arxiv.org/abs/2607.01306"
+    }
+  ]
+}
